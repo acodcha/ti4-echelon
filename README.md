@@ -8,8 +8,8 @@ Generates a simple leaderboard for Twilight Imperium 4th Edition games.
 - [Documentation](#documentation)
 - [Testing](#testing)
 - [Usage](#usage)
-  - [Games File](#usage-games-file)
-  - [Factions](#usage-factions)
+- [Games File](#games-file)
+- [Factions](#factions)
 - [License](#license)
 - [Maintainer](#maintainer)
 
@@ -71,7 +71,7 @@ make test
 [^ Back to Top](#twilight-imperium-4th-edition-leaderboard-generator)
 
 ## Usage
-Run with no arguments or with the `--help` argument to obtain usage information.
+Once you have configured and built the program, run with no arguments or with the `--help` argument to obtain usage information.
 
 Otherwise, for regular use, run with:
 
@@ -84,8 +84,8 @@ ti4_leaderboard_generator --games <path> --leaderboard <path>
 
 [^ Back to Top](#twilight-imperium-4th-edition-leaderboard-generator)
 
-### Usage: Games File
-The games file must have the following format:
+## Games File
+The games file read by this leaderboard generator must have the following format:
 
 ```
 2021-07-31
@@ -113,10 +113,10 @@ etc.
 - Each player must have a unique place. Note that initiative is used to break ties in number of victory points.
 - Places are case-sensitive and must exactly match one of the following spellings: 1st, 2nd, 3rd, 4th, 5th, 6th, 7th, 8th.
 
-[^ Back to Usage](#usage)
+[^ Back to Top](#twilight-imperium-4th-edition-leaderboard-generator)
 
-### Usage: Factions
-Factions are case-sensitive and must exactly match one of the following spellings:
+## Factions
+The faction names appearing in the games file are case-sensitive and must exactly match one of the following spellings:
 
 - Arborec
 - Argent Flight
@@ -150,7 +150,7 @@ Remarks:
 - Note the apostrophe (') in Sardakk N'orr and Vuil'raith Cabal.
 - If playing a Frankendraft-type game with custom factions, use "Custom" as the faction name.
 
-[^ Back to Usage](#usage)
+[^ Back to Top](#twilight-imperium-4th-edition-leaderboard-generator)
 
 ## License
 This work is licensed under the MIT License. For more details, see the [LICENSE](LICENSE) file or <https://mit-license.org/>.
