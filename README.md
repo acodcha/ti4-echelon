@@ -1,6 +1,18 @@
 # Twilight Imperium 4th Edition Leaderboard Generator
 Generates a simple leaderboard for Twilight Imperium 4th Edition games.
 
+**Contents:**
+- [Dependencies](#dependencies)
+- [Configuration and Build](#configuration-and-build)
+- [Installation](#installation)
+- [Documentation](#documentation)
+- [Testing](#testing)
+- [Usage](#usage)
+  - [Games File](#usage-games-file)
+  - [Factions](#usage-factions)
+- [License](#license)
+- [Maintainer](#maintainer)
+
 ## Dependencies
 The following packages are required:
 - **C++17 Compiler:** Any C++17 compiler will do, such as GCC or Clang. On Ubuntu, install GCC with `sudo apt install g++` or Clang with `sudo apt install clang`.
@@ -60,7 +72,7 @@ ti4_leaderboard_generator --games <path> --leaderboard <path>
 - `--games <path>` specifies the path to the games file to be read. Required.
 - `--leaderboard <path>` specifies the path to the directory in which the leaderboard will be written. Optional. If omitted, no leaderboard is written.
 
-### Games File
+### Usage: Games File
 The games file must have the following format:
 
 ```
@@ -87,11 +99,9 @@ etc.
 - Dates must be in the YYYY-MM-DD format.
 - Player names are case-sensitive and cannot contain any whitespace.
 - Each player must have a unique place. Note that initiative is used to break ties in number of victory points.
+- Places are case-sensitive and must exactly match one of the following spellings: 1st, 2nd, 3rd, 4th, 5th, 6th, 7th, 8th.
 
-### Places
-Places are case-sensitive and must exactly match one of the following spellings: 1st, 2nd, 3rd, 4th, 5th, 6th, 7th, 8th.
-
-### Factions
+### Usage: Factions
 Factions are case-sensitive and must exactly match one of the following spellings:
 
 - Arborec
@@ -113,13 +123,18 @@ Factions are case-sensitive and must exactly match one of the following spelling
 - Sardakk N'orr
 - Titans of Ul
 - Universities of Jol-Nar
-- Vuil'Raith Cabal
+- Vuil'raith Cabal
 - Winnu
 - Xxcha Kingdom
 - Yin Brotherhood
 - Yssaril Tribes
+- Custom
 
-Note the hyphen (-) in Mahact Gene-Sorcerers, Naaz-Rokha Alliance, and Universities of Jol-Nar. Also note the apostrophe (') in Sardakk N'orr and Vuil'Raith Cabal.
+Remarks:
+- Note the numeral one (1) characters in L1z1x Mindnet.
+- Note the hyphen (-) in Mahact Gene-Sorcerers, Naaz-Rokha Alliance, and Universities of Jol-Nar.
+- Note the apostrophe (') in Sardakk N'orr and Vuil'raith Cabal.
+- If playing a Frankendraft-type game with custom factions, use "Custom" as the faction name.
 
 ## License
 This work is licensed under the MIT License. For more details, see the [LICENSE](LICENSE) file or <https://mit-license.org/>.
