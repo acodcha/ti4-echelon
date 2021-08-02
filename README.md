@@ -1,7 +1,6 @@
 # Twilight Imperium 4th Edition Leaderboard Generator
 Generates a simple leaderboard for Twilight Imperium 4th Edition games.
 
-**Contents:**
 - [Dependencies](#dependencies)
 - [Configuration and Build](#configuration-and-build)
 - [Installation](#installation)
@@ -145,7 +144,7 @@ The faction names appearing in the games file are case-sensitive and must exactl
 - Custom
 
 Remarks:
-- Note the numeral one (1) characters in L1z1x Mindnet.
+- Note the numeral ones (1) in L1z1x Mindnet.
 - Note the hyphen (-) in Mahact Gene-Sorcerers, Naaz-Rokha Alliance, and Universities of Jol-Nar.
 - Note the apostrophe (') in Sardakk N'orr and Vuil'raith Cabal.
 - If playing a Frankendraft-type game with custom factions, use "Custom" as the faction name.
