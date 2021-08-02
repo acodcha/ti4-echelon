@@ -19,6 +19,8 @@ The following packages are required:
 - **CMake:** On Ubuntu, install with `sudo apt install cmake`.
 - **Gnuplot:** On Ubuntu, install with `sudo apt install gnuplot`.
 
+[^ Back to Top](#twilight-imperium-4th-edition-leaderboard-generator)
+
 ## Configuration and Build
 Configure and build the program with:
 
@@ -29,6 +31,8 @@ cmake ..
 make
 ```
 
+[^ Back to Top](#twilight-imperium-4th-edition-leaderboard-generator)
+
 ## Installation
 Once you have configured and built the program, install it from the `build` directory with:
 
@@ -37,6 +41,8 @@ sudo make install
 ```
 
 This installs the program to `/usr/local/bin/ti4_leaderboard_generator`. To uninstall the program, simply delete it.
+
+[^ Back to Top](#twilight-imperium-4th-edition-leaderboard-generator)
 
 ## Documentation
 Building the documentation is optional and requires additional packages:
@@ -53,12 +59,16 @@ make docs
 
 This generates HTML documentation using Doxygen. The documentation is located in `docs/html`. Open the `docs/html/index.html` file in any web browser to view the documentation.
 
+[^ Back to Top](#twilight-imperium-4th-edition-leaderboard-generator)
+
 ## Testing
 Once you have configured and built the program, run tests from the `build` directory with:
 
 ```
 make test
 ```
+
+[^ Back to Top](#twilight-imperium-4th-edition-leaderboard-generator)
 
 ## Usage
 Run with no arguments or with the `--help` argument to obtain usage information.
@@ -71,6 +81,8 @@ ti4_leaderboard_generator --games <path> --leaderboard <path>
 
 - `--games <path>` specifies the path to the games file to be read. Required.
 - `--leaderboard <path>` specifies the path to the directory in which the leaderboard will be written. Optional. If omitted, no leaderboard is written.
+
+[^ Back to Top](#twilight-imperium-4th-edition-leaderboard-generator)
 
 ### Usage: Games File
 The games file must have the following format:
@@ -100,6 +112,8 @@ etc.
 - Player names are case-sensitive and cannot contain any whitespace.
 - Each player must have a unique place. Note that initiative is used to break ties in number of victory points.
 - Places are case-sensitive and must exactly match one of the following spellings: 1st, 2nd, 3rd, 4th, 5th, 6th, 7th, 8th.
+
+[^ Back to Usage](#usage)
 
 ### Usage: Factions
 Factions are case-sensitive and must exactly match one of the following spellings:
@@ -136,9 +150,15 @@ Remarks:
 - Note the apostrophe (') in Sardakk N'orr and Vuil'raith Cabal.
 - If playing a Frankendraft-type game with custom factions, use "Custom" as the faction name.
 
+[^ Back to Usage](#usage)
+
 ## License
 This work is licensed under the MIT License. For more details, see the [LICENSE](LICENSE) file or <https://mit-license.org/>.
 
+[^ Back to Top](#twilight-imperium-4th-edition-leaderboard-generator)
+
 ## Maintainer
 - Alexandre Coderre-Chabot (<https://github.com/acodcha>)
+
+[^ Back to Top](#twilight-imperium-4th-edition-leaderboard-generator)
 
