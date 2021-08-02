@@ -1,4 +1,4 @@
-# Twilioght Imperium 4th Edition Leaderboard Generator
+# Twilight Imperium 4th Edition Leaderboard Generator
 Generates a simple leaderboard for Twilight Imperium 4th Edition games.
 
 ## Dependencies
