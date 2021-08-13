@@ -1,5 +1,5 @@
-# Twilight Imperium 4th Edition Leaderboard Generator
-Generates a simple leaderboard for Twilight Imperium 4th Edition games.
+# TI4 Leaderboarder
+Generates a simple leaderboard for games of the Twilight Imperium 4th Edition board game.
 
 - [Dependencies](#dependencies)
 - [Configuration and Build](#configuration-and-build)
