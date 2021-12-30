@@ -11,8 +11,19 @@ std::vector<std::string> split_by_whitespace(const std::string& text) noexcept {
   return words;
 }
 
+/// \brief Split a string into lines using newlines as a delimiter.
+std::vector<std::string> split_by_newline(const std::string& text) noexcept {
+  std::stringstream stream(text);
+  std::string line;
+  std::vector<std::string> lines;
+  while (std::getline(stream, line)) {
+    lines.push_back(line);
+  }
+  return lines;
+}
+
 /// \brief Split a string into words using a given delimiter. The delimiter character is removed.
-std::vector<std::string> split(const std::string& text, const char delimiter) noexcept {
+std::vector<std::string> split_by_delimiter(const std::string& text, const char delimiter) noexcept {
   std::stringstream stream(text);
   std::string word;
   std::vector<std::string> words;

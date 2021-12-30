@@ -16,8 +16,8 @@ public:
 
   /// \brief Constructor from a YYYY-MM-DD string, such as "2021-07-31".
   Date(const std::string& year_month_day) {
-    const std::vector<std::string> year_month_day_vector{split(remove_whitespace(year_month_day), '-')};
-    const std::string error_message{"The date '" + year_month_day + "' is not a valid date in the YYYY-MM-DD format."};
+    const std::vector<std::string> year_month_day_vector{split_by_delimiter(year_month_day, '-')};
+    const std::string error_message{"'" + year_month_day + "' is not a valid date in the YYYY-MM-DD format."};
     if (year_month_day_vector.size() != 3) {
       error(error_message);
     }

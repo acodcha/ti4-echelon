@@ -15,6 +15,16 @@ public:
   /// \brief Constructor to a given value. For example, VictoryPoints{10} sets the value to 10.
   constexpr VictoryPoints(const int64_t value) noexcept : value_(value) {}
 
+  /// \brief Constructor from a string.
+  VictoryPoints(const std::string& text) {
+    const std::optional<int64_t> number{string_to_integer_number(text)};
+    if (number.has_value() && number.value() >= 1 && number.value() <= 30) {
+      value_ = number.value();
+    } else {
+      error("'" + text + "' is not a valid number of victory points.");
+    }
+  }
+
   constexpr int64_t value() const noexcept {
     return value_;
   }
@@ -112,12 +122,6 @@ private:
   int64_t value_{0};
 
 }; // class VictoryPoints
-
-/// \brief Games are typically played to 10-14 victory points. However, a custom game could be played to as few as 1 vitory point.
-constexpr const VictoryPoints MinimumVictoryPoints{1};
-
-/// \brief Games are typically played to 10-14 victory points. However, a custom game could be played to as much as 20 vitory points.
-constexpr const VictoryPoints MaximumVictoryPoints{20};
 
 } // namespace TI4Echelon
 
