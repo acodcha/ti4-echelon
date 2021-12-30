@@ -2,8 +2,8 @@
 
 #include "Color.hpp"
 #include "CurrentDateAndTime.hpp"
+#include "Enumerations.hpp"
 #include "Message.hpp"
-#include "String.hpp"
 
 namespace TI4Echelon {
 
@@ -26,17 +26,6 @@ void create(const std::filesystem::path& directory) {
   std::filesystem::create_directory(directory);
   if (!std::filesystem::exists(directory) || !std::filesystem::is_directory(directory)) {
     error("Could not create the directory: " + directory.string());
-  }
-}
-
-template <typename Type> const std::map<Type, std::string> labels;
-
-template <typename Type> std::string label(const Type type) noexcept {
-  const typename std::map<Type, std::string>::const_iterator found{labels<Type>.find(type)};
-  if (found != labels<Type>.cend()) {
-    return found->second;
-  } else {
-    return {};
   }
 }
 
