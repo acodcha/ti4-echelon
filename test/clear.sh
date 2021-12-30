@@ -2,4 +2,3 @@
 set -e
 cd "${0%/*}"
 rm -rf leaderboard*
-
