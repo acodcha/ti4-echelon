@@ -1,3 +1,5 @@
+[![build and test](https://github.com/acodcha/ti4-echelon/actions/workflows/build_and_test.yml/badge.svg?branch=main)](https://github.com/acodcha/ti4-echelon/actions/workflows/build_and_test.yml)
+
 - [Setup](#setup)
 - [Usage](#usage)
 - [Games File](#games-file)
@@ -70,7 +72,7 @@ The games file is a plain text file with the following format:
 
 2021-07-24 14
 1st Bob 14 Mentak Coalition
-2nd Alice 14 Titans of Ul
+2nd Alice 15 Titans of Ul
 3rd Erin 13 Nomad
 4th Carol 11 Mahact Gene-Sorcerers
 5th David 10 Yssaril Tribes
@@ -79,10 +81,10 @@ etc.
 ```
 
 - Games are separated by a blank line.
-- Each game consists of a date and a number of victory points followed by a list of places, player names, victory points, and faction names.
+- Each game consists of a date and a goal number of victory points followed by a list of places, player names, victory points, and faction names.
 - Dates must be in the YYYY-MM-DD format.
 - Player names are case-sensitive and cannot contain any whitespace.
-- Each player must have a unique place. Initiative breaks ties in victory points.
+- Each player must have a unique place. Initiative breaks ties in victory points. Additional victory points in excess of the game's goal number of victory points are worthless.
 - Places are case-sensitive and must exactly match one of the following spellings: 1st, 2nd, 3rd, 4th, 5th, 6th, 7th, 8th.
 
 [(Back to Top)](#)
