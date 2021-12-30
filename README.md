@@ -160,4 +160,3 @@ This work is licensed under the MIT License. For more details, see the [LICENSE]
 - Alexandre Coderre-Chabot (<https://github.com/acodcha>)
 
 [^ Back to Top](#twilight-imperium-4th-edition-leaderboard-generator)
-

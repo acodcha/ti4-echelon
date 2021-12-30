@@ -1,21 +1,20 @@
 cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 
 # Define the C++ and build settings.
-set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=x86-64 -ffast-math -O3 -Wall -Wno-return-type")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffast-math -O3 -Wall -Wno-return-type")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_BUILD_TYPE Release)
 
 # Define the CMake project.
-project("TI4LeaderboardGenerator" VERSION 1.0.0 LANGUAGES CXX)
+project("ti4-echelon" LANGUAGES CXX)
 option(BUILD_DOCS "Build the documentation using Doxygen." OFF)
 option(BUILD_TESTING "Build the tests." ON)
 
 # Build the executable.
-set(EXECUTABLE_NAME "ti4_leaderboard_generator")
+set(EXECUTABLE_NAME "ti4-echelon")
 file(GLOB_RECURSE SOURCE_CPP source/*.cpp)
 add_executable(${EXECUTABLE_NAME} ${SOURCE_CPP})
 target_link_libraries(${EXECUTABLE_NAME} stdc++fs)
@@ -27,7 +26,7 @@ install(TARGETS ${EXECUTABLE_NAME} DESTINATION /usr/local/bin)
 include(CTest)
 if(BUILD_TESTING)
   enable_testing()
-  add_test(NAME main_test COMMAND ../test/run.sh)
+  add_test(NAME test COMMAND ../test/run.sh)
 endif()
 
 # Build the documentation.
@@ -44,4 +43,3 @@ if(BUILD_DOCS)
     COMMENT "Building the documentation using Doxygen..."
     VERBATIM)
 endif()
-
