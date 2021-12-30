@@ -33,11 +33,11 @@ public:
     check();
   }
 
-  const std::experimental::filesystem::path& games_file() const noexcept {
+  const std::filesystem::path& games_file() const noexcept {
     return games_file_;
   }
 
-  const std::experimental::filesystem::path& leaderboard_directory() const noexcept {
+  const std::filesystem::path& leaderboard_directory() const noexcept {
     return leaderboard_directory_;
   }
 
@@ -47,9 +47,9 @@ private:
 
   std::vector<std::string> arguments_;
 
-  std::experimental::filesystem::path games_file_;
+  std::filesystem::path games_file_;
 
-  std::experimental::filesystem::path leaderboard_directory_;
+  std::filesystem::path leaderboard_directory_;
 
   void message_header_information() const noexcept {
     message(Program::Title);

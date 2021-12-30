@@ -18,9 +18,13 @@ const std::string Description{"Leaderboard generator for the Twilight Imperium 4
 
 } // namespace Program
 
-void create(const std::experimental::filesystem::path& directory) {
-  std::experimental::filesystem::create_directory(directory);
-  if (!std::experimental::filesystem::exists(directory) || !std::experimental::filesystem::is_directory(directory)) {
+constexpr const int16_t PlotWidthPixels{1000};
+
+constexpr const int16_t PlotHeightPixels{750};
+
+void create(const std::filesystem::path& directory) {
+  std::filesystem::create_directory(directory);
+  if (!std::filesystem::exists(directory) || !std::filesystem::is_directory(directory)) {
     error("Could not create the directory: " + directory.string());
   }
 }
