@@ -88,4 +88,32 @@ template <> const std::unordered_map<std::string, Faction> spellings<Faction>{
   {"Custom", Faction::Custom}
 };
 
+const std::set<Faction> Factions{
+  Faction::Arborec,
+  Faction::ArgentFlight,
+  Faction::BaronyOfLetnev,
+  Faction::ClanOfSaar,
+  Faction::EmbersOfMuaat,
+  Faction::EmiratesOfHacan,
+  Faction::Empyrean,
+  Faction::FederationOfSol,
+  Faction::GhostsOfCreuss,
+  Faction::L1z1xMindnet,
+  Faction::MahactGeneSorcerers,
+  Faction::MentakCoalition,
+  Faction::NaaluCollective,
+  Faction::NaazRokhaAlliance,
+  Faction::NekroVirus,
+  Faction::Nomad,
+  Faction::SardakkNorr,
+  Faction::TitansOfUl,
+  Faction::UniversitiesOfJolNar,
+  Faction::VuilraithCabal,
+  Faction::Winnu,
+  Faction::XxchaKingdom,
+  Faction::YinBrotherhood,
+  Faction::YssarilTribes,
+  Faction::Custom
+};
+
 } // namespace TI4Echelon

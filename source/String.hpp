@@ -69,6 +69,17 @@ std::string remove_non_alphabetic_characters(const std::string& text) noexcept {
   return new_text;
 }
 
+/// \brief Remove non-numeric characters in a string.
+std::string remove_non_numeric_characters(const std::string& text) noexcept {
+  std::string new_text;
+  for (const char character : text) {
+    if (::isdigit(character)) {
+      new_text += character;
+    }
+  }
+  return new_text;
+}
+
 /// \brief Replace all occurences of a given character with another character in a string.
 std::string replace_character(const std::string& text, const char original, const char replacement) noexcept {
   std::string transformed_text{text};
