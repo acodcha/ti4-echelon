@@ -29,7 +29,7 @@ public:
     }
     message("Read " + std::to_string(data_.size()) + " games from the games file:");
     for (const Game& game : data_) {
-      message("- " + game.print());
+      message("- " + game.print() + ".");
     }
   }
 

@@ -59,7 +59,7 @@ public:
   }
 
   std::string print() const noexcept {
-    std::string text{date_.print() + " " + victory_point_goal_.print() + " points " + std::to_string(number_of_players()) + " players: "};
+    std::string text{date_.print() + ", " + victory_point_goal_.print() + " points, " + std::to_string(number_of_players()) + " players, "};
     std::size_t counter{0};
     for (const Place& place : places_) {
       text += place.print() + " " + places_.player_name(place).value().value() + " " + places_.victory_points(place).value().print() + " " + label(places_.faction_name(place).value()) ;
@@ -68,7 +68,6 @@ public:
       }
       ++counter;
     }
-    text += ".";
     return text;
   }
 
