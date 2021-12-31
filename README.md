@@ -1,11 +1,6 @@
 [![build and test](https://github.com/acodcha/ti4-echelon/actions/workflows/build_and_test.yml/badge.svg?branch=main)](https://github.com/acodcha/ti4-echelon/actions/workflows/build_and_test.yml)
 
-- [Setup](#setup)
-- [Usage](#usage)
-- [Games File](#games-file)
-- [Factions](#factions)
-- [Documentation](#documentation)
-- [License](#license)
+[Setup](#setup) · [Usage](#usage) · [Games File](#games-file) · [Factions](#factions) · [Documentation](#documentation) · [License](#license)
 
 # Setup
 
@@ -93,38 +88,38 @@ etc.
 
 The faction names in the games file are case-sensitive and must exactly match one of the following spellings:
 
-- Arborec
-- Argent Flight
-- Barony of Letnev
-- Clan of Saar
-- Embers of Muaat
-- Emirates of Hacan
-- Empyrean
-- Federation of Sol
-- Ghosts of Creuss
-- L1z1x Mindnet
-- Mahact Gene-Sorcerers
-- Mentak Coalition
-- Naalu Collective
-- Naaz-Rokha Alliance
-- Nekro Virus
-- Nomad
-- Sardakk N'orr
-- Titans of Ul
-- Universities of Jol-Nar
-- Vuil'raith Cabal
-- Winnu
-- Xxcha Kingdom
-- Yin Brotherhood
-- Yssaril Tribes
-- Custom
+- `Arborec`
+- `Argent Flight`
+- `Barony of Letnev`
+- `Clan of Saar`
+- `Embers of Muaat`
+- `Emirates of Hacan`
+- `Empyrean`
+- `Federation of Sol`
+- `Ghosts of Creuss`
+- `L1z1x Mindnet`
+- `Mahact Gene-Sorcerers`
+- `Mentak Coalition`
+- `Naalu Collective`
+- `Naaz-Rokha Alliance`
+- `Nekro Virus`
+- `Nomad`
+- `Sardakk N'orr`
+- `Titans of Ul`
+- `Universities of Jol-Nar`
+- `Vuil'raith Cabal`
+- `Winnu`
+- `Xxcha Kingdom`
+- `Yin Brotherhood`
+- `Yssaril Tribes`
+- `Custom`
 
 Remarks:
 
-- Note the numeral ones (1) in L1z1x Mindnet.
-- Note the hyphen (-) in Mahact Gene-Sorcerers, Naaz-Rokha Alliance, and Universities of Jol-Nar.
-- Note the apostrophe (') in Sardakk N'orr and Vuil'raith Cabal.
-- If playing a Frankendraft-type game with custom factions, use `Custom` as the faction name.
+- Note the numeral ones (`1`) in `L1z1x Mindnet`.
+- Note the hyphen (`-`) in `Mahact Gene-Sorcerers`, `Naaz-Rokha Alliance`, and `Universities of Jol-Nar`.
+- Note the apostrophe (`'`) in `Sardakk N'orr` and `Vuil'raith Cabal`.
+- If playing a Frankendraft-style game with custom factions, use `Custom` as the faction name.
 
 [(Back to Top)](#)
 
