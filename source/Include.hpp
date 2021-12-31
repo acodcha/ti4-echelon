@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <cctype>
-#include <chrono>
 #include <climits>
 #include <cmath>
 #include <cstdlib>
