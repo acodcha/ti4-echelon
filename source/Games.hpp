@@ -48,6 +48,10 @@ public:
     const_reverse_iterator(const std::multiset<Game, Game::sort_by_most_recent_date>::const_reverse_iterator i) noexcept : std::multiset<Game, Game::sort_by_most_recent_date>::const_reverse_iterator(i) {}
   };
 
+  bool empty() const noexcept {
+    return data_.empty();
+  }
+
   std::size_t size() const noexcept {
     return data_.size();
   }

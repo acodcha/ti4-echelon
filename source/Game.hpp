@@ -1,10 +1,8 @@
 #pragma once
 
-#include "Date.hpp"
-#include "FactionName.hpp"
-#include "Place.hpp"
-#include "PlayerName.hpp"
-#include "VictoryPoints.hpp"
+#include "GameFactionNames.hpp"
+#include "GamePlaces.hpp"
+#include "GamePlayerNames.hpp"
 
 namespace TI4Echelon {
 
@@ -17,14 +15,22 @@ public:
 
   /// \brief Construct a game from a list of lines containing a date and a goal number of victory points followed by a list of places, player names, victory points, and faction names.
   Game(const std::vector<std::string> lines) {
-    if (lines.size() >= 2) {
+    // 1 header line with a line for each of at least 2 players implies at least 3 lines in total.
+    if (lines.size() >= 3) {
       initialize_date_and_victory_point_goal(lines[0]);
       for (std::size_t index = 1; index < lines.size(); ++index) {
         initialize_standing(lines[index]);
       }
       check_places();
     } else {
-      error("Cannot parse the lines of text for a game.");
+      std::string text;
+      for (const std::string& line : lines) {
+        if (!text.empty()) {
+          text += ";";
+        }
+        text += line;
+      }
+      error("The lines '" + text + "' cannot be parsed as a game.");
     }
   }
 
@@ -36,94 +42,34 @@ public:
     return victory_point_goal_;
   }
 
-  std::string print() const noexcept {
-    std::string text{date_.print() + " " + victory_point_goal_.print() + " points " + std::to_string(number_of_players()) + " players: "};
-    std::size_t counter{0};
-    for (const std::pair<Place, PlayerName>& place_and_player_name : places_to_player_names_) {
-      player_names_to_victory_points_.find(place_and_player_name.second)->second;
-      text += place_and_player_name.first.print() + " " + place_and_player_name.second.value() + " " + player_names_to_victory_points_.find(place_and_player_name.second)->second.print() + " " + label(player_names_to_faction_names_.find(place_and_player_name.second)->second);
-      if (counter + 1 < places_to_player_names_.size()) {
-        text += ", ";
-      }
-      ++counter;
-    }
-    text += ".";
-    return text;
+  const GameFactionNames& faction_names() const noexcept {
+    return faction_names_;
+  }
+
+  const GamePlaces& places() const noexcept {
+    return places_;
+  }
+
+  const GamePlayerNames& player_names() const noexcept {
+    return player_names_;
   }
 
   std::size_t number_of_players() const noexcept {
     return player_names_.size();
   }
 
-  bool participant(const PlayerName& player_name) const noexcept {
-    return player_names_.find(player_name) != player_names_.cend();
-  }
-
-  bool participant(const FactionName& faction) const noexcept {
-    return faction_names_.find(faction) != faction_names_.cend();
-  }
-
-  std::optional<Place> place(const PlayerName& player_name) const noexcept {
-    const std::map<PlayerName, Place, PlayerName::sort_alphabetically>::const_iterator found{player_names_to_places_.find(player_name)};
-    if (found != player_names_to_places_.cend()) {
-      return {found->second};
-    } else {
-      const std::optional<Place> no_data;
-      return no_data;
-    }
-  }
-
-  std::optional<Place> place(const FactionName& faction) const noexcept {
-    if (faction != FactionName::Custom) {
-      const std::map<FactionName, Place, std::less<FactionName>>::const_iterator found{faction_names_to_places_.find(faction)};
-      if (found != faction_names_to_places_.cend()) {
-        return {found->second};
+  std::string print() const noexcept {
+    std::string text{date_.print() + " " + victory_point_goal_.print() + " points " + std::to_string(number_of_players()) + " players: "};
+    std::size_t counter{0};
+    for (const Place& place : places_) {
+      text += place.print() + " " + places_.player_name(place).value().value() + " " + places_.victory_points(place).value().print() + " " + label(places_.faction_name(place).value()) ;
+      if (counter + 1 < places_.size()) {
+        text += ", ";
       }
+      ++counter;
     }
-    const std::optional<Place> no_data;
-    return no_data;
-  }
-
-  std::optional<VictoryPoints> victory_points(const PlayerName& player_name) const noexcept {
-    const std::map<PlayerName, VictoryPoints, PlayerName::sort_alphabetically>::const_iterator found{player_names_to_victory_points_.find(player_name)};
-    if (found != player_names_to_victory_points_.cend()) {
-      return {found->second};
-    } else {
-      const std::optional<VictoryPoints> no_data;
-      return no_data;
-    }
-  }
-
-  std::optional<VictoryPoints> victory_points(const FactionName& faction) const noexcept {
-    if (faction != FactionName::Custom) {
-      const std::map<FactionName, VictoryPoints, std::less<FactionName>>::const_iterator found{faction_names_to_victory_points_.find(faction)};
-      if (found != faction_names_to_victory_points_.cend()) {
-        return {found->second};
-      }
-    }
-    const std::optional<VictoryPoints> no_data;
-    return no_data;
-  }
-
-  std::optional<FactionName> faction_name(const PlayerName& player_name) const noexcept {
-    const std::map<PlayerName, FactionName, PlayerName::sort_alphabetically>::const_iterator found{player_names_to_faction_names_.find(player_name)};
-    if (found != player_names_to_faction_names_.cend()) {
-      return {found->second};
-    } else {
-      const std::optional<FactionName> no_data;
-      return no_data;
-    }
-  }
-
-  std::optional<PlayerName> player_name(const FactionName& faction_name) const noexcept {
-    if (faction_name != FactionName::Custom) {
-      const std::multimap<FactionName, PlayerName>::const_iterator found{faction_names_to_player_names_.find(faction_name)};
-      if (found != faction_names_to_player_names_.cend()) {
-        return {found->second};
-      }
-    }
-    const std::optional<PlayerName> no_data;
-    return no_data;
+    text += ".";
+    return text;
   }
 
   struct sort_by_most_recent_date {
@@ -138,26 +84,11 @@ private:
 
   VictoryPoints victory_point_goal_{10};
 
-  std::set<PlayerName, PlayerName::sort_alphabetically> player_names_;
+  GameFactionNames faction_names_;
 
-  std::map<PlayerName, Place, PlayerName::sort_alphabetically> player_names_to_places_;
+  GamePlaces places_;
 
-  std::map<PlayerName, VictoryPoints, PlayerName::sort_alphabetically> player_names_to_victory_points_;
-
-  std::map<PlayerName, FactionName, PlayerName::sort_alphabetically> player_names_to_faction_names_;
-
-  std::map<Place, PlayerName, Place::sort_ascending> places_to_player_names_;
-
-  std::set<FactionName, std::less<FactionName>> faction_names_;
-
-  /// \brief The Custom faction can appear multiple times, so we use a multimap.
-  std::multimap<FactionName, PlayerName> faction_names_to_player_names_;
-
-  /// \brief The Custom faction can appear multiple times, so we use a multimap.
-  std::multimap<FactionName, Place, std::less<FactionName>> faction_names_to_places_;
-
-  /// \brief The Custom faction can appear multiple times, so we use a multimap.
-  std::multimap<FactionName, VictoryPoints, std::less<FactionName>> faction_names_to_victory_points_;
+  GamePlayerNames player_names_;
 
   void initialize_date_and_victory_point_goal(const std::string& line) {
     const std::vector<std::string> words{split_by_whitespace(line)};
@@ -203,31 +134,14 @@ private:
       if (optional_faction_name.has_value()) {
         faction_name = optional_faction_name.value();
       } else {
-        error("'" + faction_name_string + "' is not a valid faction in the game played on " + date_.print() + ".");
+        error("'" + faction_name_string + "' is not a valid faction for the game played on " + date_.print() + ".");
       }
-      // Try to insert the player name.
-      const std::pair<std::set<PlayerName, PlayerName::sort_alphabetically>::iterator, bool> player_name_result_1{player_names_.insert(player_name)};
-      const std::pair<std::map<PlayerName, Place, PlayerName::sort_alphabetically>::iterator, bool> player_name_result_2{player_names_to_places_.emplace(player_name, place)};
-      const std::pair<std::map<PlayerName, VictoryPoints, PlayerName::sort_alphabetically>::iterator, bool> player_name_result_3{player_names_to_victory_points_.emplace(player_name, victory_points)};
-      const std::pair<std::map<PlayerName, FactionName, PlayerName::sort_alphabetically>::iterator, bool> player_name_result_4{player_names_to_faction_names_.emplace(player_name, faction_name)};
-      if (!player_name_result_1.second || !player_name_result_2.second || !player_name_result_3.second || !player_name_result_4.second) {
-        error("Player '" + player_name.value() + "' appears twice in the game played on " + date_.print() + ".");
-      }
-      // Try to insert the place.
-      const std::pair<std::map<Place, PlayerName, std::less<Place>>::iterator, bool> place_result{places_to_player_names_.emplace(place, player_name)};
-      if (!place_result.second) {
-        error("Place '" + place.print() + "' appears twice in the game played on " + date_.print() + ".");
-      }
-      // Try to insert the faction.
-      const std::pair<std::set<FactionName, std::less<FactionName>>::iterator, bool> faction_result{faction_names_.insert(faction_name)};
-      if (!faction_result.second && faction_name != FactionName::Custom) {
-        error("FactionName '" + label(faction_name) + "' appears twice in the game played on " + date_.print() + ".");
-      }
-      faction_names_to_player_names_.emplace(faction_name, player_name);
-      faction_names_to_places_.emplace(faction_name, place);
-      faction_names_to_victory_points_.emplace(faction_name, victory_points);
+      // Try to insert the attributes.
+      faction_names_.insert(date_, place, player_name, victory_points, faction_name);
+      places_.insert(date_, place, player_name, victory_points, faction_name);
+      player_names_.insert(date_, place, player_name, victory_points, faction_name);
     } else {
-      error("'" + line + "' does not contain a place, player, number of victory points, and faction in the game played on " + date_.print() + ".");
+      error("'" + line + "' does not contain a place, player, number of victory points, and faction for the game played on " + date_.print() + ".");
     }
   }
 
@@ -239,7 +153,7 @@ private:
       expected_places.emplace(player_index + 1);
     }
     for (const Place& place : expected_places) {
-      if (places_to_player_names_.find(place) == places_to_player_names_.cend()) {
+      if (!places_.exists(place)) {
         error("The " + place.print() + " place is missing from the game played on " + date_.print() + ".");
       }
     }

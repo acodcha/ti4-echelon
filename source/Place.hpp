@@ -59,6 +59,19 @@ public:
     }
   }
 
+  /// \brief The outcome of a game between a pair of players is 1, 0.5, or 0 in the case of a higher place, an equal place, or a lower place than the opponent, respectively.
+  double outcome(const Place& opponent_place) const noexcept {
+    // A "lower" place is better. For example, 1st place is better than 2nd place.
+    if (*this < opponent_place) {
+      return 1.0;
+    } else if (*this > opponent_place) {
+      return 0.0;
+    } else {
+      // This case is included for completeness even though equal places cannot occur.
+      return 0.5;
+    }
+  }
+
   constexpr bool operator==(const Place& other) const noexcept {
     return value_ == other.value_;
   }
