@@ -33,19 +33,20 @@ public:
     }
   }
 
-  struct iterator : public std::multiset<Game, Game::sort_by_most_recent_date>::iterator {
-    iterator(const std::multiset<Game, Game::sort_by_most_recent_date>::iterator i) noexcept : std::multiset<Game, Game::sort_by_most_recent_date>::iterator(i) {}
+  struct iterator : public std::multiset<Game, Game::sort>::iterator {
+    iterator(const std::multiset<Game, Game::sort>::iterator i) noexcept : std::multiset<Game, Game::sort>::iterator(i) {}
   };
 
-  struct const_iterator : public std::multiset<Game, Game::sort_by_most_recent_date>::const_iterator {
-    const_iterator(const std::multiset<Game, Game::sort_by_most_recent_date>::const_iterator i) noexcept : std::multiset<Game, Game::sort_by_most_recent_date>::const_iterator(i) {}
+  struct const_iterator : public std::multiset<Game, Game::sort>::const_iterator {
+    const_iterator(const std::multiset<Game, Game::sort>::const_iterator i) noexcept : std::multiset<Game, Game::sort>::const_iterator(i) {}
   };
 
-  struct reverse_iterator : public std::multiset<Game, Game::sort_by_most_recent_date>::reverse_iterator {
-    reverse_iterator(const std::multiset<Game, Game::sort_by_most_recent_date>::reverse_iterator i) noexcept : std::multiset<Game, Game::sort_by_most_recent_date>::reverse_iterator(i) {}
+  struct reverse_iterator : public std::multiset<Game, Game::sort>::reverse_iterator {
+    reverse_iterator(const std::multiset<Game, Game::sort>::reverse_iterator i) noexcept : std::multiset<Game, Game::sort>::reverse_iterator(i) {}
   };
-  struct const_reverse_iterator : public std::multiset<Game, Game::sort_by_most_recent_date>::const_reverse_iterator {
-    const_reverse_iterator(const std::multiset<Game, Game::sort_by_most_recent_date>::const_reverse_iterator i) noexcept : std::multiset<Game, Game::sort_by_most_recent_date>::const_reverse_iterator(i) {}
+
+  struct const_reverse_iterator : public std::multiset<Game, Game::sort>::const_reverse_iterator {
+    const_reverse_iterator(const std::multiset<Game, Game::sort>::const_reverse_iterator i) noexcept : std::multiset<Game, Game::sort>::const_reverse_iterator(i) {}
   };
 
   bool empty() const noexcept {
@@ -91,7 +92,7 @@ public:
 private:
 
   /// \brief A multiset is used in case two or more games are played on the same date.
-  std::multiset<Game, Game::sort_by_most_recent_date> data_;
+  std::multiset<Game, Game::sort> data_;
 
 }; // class Games
 

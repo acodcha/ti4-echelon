@@ -10,10 +10,10 @@ class Place {
 public:
 
   /// \brief Default constructor. Initializes to 0th place.
-  Place() noexcept {}
+  constexpr Place() noexcept {}
 
   /// \brief Constructor to a given value. For example, Place{2} sets the value to 2nd place.
-  Place(const int8_t value) noexcept : value_(value) {}
+  constexpr Place(const int8_t value) noexcept : value_(value) {}
 
   /// \brief Constructor from a string. Expects text such as "1st", "2nd", and so on.
   Place(const std::string& text) noexcept {
@@ -43,7 +43,7 @@ public:
     }
   }
 
-  int8_t value() const noexcept {
+  constexpr int8_t value() const noexcept {
     return value_;
   }
 

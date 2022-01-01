@@ -57,7 +57,7 @@ ti4-echelon --games <path> --leaderboard <path>
 The games file is a plain text file with the following format:
 
 ```
-2021-07-31 10
+2021-07-31 free-for-all 10
 1st Alice 10 Winnu
 2nd Bob 9 Xxcha Kingdom
 3rd Carol 8 Clan of Saar
@@ -65,22 +65,25 @@ The games file is a plain text file with the following format:
 5th Erin 7 Empyrean
 6th Frank 6 Argent Flight
 
-2021-07-24 14
+2021-07-24 teams 14
 1st Bob 14 Mentak Coalition
-2nd Alice 15 Titans of Ul
-3rd Erin 13 Nomad
-4th Carol 11 Mahact Gene-Sorcerers
-5th David 10 Yssaril Tribes
+1st Alice 11 Titans of Ul
+2nd Erin 13 Nomad
+2nd Carol 11 Mahact Gene-Sorcerers
+3rd David 12 Yssaril Tribes
+3rd Hugo 10 Arborec
 
 etc.
 ```
 
 - Games are separated by a blank line.
-- Each game consists of a date and a goal number of victory points followed by a list of places, player names, victory points, and faction names.
+- Each game consists of a date, a game mode, and a goal number of victory points followed by a list of places, player names, victory points, and faction names.
 - Dates must be in the YYYY-MM-DD format.
+- The game mode must be one of `free-for-all` or `teams`.
 - Player names are case-sensitive and cannot contain any whitespace.
-- Each player must have a unique place. Initiative breaks ties in victory points. Additional victory points in excess of the game's goal number of victory points are worthless.
-- Places are case-sensitive and must exactly match one of the following spellings: 1st, 2nd, 3rd, 4th, 5th, 6th, 7th, 8th.
+- In free-for-all games, each player must have a unique place. As per the game rules, initiative breaks ties in victory points. Additional victory points in excess of the game's goal number of victory points are worthless.
+- When playing in teams, all players on the same team must have the same place; this is how teams are identified.
+- Places are case-sensitive and must exactly match one of the following spellings: `1st`, `2nd`, `3rd`, `4th`, `5th`, `6th`, `7th`, `8th`.
 
 [(Back to Top)](#)
 

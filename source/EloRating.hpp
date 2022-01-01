@@ -22,38 +22,31 @@ public:
     const Game& game,
     const std::unordered_map<PlayerName, EloRating>& previous_elo_ratings
   ) {
-    // Maximum update factor.
-    const double maximum_update_factor_{maximum_update_factor(game.number_of_players())};
     // Player current place.
-    const std::optional<Place> player_place{game.player_names().place(player_name)};
-    if (!player_place.has_value()) {
+    const std::optional<Place> place{game.place(player_name)};
+    if (!place.has_value()) {
       error("Player " + player_name.value() + " is not a participant in the game: " + game.print());
     }
+    // Number of enemies.
+    const std::size_t number_of_opponents{game.size() - game.number_of_players_on_team(player_name).value()};
+    // Maximum update factor.
+    const double maximum_update_factor_{maximum_update_factor(number_of_opponents)};
     // Player previous Elo rating.
-    EloRating player_elo_rating;
-    const std::unordered_map<PlayerName, EloRating>::const_iterator found{previous_elo_ratings.find(player_name)};
-    if (found != previous_elo_ratings.cend()) {
-      player_elo_rating = found->second;
-    } else {
-      error("Player " + player_name.value() + " is missing from the previous Elo ratings map.");
-    }
+    EloRating elo_rating{previous_elo_rating(player_name, previous_elo_ratings)};
     // Update the Elo rating using the actual and expected outcomes.
-    for (const PlayerName& game_player_name : game.player_names() ) {
-      if (player_name != game_player_name) {
-        const Place game_player_place{game.player_names().place(game_player_name).value()};
-        const double actual_outcome{player_place.value().outcome(game_player_place)};
-        EloRating game_player_previous_elo_rating;
-        const std::unordered_map<PlayerName, EloRating>::const_iterator found{previous_elo_ratings.find(game_player_name)};
-        if (found != previous_elo_ratings.cend()) {
-          game_player_previous_elo_rating = found->second;
-        } else {
-          error("Player " + game_player_name.value() + " is missing from the previous Elo ratings map.");
+    for (const Standing& standing : game ) {
+      if (player_name != standing.player_name()) {
+        if (game.mode() == GameMode::Teams && place.value() == standing.place()) {
+          // In this case, this is an ally. Players do not compete against their allies.
+          continue;
         }
-        const double expected_outcome{player_elo_rating.expected_outcome(game_player_previous_elo_rating)};
-        player_elo_rating += maximum_update_factor_ * (actual_outcome - expected_outcome);
+        const EloRating opponent_elo_rating{previous_elo_rating(standing.player_name(), previous_elo_ratings)};
+        const double actual_outcome{place.value().outcome(standing.place())};
+        const double expected_outcome{elo_rating.expected_outcome(opponent_elo_rating)};
+        elo_rating += maximum_update_factor_ * (actual_outcome - expected_outcome);
       }
     }
-    value_ = player_elo_rating.value();
+    value_ = elo_rating.value();
   }
 
   constexpr double value() const noexcept {
@@ -159,13 +152,23 @@ private:
     return 1.0 / (1.0 + std::pow(10.0, (opponent_elo_rating.value() - value_) / 400.0));
   }
 
-  static constexpr double maximum_update_factor(const std::size_t number_of_players) noexcept {
-    if (number_of_players <= 2) {
+  static constexpr double maximum_update_factor(const std::size_t number_of_opponents) noexcept {
+    if (number_of_opponents <= 1) {
       return 64.0;
     } else {
-      // In a game with N players, each player faces off against N-1 other players, and there are 0.5*N*(N-1) two-player pairs.
-      return 64.0 / (number_of_players - 1);
+      // In a free-for-all game with N players, each player faces off against N-1 other players, and there are 0.5*N*(N-1) two-player pairs.
+      return 64.0 / number_of_opponents;
     }
+  }
+
+  EloRating previous_elo_rating(const PlayerName& player_name, const std::unordered_map<PlayerName, EloRating>& previous_elo_ratings) const {
+    const std::unordered_map<PlayerName, EloRating>::const_iterator found{previous_elo_ratings.find(player_name)};
+    if (found != previous_elo_ratings.cend()) {
+      return found->second;
+    } else {
+      error("Player " + player_name.value() + " is missing from the previous Elo ratings.");
+    }
+    return {};
   }
 
 }; // class EloRating
