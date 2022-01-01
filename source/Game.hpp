@@ -34,6 +34,10 @@ public:
     }
   }
 
+  constexpr std::size_t index() const noexcept {
+    return index_;
+  }
+
   constexpr const Date& date() const noexcept {
     return date_;
   }
@@ -42,7 +46,7 @@ public:
     return victory_point_goal_;
   }
 
-  GameMode mode() const noexcept {
+  constexpr GameMode mode() const noexcept {
     return mode_;
   }
 
@@ -115,13 +119,34 @@ public:
     }
   }
 
-  std::set<VictoryPoints> victory_points(const FactionName& faction) const noexcept {
-    std::set<VictoryPoints> victory_points;
+  std::multiset<VictoryPoints, VictoryPoints::sort_descending> victory_points(const FactionName& faction) const noexcept {
+    std::multiset<VictoryPoints, VictoryPoints::sort_descending> victory_points;
     const std::pair<std::multimap<FactionName, VictoryPoints, std::less<FactionName>>::const_iterator, std::multimap<FactionName, VictoryPoints, std::less<FactionName>>::const_iterator> range{faction_names_to_victory_points_.equal_range(faction)};
     for (std::multimap<FactionName, VictoryPoints, std::less<FactionName>>::const_iterator i = range.first; i != range.second; ++i) {
       victory_points.insert(i->second);
     }
     return victory_points;
+  }
+
+  std::optional<double> adjusted_victory_points(const PlayerName& player_name) const noexcept {
+    const std::optional<VictoryPoints> raw_victory_points{victory_points(player_name)};
+    if (raw_victory_points.has_value()) {
+      const VictoryPoints limited{std::min(raw_victory_points.value(), victory_point_goal_)};
+      return static_cast<double>(limited.value()) / static_cast<double>(victory_point_goal_.value()) * 10.0;
+    } else {
+      const std::optional<double> no_data;
+      return no_data;
+    }
+  }
+
+  std::multiset<double> adjusted_victory_points(const FactionName& faction) const noexcept {
+    const std::multiset<VictoryPoints, VictoryPoints::sort_descending> raw_victory_points_multiset{victory_points(faction)};
+    std::multiset<double> adjusted_victory_points_;
+    for (const VictoryPoints& raw_victory_points : raw_victory_points_multiset) {
+      const VictoryPoints limited{std::min(raw_victory_points, victory_point_goal_)};
+      adjusted_victory_points_.insert(static_cast<double>(limited.value()) / static_cast<double>(victory_point_goal_.value()) * 10.0);
+    }
+    return adjusted_victory_points_;
   }
 
   std::optional<FactionName> faction_name(const PlayerName& player_name) const noexcept {
@@ -147,16 +172,8 @@ public:
     return text;
   }
 
-  struct iterator : public std::set<Standing, Standing::sort>::iterator {
-    iterator(const std::set<Standing, Standing::sort>::iterator i) noexcept : std::set<Standing, Standing::sort>::iterator(i) {}
-  };
-
   struct const_iterator : public std::set<Standing, Standing::sort>::const_iterator {
     const_iterator(const std::set<Standing, Standing::sort>::const_iterator i) noexcept : std::set<Standing, Standing::sort>::const_iterator(i) {}
-  };
-
-  struct reverse_iterator : public std::set<Standing, Standing::sort>::reverse_iterator {
-    reverse_iterator(const std::set<Standing, Standing::sort>::reverse_iterator i) noexcept : std::set<Standing, Standing::sort>::reverse_iterator(i) {}
   };
 
   struct const_reverse_iterator : public std::set<Standing, Standing::sort>::const_reverse_iterator {
@@ -171,36 +188,36 @@ public:
     return standings_.size();
   }
 
-  iterator begin() const noexcept {
-   return iterator(standings_.cbegin());
+  const_iterator begin() const noexcept {
+    return const_iterator(standings_.begin());
   }
 
   const_iterator cbegin() const noexcept {
-   return const_iterator(standings_.cbegin());
+    return const_iterator(standings_.cbegin());
   }
 
-  reverse_iterator rbegin() const noexcept {
-   return reverse_iterator(standings_.crbegin());
+  const_reverse_iterator rbegin() const noexcept {
+    return const_reverse_iterator(standings_.rbegin());
   }
 
   const_reverse_iterator crbegin() const noexcept {
-   return const_reverse_iterator(standings_.crbegin());
+    return const_reverse_iterator(standings_.crbegin());
   }
 
-  iterator end() const noexcept {
-   return iterator(standings_.cend());
+  const_iterator end() const noexcept {
+    return const_iterator(standings_.end());
   }
 
   const_iterator cend() const noexcept {
-   return const_iterator(standings_.cend());
+    return const_iterator(standings_.cend());
   }
 
-  reverse_iterator rend() const noexcept {
-   return reverse_iterator(standings_.crend());
+  const_reverse_iterator rend() const noexcept {
+    return const_reverse_iterator(standings_.rend());
   }
 
   const_reverse_iterator crend() const noexcept {
-   return const_reverse_iterator(standings_.crend());
+    return const_reverse_iterator(standings_.crend());
   }
 
   struct sort {
@@ -209,7 +226,14 @@ public:
     }
   };
 
+  void set_index(const std::size_t index) noexcept {
+    index_ = index;
+  }
+
 private:
+
+  /// \brief Unique identifier of this game.
+  std::size_t index_{0};
 
   Date date_;
 
