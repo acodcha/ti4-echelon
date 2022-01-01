@@ -79,7 +79,7 @@ etc.
 - Games are separated by a blank line.
 - Each game consists of a date, a game mode, and a goal number of victory points followed by a list of places, player names, victory points, and faction names.
 - Dates must be in the YYYY-MM-DD format.
-- The game mode must be one of `free-for-all` or `teams`.
+- The game mode must be one of either `free-for-all` or `teams`.
 - Player names are case-sensitive and cannot contain any whitespace.
 - In free-for-all games, each player must have a unique place. As per the game rules, initiative breaks ties in victory points. Additional victory points in excess of the game's goal number of victory points are worthless.
 - When playing in teams, all players on the same team must have the same place; this is how teams are identified.
