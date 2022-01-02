@@ -56,7 +56,13 @@ public:
       } else if (victory_points_ < other.victory_points_) {
         return false;
       } else {
-        return player_name_ < other.player_name_;
+        if (player_name_ < other.player_name_) {
+          return true;
+        } else if (player_name_ > other.player_name_) {
+          return false;
+        } else {
+          return faction_name_ < other.faction_name_;
+        }
       }
     }
   }
@@ -72,7 +78,13 @@ public:
       } else if (victory_points_ < other.victory_points_) {
         return false;
       } else {
-        return player_name_ <= other.player_name_;
+        if (player_name_ < other.player_name_) {
+          return true;
+        } else if (player_name_ > other.player_name_) {
+          return false;
+        } else {
+          return faction_name_ <= other.faction_name_;
+        }
       }
     }
   }
@@ -88,7 +100,13 @@ public:
       } else if (victory_points_ < other.victory_points_) {
         return true;
       } else {
-        return player_name_ > other.player_name_;
+        if (player_name_ < other.player_name_) {
+          return false;
+        } else if (player_name_ > other.player_name_) {
+          return true;
+        } else {
+          return faction_name_ > other.faction_name_;
+        }
       }
     }
   }
@@ -104,26 +122,20 @@ public:
       } else if (victory_points_ < other.victory_points_) {
         return true;
       } else {
-        return player_name_ >= other.player_name_;
+        if (player_name_ < other.player_name_) {
+          return false;
+        } else if (player_name_ > other.player_name_) {
+          return true;
+        } else {
+          return faction_name_ >= other.faction_name_;
+        }
       }
     }
   }
 
   struct sort {
     bool operator()(const Standing& standing_1, const Standing& standing_2) const noexcept {
-      if (standing_1.place_ < standing_2.place_) {
-        return true;
-      } else if (standing_1.place_ > standing_2.place_) {
-        return false;
-      } else {
-        if (standing_1.victory_points_ > standing_2.victory_points_) {
-          return true;
-        } else if (standing_1.victory_points_ < standing_2.victory_points_) {
-          return false;
-        } else {
-          return standing_1.player_name_ < standing_2.player_name_;
-        }
-      }
+      return standing_1 < standing_2;
     }
   };
 

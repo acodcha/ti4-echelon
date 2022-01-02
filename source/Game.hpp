@@ -109,7 +109,7 @@ public:
     return player_names;
   }
 
-  std::optional<VictoryPoints> victory_points(const PlayerName& player_name) const noexcept {
+  std::optional<VictoryPoints> raw_victory_points(const PlayerName& player_name) const noexcept {
     const std::map<PlayerName, VictoryPoints, PlayerName::sort_alphabetically>::const_iterator found{player_names_to_victory_points_.find(player_name)};
     if (found != player_names_to_victory_points_.cend()) {
       return {found->second};
@@ -119,7 +119,7 @@ public:
     }
   }
 
-  std::multiset<VictoryPoints, VictoryPoints::sort_descending> victory_points(const FactionName& faction) const noexcept {
+  std::multiset<VictoryPoints, VictoryPoints::sort_descending> raw_victory_points(const FactionName& faction) const noexcept {
     std::multiset<VictoryPoints, VictoryPoints::sort_descending> victory_points;
     const std::pair<std::multimap<FactionName, VictoryPoints, std::less<FactionName>>::const_iterator, std::multimap<FactionName, VictoryPoints, std::less<FactionName>>::const_iterator> range{faction_names_to_victory_points_.equal_range(faction)};
     for (std::multimap<FactionName, VictoryPoints, std::less<FactionName>>::const_iterator i = range.first; i != range.second; ++i) {
@@ -129,9 +129,9 @@ public:
   }
 
   std::optional<double> adjusted_victory_points(const PlayerName& player_name) const noexcept {
-    const std::optional<VictoryPoints> raw_victory_points{victory_points(player_name)};
-    if (raw_victory_points.has_value()) {
-      const VictoryPoints limited{std::min(raw_victory_points.value(), victory_point_goal_)};
+    const std::optional<VictoryPoints> raw_victory_points_{raw_victory_points(player_name)};
+    if (raw_victory_points_.has_value()) {
+      const VictoryPoints limited{std::min(raw_victory_points_.value(), victory_point_goal_)};
       return static_cast<double>(limited.value()) / static_cast<double>(victory_point_goal_.value()) * 10.0;
     } else {
       const std::optional<double> no_data;
@@ -140,7 +140,7 @@ public:
   }
 
   std::multiset<double> adjusted_victory_points(const FactionName& faction) const noexcept {
-    const std::multiset<VictoryPoints, VictoryPoints::sort_descending> raw_victory_points_multiset{victory_points(faction)};
+    const std::multiset<VictoryPoints, VictoryPoints::sort_descending> raw_victory_points_multiset{raw_victory_points(faction)};
     std::multiset<double> adjusted_victory_points_;
     for (const VictoryPoints& raw_victory_points : raw_victory_points_multiset) {
       const VictoryPoints limited{std::min(raw_victory_points, victory_point_goal_)};
@@ -160,7 +160,7 @@ public:
   }
 
   std::string print() const noexcept {
-    std::string text{date_.print() + ", " + lowercase(label(mode_)) + ", " + victory_point_goal_.print() + " points, " + std::to_string(size()) + " players, "};
+    std::string text{date_.print() + ", " + label(mode_) + ", " + victory_point_goal_.print() + " Victory Points, " + std::to_string(size()) + " Players, "};
     std::size_t counter{0};
     for (const Standing& standing : standings_) {
       text += standing.print();

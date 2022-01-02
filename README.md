@@ -66,24 +66,26 @@ The games file is a plain text file with the following format:
 6th Frank 6 Argent Flight
 
 2021-07-24 teams 14
-1st Bob 14 Mentak Coalition
+1st Bob 15 Mentak Coalition
 1st Alice 11 Titans of Ul
-2nd Erin 13 Nomad
-2nd Carol 11 Mahact Gene-Sorcerers
+2nd Carol 13 Nomad
+2nd Gabby 11 Mahact Gene-Sorcerers
 3rd David 12 Yssaril Tribes
 3rd Hugo 10 Arborec
 
 etc.
 ```
 
-- Games are separated by a blank line.
-- Each game consists of a date, a game mode, and a goal number of victory points followed by a list of places, player names, victory points, and faction names.
+- Games are separated by one or more blank lines.
+- Each game consists of a header line followed by a number of result lines.
+- The header line must contain a **date**, a **game mode**, and a **goal number of victory points**, in this order, each separated by whitespace.
+- Each result line must contain a **place**, a **player name**, a **number of victory points**, and a **faction name**, in this order, each separated by whitespace.
 - Dates must be in the YYYY-MM-DD format.
 - The game mode must be one of either `free-for-all` or `teams`.
-- Player names are case-sensitive and cannot contain any whitespace.
-- In free-for-all games, each player must have a unique place. As per the game rules, initiative breaks ties in victory points. Additional victory points in excess of the game's goal number of victory points are worthless.
-- When playing in teams, all players on the same team must have the same place; this is how teams are identified.
 - Places are case-sensitive and must exactly match one of the following spellings: `1st`, `2nd`, `3rd`, `4th`, `5th`, `6th`, `7th`, `8th`.
+- In free-for-all games, each player must have a unique place. Recall that initiative breaks ties in victory points, and additional victory points in excess of the game's goal number of victory points are worthless.
+- When playing in teams, all players on the same team must have the same place; this is how teams are identified.
+- Player names are case-sensitive and cannot contain any whitespace.
 
 [(Back to Top)](#)
 
