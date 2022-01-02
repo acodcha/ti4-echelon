@@ -131,6 +131,13 @@ public:
     }
   }
 
+  /// \brief Sort in reverse-chronological order, i.e. by the most recent date.
+  struct sort {
+    bool operator()(const Date& date_1, const Date& date_2) const noexcept {
+      return date_1 > date_2;
+    }
+  };
+
 private:
 
   /// \brief CE year, e.g. 2021.

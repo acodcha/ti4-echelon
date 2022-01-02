@@ -49,7 +49,7 @@ public:
 
   /// \brief Number of Nth place finishes.
   int64_t place_count(const Place place) const noexcept {
-    const std::map<Place, int64_t, Place::sort_ascending>::const_iterator found{place_counts_.find(place)};
+    const std::map<Place, int64_t, Place::sort>::const_iterator found{place_counts_.find(place)};
     if (found != place_counts_.cend()) {
       return found->second;
     } else {
@@ -59,7 +59,7 @@ public:
 
   /// \brief Percentage ratio of Nth place finishes.
   Percentage place_percentage(const Place place) const noexcept {
-    const std::map<Place, Percentage, Place::sort_ascending>::const_iterator found{place_percentages_.find(place)};
+    const std::map<Place, Percentage, Place::sort>::const_iterator found{place_percentages_.find(place)};
     if (found != place_percentages_.cend()) {
       return found->second;
     } else {
@@ -79,7 +79,8 @@ public:
     return std::to_string(player_game_number()) + " games , " + current_elo_rating_.print() + " current rating , " + average_elo_rating_.print() + " average rating , " + real_number_to_string(average_victory_points_per_game_, 2) + " pts , " + place_percentage({1}).print() + " 1st , " + place_percentage({2}).print() + " 2nd , " + place_percentage({3}).print() + " 3rd";
   }
 
-  struct sort_by_most_recent {
+  /// \brief Sort from most recent to oldest.
+  struct sort {
     bool operator()(const PlayerSnapshot& player_snapshot_1, const PlayerSnapshot& player_snapshot_2) const noexcept {
       return player_snapshot_1.player_game_index_ > player_snapshot_2.player_game_index_;
     }
@@ -96,9 +97,9 @@ private:
   /// \brief This is relative to a 10-point game. Victory point counts are adjusted to a 10-point game.
   double average_victory_points_per_game_{0.0};
 
-  std::map<Place, int64_t, Place::sort_ascending> place_counts_;
+  std::map<Place, int64_t, Place::sort> place_counts_;
 
-  std::map<Place, Percentage, Place::sort_ascending> place_percentages_;
+  std::map<Place, Percentage, Place::sort> place_percentages_;
 
   EloRating current_elo_rating_;
 
@@ -129,7 +130,7 @@ private:
     }
     const std::optional<Place> found{game.place(name)};
     if (found.has_value()) {
-      const std::map<Place, int64_t, Place::sort_ascending>::iterator place_count{place_counts_.find(found.value())};
+      const std::map<Place, int64_t, Place::sort>::iterator place_count{place_counts_.find(found.value())};
       if (place_count != place_counts_.end()) {
         ++(place_count->second);
       } else {

@@ -28,20 +28,20 @@ public:
       error("Player " + player_name.value() + " is not a participant in the game: " + game.print());
     }
     // Number of enemies.
-    const std::size_t number_of_opponents{game.size() - game.number_of_players_on_team(player_name).value()};
+    const std::size_t number_of_opponents{game.participants().size() - game.number_of_players_on_team(player_name).value()};
     // Maximum update factor.
     const double maximum_update_factor_{maximum_update_factor(number_of_opponents)};
     // Player previous Elo rating.
     EloRating elo_rating{previous_elo_rating(player_name, previous_elo_ratings)};
     // Update the Elo rating using the actual and expected outcomes.
-    for (const Standing& standing : game ) {
-      if (player_name != standing.player_name()) {
-        if (game.mode() == GameMode::Teams && place.value() == standing.place()) {
+    for (const Participant& participant : game.participants() ) {
+      if (player_name != participant.player_name()) {
+        if (game.mode() == GameMode::Teams && place.value() == participant.place()) {
           // In this case, this is an ally. Players do not compete against their allies.
           continue;
         }
-        const EloRating opponent_elo_rating{previous_elo_rating(standing.player_name(), previous_elo_ratings)};
-        const double actual_outcome{place.value().outcome(standing.place())};
+        const EloRating opponent_elo_rating{previous_elo_rating(participant.player_name(), previous_elo_ratings)};
+        const double actual_outcome{place.value().outcome(participant.place())};
         const double expected_outcome{elo_rating.expected_outcome(opponent_elo_rating)};
         elo_rating += maximum_update_factor_ * (actual_outcome - expected_outcome);
       }
@@ -130,13 +130,8 @@ public:
     value_ /= number;
   }
 
-  struct sort_ascending {
-    bool operator()(const EloRating& elo_rating_1, const EloRating& elo_rating_2) const noexcept {
-      return elo_rating_1 < elo_rating_2;
-    }
-  };
-
-  struct sort_descending {
+  /// \brief Sort descending, i.e. from the highest Elo rating downwards.
+  struct sort {
     bool operator()(const EloRating& elo_rating_1, const EloRating& elo_rating_2) const noexcept {
       return elo_rating_1 > elo_rating_2;
     }

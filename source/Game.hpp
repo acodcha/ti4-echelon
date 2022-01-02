@@ -2,7 +2,7 @@
 
 #include "Date.hpp"
 #include "GameMode.hpp"
-#include "Standing.hpp"
+#include "Participants.hpp"
 
 namespace TI4Echelon {
 
@@ -19,7 +19,7 @@ public:
     if (lines.size() >= 3) {
       initialize_header(lines[0]);
       for (std::size_t index = 1; index < lines.size(); ++index) {
-        initialize_standing(lines[index]);
+        initialize_player(lines[index]);
       }
       check_mode();
     } else {
@@ -50,6 +50,10 @@ public:
     return mode_;
   }
 
+  const Participants& participants() const noexcept {
+    return participants_;
+  }
+
   std::optional<std::size_t> number_of_players_on_team(const PlayerName& player_name) const noexcept {
     if (exists(player_name)) {
       switch (mode_) {
@@ -59,8 +63,8 @@ public:
         case GameMode::Teams:
           const std::optional<Place> optional_place{place(player_name)};
           std::size_t counter{0};
-          for (const Standing& standing : standings_) {
-            if (standing.place() == optional_place.value()) {
+          for (const Participant& participant : participants_) {
+            if (participant.place() == optional_place.value()) {
               ++counter;
             }
           }
@@ -82,7 +86,7 @@ public:
   }
 
   std::optional<Place> place(const PlayerName& player_name) const noexcept {
-    const std::map<PlayerName, Place, PlayerName::sort_alphabetically>::const_iterator found{player_names_to_places_.find(player_name)};
+    const std::map<PlayerName, Place, PlayerName::sort>::const_iterator found{player_names_to_places_.find(player_name)};
     if (found != player_names_to_places_.cend()) {
       return {found->second};
     } else {
@@ -110,7 +114,7 @@ public:
   }
 
   std::optional<VictoryPoints> raw_victory_points(const PlayerName& player_name) const noexcept {
-    const std::map<PlayerName, VictoryPoints, PlayerName::sort_alphabetically>::const_iterator found{player_names_to_victory_points_.find(player_name)};
+    const std::map<PlayerName, VictoryPoints, PlayerName::sort>::const_iterator found{player_names_to_victory_points_.find(player_name)};
     if (found != player_names_to_victory_points_.cend()) {
       return {found->second};
     } else {
@@ -119,8 +123,8 @@ public:
     }
   }
 
-  std::multiset<VictoryPoints, VictoryPoints::sort_descending> raw_victory_points(const FactionName& faction) const noexcept {
-    std::multiset<VictoryPoints, VictoryPoints::sort_descending> victory_points;
+  std::multiset<VictoryPoints, VictoryPoints::sort> raw_victory_points(const FactionName& faction) const noexcept {
+    std::multiset<VictoryPoints, VictoryPoints::sort> victory_points;
     const std::pair<std::multimap<FactionName, VictoryPoints, std::less<FactionName>>::const_iterator, std::multimap<FactionName, VictoryPoints, std::less<FactionName>>::const_iterator> range{faction_names_to_victory_points_.equal_range(faction)};
     for (std::multimap<FactionName, VictoryPoints, std::less<FactionName>>::const_iterator i = range.first; i != range.second; ++i) {
       victory_points.insert(i->second);
@@ -140,7 +144,7 @@ public:
   }
 
   std::multiset<double> adjusted_victory_points(const FactionName& faction) const noexcept {
-    const std::multiset<VictoryPoints, VictoryPoints::sort_descending> raw_victory_points_multiset{raw_victory_points(faction)};
+    const std::multiset<VictoryPoints, VictoryPoints::sort> raw_victory_points_multiset{raw_victory_points(faction)};
     std::multiset<double> adjusted_victory_points_;
     for (const VictoryPoints& raw_victory_points : raw_victory_points_multiset) {
       const VictoryPoints limited{std::min(raw_victory_points, victory_point_goal_)};
@@ -150,7 +154,7 @@ public:
   }
 
   std::optional<FactionName> faction_name(const PlayerName& player_name) const noexcept {
-    const std::map<PlayerName, FactionName, PlayerName::sort_alphabetically>::const_iterator found{player_names_to_faction_names_.find(player_name)};
+    const std::map<PlayerName, FactionName, PlayerName::sort>::const_iterator found{player_names_to_faction_names_.find(player_name)};
     if (found != player_names_to_faction_names_.cend()) {
       return {found->second};
     } else {
@@ -160,64 +164,16 @@ public:
   }
 
   std::string print() const noexcept {
-    std::string text{date_.print() + ", " + label(mode_) + ", " + victory_point_goal_.print() + " Victory Points, " + std::to_string(size()) + " Players, "};
+    std::string text{date_.print() + ", " + label(mode_) + ", " + victory_point_goal_.print() + " Victory Points, " + std::to_string(participants_.size()) + " Players, "};
     std::size_t counter{0};
-    for (const Standing& standing : standings_) {
-      text += standing.print();
-      if (counter + 1 < standings_.size()) {
+    for (const Participant& participant : participants_) {
+      text += participant.print();
+      if (counter + 1 < participants_.size()) {
         text += ", ";
       }
       ++counter;
     }
     return text;
-  }
-
-  struct const_iterator : public std::set<Standing, Standing::sort>::const_iterator {
-    const_iterator(const std::set<Standing, Standing::sort>::const_iterator i) noexcept : std::set<Standing, Standing::sort>::const_iterator(i) {}
-  };
-
-  struct const_reverse_iterator : public std::set<Standing, Standing::sort>::const_reverse_iterator {
-    const_reverse_iterator(const std::set<Standing, Standing::sort>::const_reverse_iterator i) noexcept : std::set<Standing, Standing::sort>::const_reverse_iterator(i) {}
-  };
-
-  bool empty() const noexcept {
-    return standings_.empty();
-  }
-
-  std::size_t size() const noexcept {
-    return standings_.size();
-  }
-
-  const_iterator begin() const noexcept {
-    return const_iterator(standings_.begin());
-  }
-
-  const_iterator cbegin() const noexcept {
-    return const_iterator(standings_.cbegin());
-  }
-
-  const_reverse_iterator rbegin() const noexcept {
-    return const_reverse_iterator(standings_.rbegin());
-  }
-
-  const_reverse_iterator crbegin() const noexcept {
-    return const_reverse_iterator(standings_.crbegin());
-  }
-
-  const_iterator end() const noexcept {
-    return const_iterator(standings_.end());
-  }
-
-  const_iterator cend() const noexcept {
-    return const_iterator(standings_.cend());
-  }
-
-  const_reverse_iterator rend() const noexcept {
-    return const_reverse_iterator(standings_.rend());
-  }
-
-  const_reverse_iterator crend() const noexcept {
-    return const_reverse_iterator(standings_.crend());
   }
 
   struct sort {
@@ -241,20 +197,20 @@ private:
 
   GameMode mode_{GameMode::FreeForAll};
 
-  /// \brief Set of player standings.
-  std::set<Standing, Standing::sort> standings_;
+  /// \brief Participants in this game.
+  Participants participants_;
 
   /// \brief Set of player names. Player names are unique.
-  std::set<PlayerName, PlayerName::sort_alphabetically> player_names_;
+  std::set<PlayerName, PlayerName::sort> player_names_;
 
   /// \brief Place of each player name.
-  std::map<PlayerName, Place, PlayerName::sort_alphabetically> player_names_to_places_;
+  std::map<PlayerName, Place, PlayerName::sort> player_names_to_places_;
 
   /// \brief Victory points of each player name.
-  std::map<PlayerName, VictoryPoints, PlayerName::sort_alphabetically> player_names_to_victory_points_;
+  std::map<PlayerName, VictoryPoints, PlayerName::sort> player_names_to_victory_points_;
 
   /// \brief Faction name of each player name.
-  std::map<PlayerName, FactionName, PlayerName::sort_alphabetically> player_names_to_faction_names_;
+  std::map<PlayerName, FactionName, PlayerName::sort> player_names_to_faction_names_;
 
   /// \brief Set of faction names. A multiset is used because the Custom faction can appear multiple times.
   std::multiset<FactionName, std::less<FactionName>> faction_names_;
@@ -284,9 +240,9 @@ private:
     }
   }
 
-  void initialize_standing(const std::string& line) {
+  void initialize_player(const std::string& line) {
     // The line is expected to read: "<place> <player-name> <victory-points> <faction>""
-    const std::vector<std::string> words{parse_standing(line)};
+    const std::vector<std::string> words{parse_participant(line)};
     if (words.size() == 4) {
       const Place place{words[0]};
       const PlayerName player_name{words[1]};
@@ -295,7 +251,7 @@ private:
       if (!optional_faction_name.has_value()) {
         error("'" + words[3] + "' is not a valid faction for the game played on " + date_.print() + ".");
       }
-      standings_.emplace(place, player_name, victory_points, optional_faction_name.value());
+      participants_.emplace(place, player_name, victory_points, optional_faction_name.value());
       initialize_player_names(place, player_name, victory_points, optional_faction_name.value());
       initialize_faction_names(place, player_name, victory_points, optional_faction_name.value());
     } else {
@@ -303,7 +259,7 @@ private:
     }
   }
 
-  std::vector<std::string> parse_standing(const std::string& line) const noexcept {
+  std::vector<std::string> parse_participant(const std::string& line) const noexcept {
     // Expect any number of whitespace characters delimiting the place, player name, number of victory points, and faction name.
     // However, expect the words of the faction name to be separated by only a single space.
     std::vector<std::string> words;
@@ -323,7 +279,7 @@ private:
   }
 
   void initialize_player_names(const Place& place, const PlayerName& player_name, const VictoryPoints& victory_points, const FactionName& faction_name) {
-    const std::pair<std::set<PlayerName, PlayerName::sort_alphabetically>::const_iterator, bool> result{player_names_.insert(player_name)};
+    const std::pair<std::set<PlayerName, PlayerName::sort>::const_iterator, bool> result{player_names_.insert(player_name)};
     if (!result.second) {
       error("Player '" + player_name.value() + "' appears twice in the game played on " + date_.print() + ".");
     }
@@ -352,11 +308,11 @@ private:
 
   /// \brief In free-for-all games, each player must have a unique place.
   void check_mode_free_for_all() const noexcept {
-    std::set<Place, Place::sort_ascending> places;
-    for (const Standing& standing : standings_) {
-      const std::pair<std::set<Place, Place::sort_ascending>::const_iterator, bool> result{places.insert(standing.place())};
+    std::set<Place, Place::sort> places;
+    for (const Participant& participant : participants_) {
+      const std::pair<std::set<Place, Place::sort>::const_iterator, bool> result{places.insert(participant.place())};
       if (!result.second) {
-        error("Place '" + standing.place().print() + "' appears twice in the free-for-all game played on " + date_.print() + ".");
+        error("Place '" + participant.place().print() + "' appears twice in the free-for-all game played on " + date_.print() + ".");
       }
     }
   }

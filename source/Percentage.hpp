@@ -103,13 +103,8 @@ public:
     value_ /= number;
   }
 
-  struct sort_ascending {
-    bool operator()(const Percentage& percentage_1, const Percentage& percentage_2) const noexcept {
-      return percentage_1.value() < percentage_2.value();
-    }
-  };
-
-  struct sort_descending {
+  /// \brief Sort descending, i.e. from highest percentage to lowest percentage.
+  struct sort {
     bool operator()(const Percentage& percentage_1, const Percentage& percentage_2) const noexcept {
       return percentage_1.value() > percentage_2.value();
     }

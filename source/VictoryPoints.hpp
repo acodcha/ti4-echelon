@@ -105,13 +105,8 @@ public:
     value_ /= number;
   }
 
-  struct sort_ascending {
-    bool operator()(const VictoryPoints& points_1, const VictoryPoints& points_2) const noexcept {
-      return points_1.value() < points_2.value();
-    }
-  };
-
-  struct sort_descending {
+  /// \brief Sort descending, i.e. from most victory points to least victory points.
+  struct sort {
     bool operator()(const VictoryPoints& points_1, const VictoryPoints& points_2) const noexcept {
       return points_1.value() > points_2.value();
     }

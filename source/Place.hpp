@@ -122,7 +122,8 @@ public:
     return result;
   }
 
-  struct sort_ascending {
+  /// \brief Sort ascending, i.e. from first place to last place.
+  struct sort {
     bool operator()(const Place& place_1, const Place& place_2) const noexcept {
       return place_1.value() < place_2.value();
     }
