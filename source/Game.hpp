@@ -3,6 +3,7 @@
 #include "Date.hpp"
 #include "GameMode.hpp"
 #include "Participants.hpp"
+#include "Teams.hpp"
 
 namespace TI4Echelon {
 
@@ -54,6 +55,14 @@ public:
     return participants_;
   }
 
+  const PlayerNames& player_names() const noexcept {
+    return player_names_;
+  }
+
+  const Teams& teams() const noexcept {
+    return teams_;
+  }
+
   std::optional<std::size_t> number_of_players_on_team(const PlayerName& player_name) const noexcept {
     if (exists(player_name)) {
       switch (mode_) {
@@ -78,7 +87,7 @@ public:
   }
 
   bool exists(const PlayerName& player_name) const noexcept {
-    return player_names_.find(player_name) != player_names_.cend();
+    return player_names_.exists(player_name);
   }
 
   bool exists(const FactionName& faction_name) const noexcept {
@@ -200,8 +209,11 @@ private:
   /// \brief Participants in this game.
   Participants participants_;
 
+  /// \brief Teams in this game.
+  Teams teams_;
+
   /// \brief Set of player names. Player names are unique.
-  std::set<PlayerName, PlayerName::sort> player_names_;
+  PlayerNames player_names_;
 
   /// \brief Place of each player name.
   std::map<PlayerName, Place, PlayerName::sort> player_names_to_places_;
@@ -252,6 +264,7 @@ private:
         error("'" + words[3] + "' is not a valid faction for the game played on " + date_.print() + ".");
       }
       participants_.emplace(place, player_name, victory_points, optional_faction_name.value());
+      initialize_team(place, player_name);
       initialize_player_names(place, player_name, victory_points, optional_faction_name.value());
       initialize_faction_names(place, player_name, victory_points, optional_faction_name.value());
     } else {
@@ -278,8 +291,17 @@ private:
     return words;
   }
 
+  void initialize_team(const Place& place, const PlayerName& player_name) noexcept {
+    const Teams::iterator found{teams_.find({place})};
+    if (found != teams_.end()) {
+      found->second.insert(player_name);
+    } else {
+      teams_.emplace(place, player_name);
+    }
+  }
+
   void initialize_player_names(const Place& place, const PlayerName& player_name, const VictoryPoints& victory_points, const FactionName& faction_name) {
-    const std::pair<std::set<PlayerName, PlayerName::sort>::const_iterator, bool> result{player_names_.insert(player_name)};
+    const std::pair<PlayerNames::const_iterator, bool> result{player_names_.insert(player_name)};
     if (!result.second) {
       error("Player '" + player_name.value() + "' appears twice in the game played on " + date_.print() + ".");
     }

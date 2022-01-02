@@ -34,14 +34,14 @@ public:
     // Player previous Elo rating.
     EloRating elo_rating{previous_elo_rating(player_name, previous_elo_ratings)};
     // Update the Elo rating using the actual and expected outcomes.
-    for (const Participant& participant : game.participants() ) {
-      if (player_name != participant.player_name()) {
-        if (game.mode() == GameMode::Teams && place.value() == participant.place()) {
+    for (const PlayerName& other_player_name : game.player_names() ) {
+      if (player_name != other_player_name) {
+        if (game.mode() == GameMode::Teams && place.value() == game.place(other_player_name).value()) {
           // In this case, this is an ally. Players do not compete against their allies.
           continue;
         }
-        const EloRating opponent_elo_rating{previous_elo_rating(participant.player_name(), previous_elo_ratings)};
-        const double actual_outcome{place.value().outcome(participant.place())};
+        const EloRating opponent_elo_rating{previous_elo_rating(other_player_name, previous_elo_ratings)};
+        const double actual_outcome{place.value().outcome(game.place(other_player_name).value())};
         const double expected_outcome{elo_rating.expected_outcome(opponent_elo_rating)};
         elo_rating += maximum_update_factor_ * (actual_outcome - expected_outcome);
       }

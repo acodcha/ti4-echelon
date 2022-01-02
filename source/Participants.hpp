@@ -9,6 +9,7 @@ class Participants {
 
 public:
 
+  /// \brief Default constructor. Initializes an empty set of participants.
   Participants() noexcept {}
 
   struct const_iterator : public std::set<Participant, Participant::sort>::const_iterator {
