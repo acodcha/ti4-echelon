@@ -10,6 +10,7 @@ class PlayerSnapshot {
 
 public:
 
+  /// \brief Default constructor. Does not initialize anything.
   PlayerSnapshot() noexcept {}
 
   PlayerSnapshot(
@@ -76,7 +77,7 @@ public:
   }
 
   std::string print() const noexcept {
-    return std::to_string(player_game_number()) + " games , " + current_elo_rating_.print() + " current rating , " + average_elo_rating_.print() + " average rating , " + real_number_to_string(average_victory_points_per_game_, 2) + " pts , " + place_percentage({1}).print() + " 1st , " + place_percentage({2}).print() + " 2nd , " + place_percentage({3}).print() + " 3rd";
+    return std::to_string(player_game_number()) + " games, " + current_elo_rating_.print() + " current rating, " + average_elo_rating_.print() + " average rating, " + real_number_to_string(average_victory_points_per_game_, 2) + " average victory points, " + place_percentage({1}).print() + " (" + std::to_string(place_count({1})) + ") 1st place, " + place_percentage({2}).print() + " (" + std::to_string(place_count({2})) + ") 2nd place, " + place_percentage({3}).print() + " (" + std::to_string(place_count({3})) + ") 3rd place";
   }
 
   /// \brief Sort from most recent to oldest.
@@ -120,7 +121,7 @@ private:
         average_victory_points_per_game_ = found.value();
       }
     } else {
-      error("Player '" + name.value() + "' is not a participant in the game " + game.print() + ".");
+      error("Player '" + name.value() + "' is not a participant in the game '" + game.print() + "'.");
     }
   }
 
@@ -137,7 +138,7 @@ private:
         place_counts_.emplace(found.value(), 1);
       }
     } else {
-      error("Player '" + name.value() + "' is not a participant in the game " + game.print() + ".");
+      error("Player '" + name.value() + "' is not a participant in the game '" + game.print() + "'.");
     }
   }
 

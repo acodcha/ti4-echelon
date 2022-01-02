@@ -37,16 +37,8 @@ public:
     }
   }
 
-  struct iterator : public std::vector<Game>::iterator {
-    iterator(const std::vector<Game>::iterator i) noexcept : std::vector<Game>::iterator(i) {}
-  };
-
   struct const_iterator : public std::vector<Game>::const_iterator {
     const_iterator(const std::vector<Game>::const_iterator i) noexcept : std::vector<Game>::const_iterator(i) {}
-  };
-
-  struct reverse_iterator : public std::vector<Game>::reverse_iterator {
-    reverse_iterator(const std::vector<Game>::reverse_iterator i) noexcept : std::vector<Game>::reverse_iterator(i) {}
   };
 
   struct const_reverse_iterator : public std::vector<Game>::const_reverse_iterator {
@@ -61,32 +53,32 @@ public:
     return data_.size();
   }
 
-  iterator begin() noexcept {
-    return iterator(data_.begin());
+  const_iterator begin() const noexcept {
+    return const_iterator(data_.begin());
   }
 
   const_iterator cbegin() const noexcept {
     return const_iterator(data_.cbegin());
   }
 
-  reverse_iterator rbegin() noexcept {
-    return reverse_iterator(data_.rbegin());
+  const_reverse_iterator rbegin() const noexcept {
+    return const_reverse_iterator(data_.rbegin());
   }
 
   const_reverse_iterator crbegin() const noexcept {
     return const_reverse_iterator(data_.crbegin());
   }
 
-  iterator end() noexcept {
-    return iterator(data_.end());
+  const_iterator end() const noexcept {
+    return const_iterator(data_.end());
   }
 
   const_iterator cend() const noexcept {
     return const_iterator(data_.cend());
   }
 
-  reverse_iterator rend() noexcept {
-    return reverse_iterator(data_.rend());
+  const_reverse_iterator rend() const noexcept {
+    return const_reverse_iterator(data_.rend());
   }
 
   const_reverse_iterator crend() const noexcept {
@@ -95,6 +87,7 @@ public:
 
 private:
 
+  /// \brief Sorted in reverse-chronological order, i.e. from most recent to oldest.
   std::vector<Game> data_;
 
 }; // class Games

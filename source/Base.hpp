@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Color.hpp"
 #include "CurrentDateAndTime.hpp"
 #include "Enumerations.hpp"
 #include "Message.hpp"

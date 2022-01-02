@@ -131,7 +131,7 @@ public:
     }
   }
 
-  /// \brief Sort in reverse-chronological order, i.e. by the most recent date.
+  /// \brief Sort in reverse-chronological order, i.e. from most recent to oldest.
   struct sort {
     bool operator()(const Date& date_1, const Date& date_2) const noexcept {
       return date_1 > date_2;
