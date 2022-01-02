@@ -13,8 +13,14 @@ public:
   /// \brief Default constructor. Initializes to an empty team.
   Team() noexcept {}
 
-  /// \brief Constructor that initializes the set to a single player name. Additional player names can be inserted later.
+  /// \brief Constructor that initializes the team to a place without any player names. Player names can be inserted later.
+  Team(const Place& place) noexcept : place_(place) {}
+
+  /// \brief Constructor that initializes the team to a place and a single player name. Additional player names can be inserted later.
   Team(const Place& place, const PlayerName& player_name) noexcept : place_(place), player_names_(player_name) {}
+
+  /// \brief Constructor that initializes the team to a place and player names.
+  Team(const Place& place, const PlayerNames& player_names) noexcept : place_(place), player_names_(player_names) {}
 
   const Place& place() const noexcept {
     return place_;
@@ -33,51 +39,27 @@ public:
   }
 
   bool operator==(const Team& other) const noexcept {
-    return place_ == other.place_ && player_names_ == other.player_names_;
+    return place_ == other.place_;
   }
 
   bool operator!=(const Team& other) const noexcept {
-    return place_ != other.place_ || player_names_ != other.player_names_;
+    return place_ != other.place_;
   }
 
   bool operator<(const Team& other) const noexcept {
-    if (place_ < other.place_) {
-      return true;
-    } else if (place_ > other.place_) {
-      return false;
-    } else {
-      return player_names_ < other.player_names_;
-    }
+    return place_ < other.place_;
   }
 
   bool operator<=(const Team& other) const noexcept {
-    if (place_ < other.place_) {
-      return true;
-    } else if (place_ > other.place_) {
-      return false;
-    } else {
-      return player_names_ <= other.player_names_;
-    }
+    return place_ <= other.place_;
   }
 
   bool operator>(const Team& other) const noexcept {
-    if (place_ < other.place_) {
-      return false;
-    } else if (place_ > other.place_) {
-      return true;
-    } else {
-      return player_names_ > other.player_names_;
-    }
+    return place_ > other.place_;
   }
 
   bool operator>=(const Team& other) const noexcept {
-    if (place_ < other.place_) {
-      return false;
-    } else if (place_ > other.place_) {
-      return true;
-    } else {
-      return player_names_ >= other.player_names_;
-    }
+    return place_ >= other.place_;
   }
 
   /// \brief Sort from best team to worst team.
@@ -102,7 +84,7 @@ namespace std {
   template <> struct hash<TI4Echelon::Team> {
 
     size_t operator()(const TI4Echelon::Team& team) const {
-      return hash<TI4Echelon::Place>()(team.place()) ^ hash<TI4Echelon::PlayerNames>()(team.player_names());
+      return hash<TI4Echelon::Place>()(team.place());
     }
 
   };

@@ -28,7 +28,7 @@ public:
       error("Player " + player_name.value() + " is not a participant in the game: " + game.print());
     }
     // Number of enemies.
-    const std::size_t number_of_opponents{game.participants().size() - game.number_of_players_on_team(player_name).value()};
+    const std::size_t number_of_opponents{game.participants().size() - game.number_of_players_on_team(player_name)};
     // Maximum update factor.
     const double maximum_update_factor_{maximum_update_factor(number_of_opponents)};
     // Player previous Elo rating.

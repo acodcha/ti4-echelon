@@ -63,26 +63,17 @@ public:
     return teams_;
   }
 
-  std::optional<std::size_t> number_of_players_on_team(const PlayerName& player_name) const noexcept {
-    if (exists(player_name)) {
-      switch (mode_) {
-        case GameMode::FreeForAll:
-          return {1};
-          break;
-        case GameMode::Teams:
-          const std::optional<Place> optional_place{place(player_name)};
-          std::size_t counter{0};
-          for (const Participant& participant : participants_) {
-            if (participant.place() == optional_place.value()) {
-              ++counter;
-            }
-          }
-          return {counter};
-          break;
+  std::size_t number_of_players_on_team(const PlayerName& player_name) const {
+    const std::optional<Place> optional_place{place(player_name)};
+    if (optional_place.has_value()) {
+      const Teams::const_iterator team{teams_.find(optional_place.value())};
+      if (team != teams_.cend()) {
+        return team->player_names().size();
+      } else {
+        error("Player '" + player_name.value() + "' is not on any team.");;
       }
     } else {
-      const std::optional<std::size_t> no_data;
-      return no_data;
+      return 0;
     }
   }
 
@@ -264,7 +255,7 @@ private:
         error("'" + words[3] + "' is not a valid faction for the game played on " + date_.print() + ".");
       }
       participants_.emplace(place, player_name, victory_points, optional_faction_name.value());
-      initialize_team(place, player_name);
+      update_teams(place, player_name);
       initialize_player_names(place, player_name, victory_points, optional_faction_name.value());
       initialize_faction_names(place, player_name, victory_points, optional_faction_name.value());
     } else {
@@ -291,10 +282,17 @@ private:
     return words;
   }
 
-  void initialize_team(const Place& place, const PlayerName& player_name) noexcept {
-    const Teams::iterator found{teams_.find({place})};
+  void update_teams(const Place& place, const PlayerName& player_name) noexcept {
+    const Teams::const_iterator found{teams_.find({place})};
     if (found != teams_.end()) {
-      found->second.insert(player_name);
+      if (found->player_names().exists(player_name)) {
+        error("Player '" + player_name.value() + "' is already on team '" + found->print() + "'.");
+      } else {
+        Team team{*found};
+        team.mutable_player_names().insert(player_name);
+        teams_.erase(found);
+        teams_.insert(team);
+      }
     } else {
       teams_.emplace(place, player_name);
     }
