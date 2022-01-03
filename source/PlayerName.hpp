@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Path.hpp"
+#include "Base.hpp"
 
 namespace TI4Echelon {
 
@@ -14,10 +14,6 @@ public:
 
   const std::string& value() const noexcept {
     return value_;
-  }
-
-  std::filesystem::path directory_name() const noexcept {
-    return Path::PlayersDirectoryName / std::filesystem::path{value_};
   }
 
   bool operator==(const PlayerName& other) const noexcept {

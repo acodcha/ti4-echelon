@@ -164,15 +164,7 @@ public:
   }
 
   std::string print() const noexcept {
-    std::string text{date_.print() + ", " + label(mode_) + ", " + victory_point_goal_.print() + " Victory Points, " + std::to_string(participants_.size()) + " Players, "};
-    std::size_t counter{0};
-    for (const Participant& participant : participants_) {
-      text += participant.print();
-      if (counter + 1 < participants_.size()) {
-        text += ", ";
-      }
-      ++counter;
-    }
+    std::string text{date_.print() + ", " + label(mode_) + ", " + victory_point_goal_.print() + " Victory Points, " + std::to_string(participants_.size()) + " Players, " + participants_.print()};
     return text;
   }
 

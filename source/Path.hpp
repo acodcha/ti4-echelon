@@ -4,27 +4,60 @@
 
 namespace TI4Echelon {
 
+// leaderboard/
+//     README.md
+//     players/
+//         points.gnuplot
+//         points.png
+//         ratings.gnuplot
+//         ratings.png
+//         winrates.gnuplot
+//         winrates.png
+//         Alice/
+//             README.md
+//             data.dat
+//             points.gnuplot
+//             points.png
+//             ratings.gnuplot
+//             ratings.png
+//             winrates.gnuplot
+//             winrates.png
+//     factions/
+//         points.gnuplot
+//         points.png
+//         ratings.gnuplot
+//         ratings.png
+//         winrates.gnuplot
+//         winrates.png
+//         Arborec/
+//             README.md
+//             data.dat
+//             points.gnuplot
+//             points.png
+//             ratings.gnuplot
+//             ratings.png
+//             winrates.gnuplot
+//             winrates.png
+
 namespace Path {
 
 const std::filesystem::path PlayersDirectoryName{"players"};
 
-const std::filesystem::path GlobalPlotsDirectoryName{"plots"};
-
-const std::filesystem::path PlayerDataDirectoryName{"data"};
-
-const std::filesystem::path PlayerPlotsDirectoryName{"plots"};
+const std::filesystem::path FactionsDirectoryName{"factions"};
 
 const std::filesystem::path LeaderboardFileName{"README.md"};
 
-const std::filesystem::path RatingPlotFileStem{"rating"};
+const std::filesystem::path DataFileName{"data.dat"};
+
+const std::filesystem::path RatingsPlotFileStem{"ratings"};
 
 const std::filesystem::path PointsPlotFileStem{"points"};
 
-const std::filesystem::path WinRatePlotFileStem{"winrate"};
+const std::filesystem::path WinRatesPlotFileStem{"winrates"};
 
 const std::filesystem::path PlotConfigurationFileExtension{"gnuplot"};
 
-const std::filesystem::path PlotImageFileExtension{"jpg"};
+const std::filesystem::path PlotImageFileExtension{"png"};
 
 } // namespace Path
 

@@ -14,21 +14,21 @@ public:
 
   std::string print_as_data() const noexcept {
     std::stringstream stream;
-    stream << print_header_as_data();
+    stream << print_data_header();
     const std::size_t number_of_rows_{number_of_rows()};
     for (std::size_t row_index = 0; row_index < number_of_rows_; ++row_index) {
-      stream << std::endl << print_row_as_data(row_index);
+      stream << std::endl << print_data_row(row_index);
     }
     return stream.str();
   }
 
   std::string print_as_markdown() const noexcept {
     std::stringstream stream;
-    stream << print_header_as_markdown() << std::endl;
-    stream << print_alignment_as_markdown() << std::endl;
+    stream << print_markdown_header() << std::endl;
+    stream << print_markdown_alignment() << std::endl;
     const std::size_t number_of_rows_{number_of_rows()};
     for (std::size_t row_index = 0; row_index < number_of_rows_; ++row_index) {
-      stream << std::endl << print_row_as_markdown(row_index);
+      stream << std::endl << print_markdown_row(row_index);
     }
     return stream.str();
   }
@@ -100,15 +100,15 @@ public:
     return const_reverse_iterator(columns_.crend());
   }
 
-  void emplace_back(const std::string& header, const Alignment alignment) noexcept {
+  void insert_column(const std::string& header, const Alignment alignment) noexcept {
     columns_.emplace_back(header, alignment);
   }
 
-  const TableColumn& at(const std::size_t index) const {
+  const TableColumn& column(const std::size_t index) const {
     columns_.at(index);
   }
 
-  TableColumn& at(const std::size_t index) {
+  TableColumn& column(const std::size_t index) {
     columns_.at(index);
   }
 
@@ -116,7 +116,7 @@ protected:
 
   std::vector<TableColumn> columns_;
 
-  std::string print_header_as_data() const noexcept {
+  std::string print_data_header() const noexcept {
     std::string text{"#"};
     for (const TableColumn& column : columns_) {
       if (text.size() > 1) {
@@ -127,7 +127,7 @@ protected:
     return text;
   }
 
-  std::string print_header_as_markdown() const noexcept {
+  std::string print_markdown_header() const noexcept {
     std::string text{"|"};
     for (const TableColumn& column : columns_) {
       text + " " + markdown_boldface(column.header()) + " |";
@@ -135,7 +135,7 @@ protected:
     return text;
   }
 
-  std::string print_alignment_as_markdown() const noexcept {
+  std::string print_markdown_alignment() const noexcept {
     std::string text{"|"};
     for (const TableColumn& column : columns_) {
       text + " " + markdown(column.alignment()) + " |";
@@ -143,14 +143,14 @@ protected:
     return text;
   }
 
-  std::string print_row_as_data(const std::size_t index) const noexcept {
+  std::string print_data_row(const std::size_t index) const noexcept {
     std::string text;
     for (const TableColumn& column : columns_) {
       if (index < column.number_of_rows()) {
         if (!text.empty()) {
           text += " ";
         }
-        text += column.at(index).print();
+        text += column.row(index).print();
       } else {
         text += " ";
       }
@@ -158,11 +158,11 @@ protected:
     return text;
   }
 
-  std::string print_row_as_markdown(const std::size_t index) const noexcept {
+  std::string print_markdown_row(const std::size_t index) const noexcept {
     std::string text{"|"};
     for (const TableColumn& column : columns_) {
       if (index < column.number_of_rows()) {
-        text += " " + column.at(index).print() + " |";
+        text += " " + column.row(index).print() + " |";
       } else {
         text += "  |";
       }

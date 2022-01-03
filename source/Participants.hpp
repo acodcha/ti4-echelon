@@ -12,6 +12,17 @@ public:
   /// \brief Default constructor. Initializes an empty set of participants.
   Participants() noexcept {}
 
+  std::string print() const noexcept {
+    std::string text;
+    for (const Participant& participant : data_) {
+      if (!text.empty()) {
+        text += ", ";
+      }
+      text += participant.print();
+    }
+    return text;
+  }
+
   struct const_iterator : public std::set<Participant, Participant::sort>::const_iterator {
     const_iterator(const std::set<Participant, Participant::sort>::const_iterator i) noexcept : std::set<Participant, Participant::sort>::const_iterator(i) {}
   };

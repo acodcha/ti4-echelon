@@ -14,11 +14,15 @@ public:
 
   TableCell(const std::size_t number) noexcept : value_(std::to_string(number)) {}
 
+  TableCell(const std::string& text) noexcept : value_(text) {}
+
   TableCell(const Date& date) noexcept : value_(date.print()) {}
 
   TableCell(const EloRating& elo_rating) noexcept : value_(elo_rating.print()) {}
 
   TableCell(const FactionName& faction_name) noexcept : value_(label(faction_name)) {}
+
+  TableCell(const GameMode& game_mode) noexcept : value_(label(game_mode)) {}
 
   TableCell(const Percentage& percentage) noexcept : value_(percentage.print()) {}
 

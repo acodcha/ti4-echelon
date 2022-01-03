@@ -31,12 +31,12 @@ public:
   }
 
   /// \brief Global number of games played, including this one, at this time.
-  constexpr int64_t global_game_number() const noexcept {
+  constexpr std::size_t global_game_number() const noexcept {
     return global_game_index_ + 1;
   }
 
   /// \brief Number of games played by this player, including this one, at this time.
-  constexpr int64_t player_game_number() const noexcept {
+  constexpr std::size_t player_game_number() const noexcept {
     return player_game_index_ + 1;
   }
 
@@ -49,8 +49,8 @@ public:
   }
 
   /// \brief Number of Nth place finishes.
-  int64_t place_count(const Place place) const noexcept {
-    const std::map<Place, int64_t, Place::sort>::const_iterator found{place_counts_.find(place)};
+  std::size_t place_count(const Place place) const noexcept {
+    const std::map<Place, std::size_t, Place::sort>::const_iterator found{place_counts_.find(place)};
     if (found != place_counts_.cend()) {
       return found->second;
     } else {
@@ -66,6 +66,10 @@ public:
     } else {
       return {0.0};
     }
+  }
+
+  std::string print_place_percentage_and_count(const Place place) const noexcept {
+    return place_percentage(place).print() + " (" + std::to_string(place_count(place)) + ")";
   }
 
   constexpr const EloRating& current_elo_rating() const noexcept {
@@ -89,16 +93,16 @@ public:
 
 private:
 
-  int64_t global_game_index_{0};
+  std::size_t global_game_index_{0};
 
-  int64_t player_game_index_{0};
+  std::size_t player_game_index_{0};
 
   Date date_;
 
   /// \brief This is relative to a 10-point game. Victory point counts are adjusted to a 10-point game.
   double average_victory_points_per_game_{0.0};
 
-  std::map<Place, int64_t, Place::sort> place_counts_;
+  std::map<Place, std::size_t, Place::sort> place_counts_;
 
   std::map<Place, Percentage, Place::sort> place_percentages_;
 
@@ -131,7 +135,7 @@ private:
     }
     const std::optional<Place> found{game.place(name)};
     if (found.has_value()) {
-      const std::map<Place, int64_t, Place::sort>::iterator place_count{place_counts_.find(found.value())};
+      const std::map<Place, std::size_t, Place::sort>::iterator place_count{place_counts_.find(found.value())};
       if (place_count != place_counts_.end()) {
         ++(place_count->second);
       } else {

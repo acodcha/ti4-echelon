@@ -80,11 +80,11 @@ public:
     return const_reverse_iterator(cells_.crend());
   }
 
-  void push_back(const TableCell& cell) noexcept {
+  void insert_row(const TableCell& cell) noexcept {
     cells_.push_back(cell);
   }
 
-  const TableCell& at(const std::size_t index) const {
+  const TableCell& row(const std::size_t index) const {
     cells_.at(index);
   }
 
