@@ -28,7 +28,7 @@ public:
 
   std::string print() const noexcept {
     std::stringstream stream;
-    stream << "The statistics of the " << data_.size() << " players are:";
+    stream << "Calculated statistics for " << data_.size() << " players:";
     for (const Player& player : data_) {
       stream << std::endl << "- " << player.print() << ".";
     }

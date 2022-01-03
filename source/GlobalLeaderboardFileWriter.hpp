@@ -19,7 +19,7 @@ public:
     MarkdownFileWriter(directory / Path::LeaderboardFileName)
   {
     introduction();
-    players_section(directory, players);
+    players_section(players);
     factions_section();
     games_section(games);
     license_section();
@@ -48,37 +48,37 @@ private:
     line("Last updated " + current_utc_date_and_time() + ".");
     blank_line();
     list_link(section_title_players_);
-    nested_list_link(section_title_players_ + " " + subsection_title_summary_);
-    nested_list_link(section_title_players_ + " " + subsection_title_ratings_);
-    nested_list_link(section_title_players_ + " " + subsection_title_points_);
-    nested_list_link(section_title_players_ + " " + subsection_title_win_rates_);
+    nested_list_link(section_title_players_ + ": " + subsection_title_summary_);
+    nested_list_link(section_title_players_ + ": " + subsection_title_ratings_);
+    nested_list_link(section_title_players_ + ": " + subsection_title_points_);
+    nested_list_link(section_title_players_ + ": " + subsection_title_win_rates_);
     list_link(section_title_factions_);
-    nested_list_link(section_title_factions_ + " " + subsection_title_summary_);
-    nested_list_link(section_title_factions_ + " " + subsection_title_ratings_);
-    nested_list_link(section_title_factions_ + " " + subsection_title_points_);
-    nested_list_link(section_title_factions_ + " " + subsection_title_win_rates_);
+    nested_list_link(section_title_factions_ + ": " + subsection_title_summary_);
+    nested_list_link(section_title_factions_ + ": " + subsection_title_ratings_);
+    nested_list_link(section_title_factions_ + ": " + subsection_title_points_);
+    nested_list_link(section_title_factions_ + ": " + subsection_title_win_rates_);
     list_link(section_title_games_);
     list_link(section_title_license_);
   }
 
-  void players_section(const std::filesystem::path& directory, const Players& players) noexcept {
+  void players_section(const Players& players) noexcept {
     section(section_title_players_);
-    list_link(section_title_players_ + " " + subsection_title_summary_);
-    list_link(section_title_players_ + " " + subsection_title_ratings_);
-    list_link(section_title_players_ + " " + subsection_title_points_);
-    list_link(section_title_players_ + " " + subsection_title_win_rates_);
+    list_link(section_title_players_ + ": " + subsection_title_summary_);
+    list_link(section_title_players_ + ": " + subsection_title_ratings_);
+    list_link(section_title_players_ + ": " + subsection_title_points_);
+    list_link(section_title_players_ + ": " + subsection_title_win_rates_);
     link_back_to_top();
-    subsection(section_title_players_ + " " + subsection_title_summary_);
+    subsection(section_title_players_ + ": " + subsection_title_summary_);
     players_summary_table(players);
     link_back_to_section(section_title_players_);
-    subsection(section_title_players_ + " " + subsection_title_ratings_);
-    players_ratings_plot(directory);
+    subsection(section_title_players_ + ": " + subsection_title_ratings_);
+    players_ratings_plot();
     link_back_to_section(section_title_players_);
-    subsection(section_title_players_ + " " + subsection_title_points_);
-    players_points_plot(directory);
+    subsection(section_title_players_ + ": " + subsection_title_points_);
+    players_points_plot();
     link_back_to_section(section_title_players_);
-    subsection(section_title_players_ + " " + subsection_title_win_rates_);
-    players_win_rates_plot(directory);
+    subsection(section_title_players_ + ": " + subsection_title_win_rates_);
+    players_win_rates_plot();
     link_back_to_section(section_title_players_);
   }
 
@@ -105,43 +105,37 @@ private:
     line(table.print_as_markdown());
   }
 
-  void players_ratings_plot(const std::filesystem::path& directory) noexcept {
-    if (std::filesystem::exists(directory / Path::PlayersDirectoryName)) {
-      line("![Ratings Plot](" + std::filesystem::path{directory / Path::PlayersDirectoryName / Path::RatingsPlotFileStem}.string() + "." + Path::PlotImageFileExtension.string() + ")");
-    }
+  void players_ratings_plot() noexcept {
+    line("![Ratings Plot](" + std::filesystem::path{Path::PlayersDirectoryName / file_name(Path::RatingsPlotFileStem, Path::PlotImageFileExtension)}.string() + ")");
   }
 
-  void players_points_plot(const std::filesystem::path& directory) noexcept {
-    if (std::filesystem::exists(directory / Path::PlayersDirectoryName)) {
-      line("![Points Plot](" + std::filesystem::path{directory / Path::PlayersDirectoryName / Path::PointsPlotFileStem}.string() + "." + Path::PlotImageFileExtension.string() + ")");
-    }
+  void players_points_plot() noexcept {
+    line("![Points Plot](" + std::filesystem::path{Path::PlayersDirectoryName / file_name(Path::PointsPlotFileStem, Path::PlotImageFileExtension)}.string() + ")");
     blank_line();
     line("Victory points are adjusted relative to a 10-point game.");
   }
 
-  void players_win_rates_plot(const std::filesystem::path& directory) noexcept {
-    if (std::filesystem::exists(directory / Path::PlayersDirectoryName)) {
-      line("![Win Rates Plot](" + std::filesystem::path{directory / Path::PlayersDirectoryName / Path::WinRatesPlotFileStem}.string() + "." + Path::PlotImageFileExtension.string() + ")");
-    }
+  void players_win_rates_plot() noexcept {
+    line("![Win Rates Plot](" + std::filesystem::path{Path::PlayersDirectoryName / file_name(Path::WinRatesPlotFileStem, Path::PlotImageFileExtension)}.string() + ")");
   }
 
   void factions_section() noexcept {
     section(section_title_factions_);
-    list_link(section_title_factions_ + " " + subsection_title_summary_);
-    list_link(section_title_factions_ + " " + subsection_title_ratings_);
-    list_link(section_title_factions_ + " " + subsection_title_points_);
-    list_link(section_title_factions_ + " " + subsection_title_win_rates_);
+    list_link(section_title_factions_ + ": " + subsection_title_summary_);
+    list_link(section_title_factions_ + ": " + subsection_title_ratings_);
+    list_link(section_title_factions_ + ": " + subsection_title_points_);
+    list_link(section_title_factions_ + ": " + subsection_title_win_rates_);
     link_back_to_top();
-    subsection(section_title_factions_ + " " + subsection_title_summary_);
+    subsection(section_title_factions_ + ": " + subsection_title_summary_);
     line("Coming soon!");
     link_back_to_section(section_title_factions_);
-    subsection(section_title_factions_ + " " + subsection_title_ratings_);
+    subsection(section_title_factions_ + ": " + subsection_title_ratings_);
     line("Coming soon!");
     link_back_to_section(section_title_factions_);
-    subsection(section_title_factions_ + " " + subsection_title_points_);
+    subsection(section_title_factions_ + ": " + subsection_title_points_);
     line("Coming soon!");
     link_back_to_section(section_title_factions_);
-    subsection(section_title_factions_ + " " + subsection_title_win_rates_);
+    subsection(section_title_factions_ + ": " + subsection_title_win_rates_);
     line("Coming soon!");
     link_back_to_section(section_title_factions_);
   }

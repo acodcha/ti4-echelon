@@ -36,16 +36,16 @@ protected:
   }
 
   void list_link(const std::string link) noexcept {
-    line("- [" + link + "](#" + lowercase(replace_character(link, ' ', '-')) + ")");
+    line("- [" + link + "](#" + lowercase((replace_character(remove_non_alphanumeric_non_space_characters(link), ' ', '-'))) + ")");
   }
 
   void nested_list_link(const std::string link) noexcept {
-    line("    - [" + link + "](#" + lowercase(replace_character(link, ' ', '-')) + ")");
+    line("    - [" + link + "](#" + lowercase(replace_character(remove_non_alphanumeric_non_space_characters(link), ' ', '-')) + ")");
   }
 
   void link_back_to_section(const std::string link) noexcept {
     blank_line();
-    line("[(Back to " + link + ")](#" + lowercase(replace_character(link, ' ', '-')) + ")");
+    line("[(Back to " + link + ")](#" + lowercase(replace_character(remove_non_alphanumeric_non_space_characters(link), ' ', '-')) + ")");
   }
 
   void link_back_to_top() noexcept {

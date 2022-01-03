@@ -58,6 +58,17 @@ std::string remove_non_alphanumeric_characters(const std::string& text) noexcept
   return new_text;
 }
 
+/// \brief Remove non-alphanumeric non-space characters in a string.
+std::string remove_non_alphanumeric_non_space_characters(const std::string& text) noexcept {
+  std::string new_text;
+  for (const char character : text) {
+    if (::isalnum(character) || character == ' ') {
+      new_text += character;
+    }
+  }
+  return new_text;
+}
+
 /// \brief Remove non-alphabetic characters in a string.
 std::string remove_non_alphabetic_characters(const std::string& text) noexcept {
   std::string new_text;

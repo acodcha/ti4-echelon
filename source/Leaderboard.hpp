@@ -2,7 +2,9 @@
 
 #include "DataFileWriter.hpp"
 #include "GlobalLeaderboardFileWriter.hpp"
+#include "GlobalPointsPlotConfigurationFileWriter.hpp"
 #include "GlobalRatingsPlotConfigurationFileWriter.hpp"
+#include "GlobalWinRatesPlotConfigurationFileWriter.hpp"
 
 namespace TI4Echelon {
 
@@ -18,6 +20,7 @@ public:
       write_global_leaderboard_file(directory, games, players);
       write_global_plot_configuration_files(directory, players);
       generate_global_plots(directory);
+      message("Wrote the leaderboard to '" + directory.string() + "'.");
     }
   }
 
@@ -67,12 +70,16 @@ private:
 
   void write_global_plot_configuration_files(const std::filesystem::path& directory, const Players& players) const {
     GlobalRatingsPlotConfigurationFileWriter{directory, players};
+    GlobalPointsPlotConfigurationFileWriter{directory, players};
+    GlobalWinRatesPlotConfigurationFileWriter{directory, players};
     message("Wrote the global plot configuration Gnuplot files.");
   }
 
   void generate_global_plots(const std::filesystem::path& directory) const {
     message("Generating the global plots...");
     generate_plot(directory / Path::PlayersDirectoryName / file_name(Path::RatingsPlotFileStem, Path::PlotConfigurationFileExtension));
+    generate_plot(directory / Path::PlayersDirectoryName / file_name(Path::PointsPlotFileStem, Path::PlotConfigurationFileExtension));
+    generate_plot(directory / Path::PlayersDirectoryName / file_name(Path::WinRatesPlotFileStem, Path::PlotConfigurationFileExtension));
     message("Generated the global plots.");
   }
 

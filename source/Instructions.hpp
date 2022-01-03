@@ -111,10 +111,10 @@ private:
 
   void message_start_information() const noexcept {
     if (!games_file_.empty()) {
-      message("The games will be read from: " + games_file_.string());
+      message("The games will be read from '" + games_file_.string() + "'.");
     }
     if (!leaderboard_directory_.empty()) {
-      message("The leaderboard will be written to: " + leaderboard_directory_.string());
+      message("The leaderboard will be written to '" + leaderboard_directory_.string() + "'.");
     } else {
       warning("The leaderboard directory (" + Arguments::LeaderboardDirectoryPattern + ") is missing. Leaderboard files will not be written.");
     }
