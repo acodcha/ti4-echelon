@@ -14,6 +14,8 @@ public:
 
   TableCell(const std::size_t number) noexcept : value_(std::to_string(number)) {}
 
+  TableCell(const double number, const int8_t decimals = 2) noexcept : value_(real_number_to_string(number, decimals)) {}
+
   TableCell(const std::string& text) noexcept : value_(text) {}
 
   TableCell(const Date& date) noexcept : value_(date.print()) {}

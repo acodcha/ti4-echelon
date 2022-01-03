@@ -9,7 +9,7 @@ class TextFileWriter : public FileWriter {
 
 protected:
 
-  TextFileWriter(const std::filesystem::path& path, const std::filesystem::perms& permissions = {std::filesystem::perms::owner_read | std::filesystem::perms::owner_write | std::filesystem::perms::group_read | std::filesystem::perms::others_read}) noexcept : FileWriter(path, permissions) {}
+  TextFileWriter(const std::filesystem::path& path, const std::filesystem::perms& permissions = {std::filesystem::perms::owner_read | std::filesystem::perms::owner_write | std::filesystem::perms::group_read | std::filesystem::perms::others_read}) : FileWriter(path, permissions) {}
 
   void line(const std::string& text) noexcept {
     if (stream_.is_open()) {

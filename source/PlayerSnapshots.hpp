@@ -40,12 +40,20 @@ public:
     return iterator(data_.begin());
   }
 
+  const_iterator begin() const noexcept {
+    return const_iterator(data_.begin());
+  }
+
   const_iterator cbegin() const noexcept {
     return const_iterator(data_.cbegin());
   }
 
   reverse_iterator rbegin() noexcept {
     return reverse_iterator(data_.rbegin());
+  }
+
+  const_reverse_iterator rbegin() const noexcept {
+    return const_reverse_iterator(data_.rbegin());
   }
 
   const_reverse_iterator crbegin() const noexcept {
@@ -56,12 +64,20 @@ public:
     return iterator(data_.end());
   }
 
+  const_iterator end() const noexcept {
+    return const_iterator(data_.end());
+  }
+
   const_iterator cend() const noexcept {
     return const_iterator(data_.cend());
   }
 
   reverse_iterator rend() noexcept {
     return reverse_iterator(data_.rend());
+  }
+
+  const_reverse_iterator rend() const noexcept {
+    return const_reverse_iterator(data_.rend());
   }
 
   const_reverse_iterator crend() const noexcept {

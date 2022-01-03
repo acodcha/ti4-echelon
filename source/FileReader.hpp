@@ -9,7 +9,7 @@ class FileReader : public File<std::ifstream> {
 
 protected:
 
-  FileReader(const std::filesystem::path& path) noexcept : File(path) {}
+  FileReader(const std::filesystem::path& path) : File(path) {}
 
 }; // class FileReader
 

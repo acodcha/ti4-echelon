@@ -24,8 +24,8 @@ public:
 
   std::string print_as_markdown() const noexcept {
     std::stringstream stream;
-    stream << print_markdown_header() << std::endl;
-    stream << print_markdown_alignment() << std::endl;
+    stream << print_markdown_header();
+    stream << std::endl << print_markdown_alignment();
     const std::size_t number_of_rows_{number_of_rows()};
     for (std::size_t row_index = 0; row_index < number_of_rows_; ++row_index) {
       stream << std::endl << print_markdown_row(row_index);
@@ -100,16 +100,16 @@ public:
     return const_reverse_iterator(columns_.crend());
   }
 
-  void insert_column(const std::string& header, const Alignment alignment) noexcept {
+  void insert_column(const std::string& header, const Alignment alignment = Alignment::Center) noexcept {
     columns_.emplace_back(header, alignment);
   }
 
   const TableColumn& column(const std::size_t index) const {
-    columns_.at(index);
+    return columns_.at(index);
   }
 
   TableColumn& column(const std::size_t index) {
-    columns_.at(index);
+    return columns_.at(index);
   }
 
 protected:
@@ -130,7 +130,7 @@ protected:
   std::string print_markdown_header() const noexcept {
     std::string text{"|"};
     for (const TableColumn& column : columns_) {
-      text + " " + markdown_boldface(column.header()) + " |";
+      text += " " + markdown_boldface(column.header()) + " |";
     }
     return text;
   }
@@ -138,7 +138,7 @@ protected:
   std::string print_markdown_alignment() const noexcept {
     std::string text{"|"};
     for (const TableColumn& column : columns_) {
-      text + " " + markdown(column.alignment()) + " |";
+      text += " " + markdown(column.alignment()) + " |";
     }
     return text;
   }

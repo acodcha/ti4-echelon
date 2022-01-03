@@ -29,7 +29,7 @@ public:
     }
     std::sort(data_.begin(), data_.end(), Game::sort());
     for (std::size_t index = 0; index < data_.size(); ++index) {
-      data_[index].set_index(index);
+      data_[index].set_index(data_.size() - 1 - index);
     }
     message("Read " + std::to_string(data_.size()) + " games from the games file:");
     for (const Game& game : data_) {

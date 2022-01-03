@@ -9,7 +9,7 @@ class DataFileWriter : public TextFileWriter {
 
 public:
 
-  DataFileWriter(const std::filesystem::path& path, const Table& table) noexcept : TextFileWriter(path) {
+  DataFileWriter(const std::filesystem::path& path, const Table& table) : TextFileWriter(path) {
     line(table.print_as_data());
     blank_line();
   }

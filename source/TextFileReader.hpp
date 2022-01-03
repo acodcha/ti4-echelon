@@ -9,7 +9,7 @@ class TextFileReader : public FileReader {
 
 public:
 
-  TextFileReader(const std::filesystem::path& path) noexcept : FileReader(path) {
+  TextFileReader(const std::filesystem::path& path) : FileReader(path) {
     if (stream_.is_open()) {
       std::string line;
       while (std::getline(stream_, line)) {

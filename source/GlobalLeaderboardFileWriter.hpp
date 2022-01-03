@@ -12,14 +12,14 @@ class GlobalLeaderboardFileWriter : public MarkdownFileWriter {
 public:
 
   GlobalLeaderboardFileWriter(
-    const std::filesystem::path& base_directory,
+    const std::filesystem::path& directory,
     const Games& games,
     const Players& players
   ) noexcept :
-    MarkdownFileWriter(base_directory / Path::LeaderboardFileName)
+    MarkdownFileWriter(directory / Path::LeaderboardFileName)
   {
     introduction();
-    players_section(base_directory, players);
+    players_section(directory, players);
     factions_section();
     games_section(games);
     license_section();
@@ -61,7 +61,7 @@ private:
     list_link(section_title_license_);
   }
 
-  void players_section(const std::filesystem::path& base_directory, const Players& players) noexcept {
+  void players_section(const std::filesystem::path& directory, const Players& players) noexcept {
     section(section_title_players_);
     list_link(section_title_players_ + " " + subsection_title_summary_);
     list_link(section_title_players_ + " " + subsection_title_ratings_);
@@ -72,13 +72,13 @@ private:
     players_summary_table(players);
     link_back_to_section(section_title_players_);
     subsection(section_title_players_ + " " + subsection_title_ratings_);
-    players_ratings_plot(base_directory);
+    players_ratings_plot(directory);
     link_back_to_section(section_title_players_);
     subsection(section_title_players_ + " " + subsection_title_points_);
-    players_points_plot(base_directory);
+    players_points_plot(directory);
     link_back_to_section(section_title_players_);
     subsection(section_title_players_ + " " + subsection_title_win_rates_);
-    players_win_rates_plot(base_directory);
+    players_win_rates_plot(directory);
     link_back_to_section(section_title_players_);
   }
 
@@ -86,7 +86,7 @@ private:
     Table table;
     table.insert_column("Player", Alignment::Left); // Column index 0
     table.insert_column("Games", Alignment::Center); // Column index 1
-    table.insert_column("Cur Rating", Alignment::Center); // Column index 2
+    table.insert_column("Current Rating", Alignment::Center); // Column index 2
     table.insert_column("Avg Rating", Alignment::Center); // Column index 3
     table.insert_column("Avg Points", Alignment::Center); // Column index 4
     table.insert_column("1st Place", Alignment::Center); // Column index 5
@@ -102,26 +102,26 @@ private:
       table.column(6).insert_row(player.snapshots().latest().value().print_place_percentage_and_count({2}));
       table.column(7).insert_row(player.snapshots().latest().value().print_place_percentage_and_count({3}));
     }
-    table.print_as_markdown();
+    line(table.print_as_markdown());
   }
 
-  void players_ratings_plot(const std::filesystem::path& base_directory) noexcept {
-    if (std::filesystem::exists(base_directory)) {
-      line("![Ratings Plot](" + std::filesystem::path{base_directory / Path::PlayersDirectoryName / Path::RatingsPlotFileStem}.string() + "." + Path::PlotImageFileExtension.string() + ")");
+  void players_ratings_plot(const std::filesystem::path& directory) noexcept {
+    if (std::filesystem::exists(directory / Path::PlayersDirectoryName)) {
+      line("![Ratings Plot](" + std::filesystem::path{directory / Path::PlayersDirectoryName / Path::RatingsPlotFileStem}.string() + "." + Path::PlotImageFileExtension.string() + ")");
     }
   }
 
-  void players_points_plot(const std::filesystem::path& base_directory) noexcept {
-    if (std::filesystem::exists(base_directory)) {
-      line("![Points Plot](" + std::filesystem::path{base_directory / Path::PlayersDirectoryName / Path::PointsPlotFileStem}.string() + "." + Path::PlotImageFileExtension.string() + ")");
+  void players_points_plot(const std::filesystem::path& directory) noexcept {
+    if (std::filesystem::exists(directory / Path::PlayersDirectoryName)) {
+      line("![Points Plot](" + std::filesystem::path{directory / Path::PlayersDirectoryName / Path::PointsPlotFileStem}.string() + "." + Path::PlotImageFileExtension.string() + ")");
     }
     blank_line();
     line("Victory points are adjusted relative to a 10-point game.");
   }
 
-  void players_win_rates_plot(const std::filesystem::path& base_directory) noexcept {
-    if (std::filesystem::exists(base_directory)) {
-      line("![Win Rates Plot](" + std::filesystem::path{base_directory / Path::PlayersDirectoryName / Path::WinRatesPlotFileStem}.string() + "." + Path::PlotImageFileExtension.string() + ")");
+  void players_win_rates_plot(const std::filesystem::path& directory) noexcept {
+    if (std::filesystem::exists(directory / Path::PlayersDirectoryName)) {
+      line("![Win Rates Plot](" + std::filesystem::path{directory / Path::PlayersDirectoryName / Path::WinRatesPlotFileStem}.string() + "." + Path::PlotImageFileExtension.string() + ")");
     }
   }
 
@@ -131,6 +131,7 @@ private:
     list_link(section_title_factions_ + " " + subsection_title_ratings_);
     list_link(section_title_factions_ + " " + subsection_title_points_);
     list_link(section_title_factions_ + " " + subsection_title_win_rates_);
+    link_back_to_top();
     subsection(section_title_factions_ + " " + subsection_title_summary_);
     line("Coming soon!");
     link_back_to_section(section_title_factions_);
@@ -167,7 +168,7 @@ private:
       table.column(4).insert_row(game.player_names().size());
       table.column(5).insert_row(game.participants().print());
     }
-    table.print_as_markdown();
+    line(table.print_as_markdown());
   }
 
   void license_section() noexcept {

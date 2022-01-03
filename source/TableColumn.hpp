@@ -14,7 +14,7 @@ public:
   TableColumn() noexcept {}
 
   /// \brief Construct a column with a header and an alignment, but no rows. Rows can be inserted later.
-  TableColumn(const std::string& header, const Alignment alignment) noexcept : header_(header), alignment_(alignment) {}
+  TableColumn(const std::string& header, const Alignment alignment = Alignment::Center) noexcept : header_(header), alignment_(alignment) {}
 
   const std::string& header() const noexcept {
     return header_;
@@ -85,7 +85,7 @@ public:
   }
 
   const TableCell& row(const std::size_t index) const {
-    cells_.at(index);
+    return cells_.at(index);
   }
 
 protected:
