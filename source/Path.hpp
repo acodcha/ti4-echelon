@@ -61,4 +61,8 @@ const std::filesystem::path PlotImageFileExtension{"png"};
 
 } // namespace Path
 
+const std::filesystem::path file_name(const std::filesystem::path& stem, const std::filesystem::path& extension) noexcept {
+  return {stem.string() + "." + extension.string()};
+}
+
 } // namespace TI4Echelon

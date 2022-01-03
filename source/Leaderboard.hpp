@@ -2,6 +2,7 @@
 
 #include "DataFileWriter.hpp"
 #include "GlobalLeaderboardFileWriter.hpp"
+#include "GlobalRatingsPlotConfigurationFileWriter.hpp"
 
 namespace TI4Echelon {
 
@@ -15,13 +16,14 @@ public:
       create_directories(directory, players);
       write_player_data_files(directory, players);
       write_global_leaderboard_file(directory, games, players);
+      write_global_plot_configuration_files(directory, players);
+      generate_global_plots(directory);
     }
   }
 
 private:
 
-  void create_directories(const std::filesystem::path& directory, const Players& players) {
-    message("Creating the directories...");
+  void create_directories(const std::filesystem::path& directory, const Players& players) const {
     create(directory);
     create(directory / Path::PlayersDirectoryName);
     for (const Player& player : players) {
@@ -30,8 +32,7 @@ private:
     message("Created the directories.");
   }
 
-  void write_player_data_files(const std::filesystem::path& directory, const Players& players) {
-    message("Writing the player data files...");
+  void write_player_data_files(const std::filesystem::path& directory, const Players& players) const {
     for (const Player& player : players) {
       Table table;
       table.insert_column("GlobalGame#"); // Column index 0
@@ -59,9 +60,31 @@ private:
     message("Wrote the player data files.");
   }
 
-  void write_global_leaderboard_file(const std::filesystem::path& directory, const Games& games, const Players& players) noexcept {
+  void write_global_leaderboard_file(const std::filesystem::path& directory, const Games& games, const Players& players) const {
     GlobalLeaderboardFileWriter{directory, games, players};
     message("Wrote the global leaderboard Markdown file.");
+  }
+
+  void write_global_plot_configuration_files(const std::filesystem::path& directory, const Players& players) const {
+    GlobalRatingsPlotConfigurationFileWriter{directory, players};
+    message("Wrote the global plot configuration Gnuplot files.");
+  }
+
+  void generate_global_plots(const std::filesystem::path& directory) const {
+    message("Generating the global plots...");
+    generate_plot(directory / Path::PlayersDirectoryName / file_name(Path::RatingsPlotFileStem, Path::PlotConfigurationFileExtension));
+    message("Generated the global plots.");
+  }
+
+  /// \brief Generate a plot using Gnuplot. If the path points to a file that does not exist, no plot is generated.
+  void generate_plot(const std::filesystem::path& path) const {
+    if (std::filesystem::exists(path)) {
+      const std::string command{"gnuplot " + path.string()};
+      const int outcome{std::system(command.c_str())};
+      if (outcome != 0) {
+        error("Could not run the command: " + command);
+      }
+    }
   }
 
 }; // class Leaderboard

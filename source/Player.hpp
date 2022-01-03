@@ -25,6 +25,14 @@ public:
     return color_;
   }
 
+  const EloRating& lowest_elo_rating() const noexcept {
+    return lowest_elo_rating_;
+  }
+
+  const EloRating& highest_elo_rating() const noexcept {
+    return highest_elo_rating_;
+  }
+
   const PlayerSnapshots& snapshots() const noexcept {
     return snapshots_;
   }
@@ -32,6 +40,7 @@ public:
   void update(const Game& game, const std::unordered_map<PlayerName, EloRating>& elo_ratings) noexcept {
     if (game.player_names().exists(name_)) {
       snapshots_.emplace_back(name_, game, elo_ratings);
+      update_lowest_and_highest_elo_ratings();
     }
   }
 
@@ -83,7 +92,21 @@ private:
 
   std::optional<Color> color_;
 
+  EloRating lowest_elo_rating_;
+
+  EloRating highest_elo_rating_;
+
   PlayerSnapshots snapshots_;
+
+  void update_lowest_and_highest_elo_ratings() noexcept {
+    const std::optional<PlayerSnapshot> latest_snapshot{snapshots_.latest()};
+    if (latest_snapshot.value().current_elo_rating() < lowest_elo_rating_) {
+      lowest_elo_rating_ = latest_snapshot.value().current_elo_rating();
+    }
+    if (latest_snapshot.value().current_elo_rating() > highest_elo_rating_) {
+      highest_elo_rating_ = latest_snapshot.value().current_elo_rating();
+    }
+  }
 
 }; // class Player
 
