@@ -121,10 +121,12 @@ private:
 
   /// \brief Update all the players with all the games.
   void update(const Games& games) noexcept {
-    for (const Game& game : games) {
+    // Iterate through the games in chronological order.
+    // The games are listed in reverse-chronological order, so use a reverse iterator.
+    for (Games::const_reverse_iterator game = games.crbegin(); game != games.crend(); ++game) {
       const std::unordered_map<PlayerName, EloRating> elo_ratings_{elo_ratings()};
       for (Player& player : data_) {
-        player.update(game, elo_ratings_);
+        player.update(*game, elo_ratings_);
       }
     }
   }

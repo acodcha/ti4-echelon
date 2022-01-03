@@ -142,4 +142,8 @@ std::optional<double> string_to_real_number(const std::string& text) noexcept {
   return no_value;
 }
 
+std::string markdown_boldface(const std::string& text) noexcept {
+  return "**" + text + "**";
+}
+
 } // namespace TI4Echelon
