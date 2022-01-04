@@ -18,7 +18,7 @@ public:
   /// \brief Constructor from a string.
   VictoryPoints(const std::string& text) {
     const std::optional<int64_t> number{string_to_integer_number(text)};
-    if (number.has_value() && number.value() >= 1 && number.value() <= 30) {
+    if (number.has_value() && number.value() >= 0) {
       value_ = number.value();
     } else {
       error("'" + text + "' is not a valid number of victory points.");
