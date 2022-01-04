@@ -5,11 +5,11 @@
 
 namespace TI4Echelon {
 
-class GlobalPointsPlotConfigurationFileWriter : public PlotConfigurationFileWriter {
+class PointsPlotConfigurationFileWriter : public PlotConfigurationFileWriter {
 
 public:
 
-  GlobalPointsPlotConfigurationFileWriter(const std::filesystem::path& directory, const Players& players) : PlotConfigurationFileWriter(directory / Path::PlayersDirectoryName / Path::PointsPlotFileStem) {
+  PointsPlotConfigurationFileWriter(const std::filesystem::path& directory, const Players& players) : PlotConfigurationFileWriter(directory / Path::PlayersDirectoryName / Path::PointsPlotFileStem) {
     line("set title \"\"");
     line("set grid xtics ytics mxtics mytics");
     line("set key horizontal center top outside");
@@ -32,6 +32,6 @@ public:
     }
   }
 
-};
+}; // class PointsPlotConfigurationFileWriter
 
 } // namespace TI4Echelon

@@ -14,14 +14,7 @@ namespace TI4Echelon {
 //         winrates.gnuplot
 //         winrates.png
 //         Alice/
-//             README.md
 //             data.dat
-//             points.gnuplot
-//             points.png
-//             ratings.gnuplot
-//             ratings.png
-//             winrates.gnuplot
-//             winrates.png
 //     factions/
 //         points.gnuplot
 //         points.png
@@ -30,14 +23,7 @@ namespace TI4Echelon {
 //         winrates.gnuplot
 //         winrates.png
 //         Arborec/
-//             README.md
 //             data.dat
-//             points.gnuplot
-//             points.png
-//             ratings.gnuplot
-//             ratings.png
-//             winrates.gnuplot
-//             winrates.png
 
 namespace Path {
 
