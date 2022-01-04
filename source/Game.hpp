@@ -230,6 +230,9 @@ private:
       }
       mode_ = optional_mode.value();
       victory_point_goal_ = {words[2]};
+      if (victory_point_goal_ <= VictoryPoints{0}) {
+        error("'" + victory_point_goal_.print() + "' is not a valid victory point goal for the game played on " + date_.print() + ".");
+      }
     } else {
       error("'" + line + "' does not contain a date, a game mode, and a number of victory points.");
     }
