@@ -5,11 +5,11 @@
 
 namespace TI4Echelon {
 
-class GlobalRatingsPlotConfigurationFileWriter : public PlotConfigurationFileWriter {
+class RatingsPlotConfigurationFileWriter : public PlotConfigurationFileWriter {
 
 public:
 
-  GlobalRatingsPlotConfigurationFileWriter(const std::filesystem::path& directory, const Players& players) : PlotConfigurationFileWriter(directory / Path::PlayersDirectoryName / Path::RatingsPlotFileStem) {
+  RatingsPlotConfigurationFileWriter(const std::filesystem::path& directory, const Players& players) : PlotConfigurationFileWriter(directory / Path::PlayersDirectoryName / Path::RatingsPlotFileStem) {
     const int64_t y_minimum{std::min(static_cast<int64_t>(EloRating{}.value() - increment_), nearest_lower_nice_number(players.lowest_elo_rating().value(), increment_))};
     const int64_t y_maximum{std::max(static_cast<int64_t>(EloRating{}.value() + increment_), nearest_higher_nice_number(players.highest_elo_rating().value(), increment_))};
     line("set title \"\"");
@@ -38,6 +38,6 @@ private:
 
   static const int64_t increment_{100};
 
-};
+}; // class RatingsPlotConfigurationFileWriter
 
 } // namespace TI4Echelon

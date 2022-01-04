@@ -7,11 +7,11 @@
 namespace TI4Echelon {
 
 /// \brief File writer for the global leaderboard file.
-class GlobalLeaderboardFileWriter : public MarkdownFileWriter {
+class LeaderboardFileWriter : public MarkdownFileWriter {
 
 public:
 
-  GlobalLeaderboardFileWriter(
+  LeaderboardFileWriter(
     const std::filesystem::path& directory,
     const Games& games,
     const Players& players
@@ -45,8 +45,6 @@ private:
   const std::string subsection_title_win_rates_{"Win Rates"};
 
   void introduction() noexcept {
-    line("Last updated " + current_utc_date_and_time() + ".");
-    blank_line();
     list_link(section_title_players_);
     nested_list_link(section_title_players_ + ": " + subsection_title_summary_);
     nested_list_link(section_title_players_ + ": " + subsection_title_ratings_);
@@ -59,6 +57,8 @@ private:
     nested_list_link(section_title_factions_ + ": " + subsection_title_win_rates_);
     list_link(section_title_games_);
     list_link(section_title_license_);
+    blank_line();
+    line("Last updated " + current_utc_date_and_time() + ".");
   }
 
   void players_section(const Players& players) noexcept {
@@ -83,26 +83,26 @@ private:
   }
 
   void players_summary_table(const Players& players) noexcept {
-    Table table;
-    table.insert_column("Player", Alignment::Left); // Column index 0
-    table.insert_column("Games", Alignment::Center); // Column index 1
-    table.insert_column("Current Rating", Alignment::Center); // Column index 2
-    table.insert_column("Avg Rating", Alignment::Center); // Column index 3
-    table.insert_column("Avg Points", Alignment::Center); // Column index 4
-    table.insert_column("1st Place", Alignment::Center); // Column index 5
-    table.insert_column("2nd Place", Alignment::Center); // Column index 6
-    table.insert_column("3rd Place", Alignment::Center); // Column index 7
+    Table table_;
+    table_.insert_column("Player", Alignment::Left); // Column index 0
+    table_.insert_column("Games", Alignment::Center); // Column index 1
+    table_.insert_column("Current Rating", Alignment::Center); // Column index 2
+    table_.insert_column("Avg Rating", Alignment::Center); // Column index 3
+    table_.insert_column("Avg Points", Alignment::Center); // Column index 4
+    table_.insert_column("1st Place", Alignment::Center); // Column index 5
+    table_.insert_column("2nd Place", Alignment::Center); // Column index 6
+    table_.insert_column("3rd Place", Alignment::Center); // Column index 7
     for (const Player& player : players) {
-      table.column(0).insert_row(player.name());
-      table.column(1).insert_row(player.snapshots().size());
-      table.column(2).insert_row(player.snapshots().latest().value().current_elo_rating());
-      table.column(3).insert_row(player.snapshots().latest().value().average_elo_rating());
-      table.column(4).insert_row(player.snapshots().latest().value().average_victory_points_per_game());
-      table.column(5).insert_row(player.snapshots().latest().value().print_place_percentage_and_count({1}));
-      table.column(6).insert_row(player.snapshots().latest().value().print_place_percentage_and_count({2}));
-      table.column(7).insert_row(player.snapshots().latest().value().print_place_percentage_and_count({3}));
+      table_.column(0).insert_row(player.name());
+      table_.column(1).insert_row(player.snapshots().size());
+      table_.column(2).insert_row(player.snapshots().latest().value().current_elo_rating());
+      table_.column(3).insert_row(player.snapshots().latest().value().average_elo_rating());
+      table_.column(4).insert_row(player.snapshots().latest().value().average_victory_points_per_game());
+      table_.column(5).insert_row(player.snapshots().latest().value().print_place_percentage_and_count({1}));
+      table_.column(6).insert_row(player.snapshots().latest().value().print_place_percentage_and_count({2}));
+      table_.column(7).insert_row(player.snapshots().latest().value().print_place_percentage_and_count({3}));
     }
-    line(table.print_as_markdown());
+    table(table_);
   }
 
   void players_ratings_plot() noexcept {
@@ -147,22 +147,22 @@ private:
   }
 
   void games_table(const Games& games) noexcept {
-    Table table;
-    table.insert_column("Game", Alignment::Center); // Column index 0
-    table.insert_column("Date", Alignment::Center); // Column index 1
-    table.insert_column("Mode", Alignment::Center); // Column index 2
-    table.insert_column("Points", Alignment::Center); // Column index 3
-    table.insert_column("Players", Alignment::Center); // Column index 4
-    table.insert_column("Results", Alignment::Left); // Column index 5
+    Table table_;
+    table_.insert_column("Game", Alignment::Center); // Column index 0
+    table_.insert_column("Date", Alignment::Center); // Column index 1
+    table_.insert_column("Mode", Alignment::Center); // Column index 2
+    table_.insert_column("Points", Alignment::Center); // Column index 3
+    table_.insert_column("Players", Alignment::Center); // Column index 4
+    table_.insert_column("Results", Alignment::Left); // Column index 5
     for (const Game& game : games) {
-      table.column(0).insert_row(game.index() + 1);
-      table.column(1).insert_row(game.date());
-      table.column(2).insert_row(game.mode());
-      table.column(3).insert_row(game.victory_point_goal());
-      table.column(4).insert_row(game.player_names().size());
-      table.column(5).insert_row(game.participants().print());
+      table_.column(0).insert_row(game.index() + 1);
+      table_.column(1).insert_row(game.date());
+      table_.column(2).insert_row(game.mode());
+      table_.column(3).insert_row(game.victory_point_goal());
+      table_.column(4).insert_row(game.player_names().size());
+      table_.column(5).insert_row(game.participants().print());
     }
-    line(table.print_as_markdown());
+    table(table_);
   }
 
   void license_section() noexcept {
@@ -171,6 +171,6 @@ private:
     link_back_to_top();
   }
 
-};
+}; // class LeaderboardFileWriter
 
 } // namespace TI4Echelon

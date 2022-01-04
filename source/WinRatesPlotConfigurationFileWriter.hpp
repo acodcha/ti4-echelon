@@ -5,11 +5,11 @@
 
 namespace TI4Echelon {
 
-class GlobalWinRatesPlotConfigurationFileWriter : public PlotConfigurationFileWriter {
+class WinRatesPlotConfigurationFileWriter : public PlotConfigurationFileWriter {
 
 public:
 
-  GlobalWinRatesPlotConfigurationFileWriter(const std::filesystem::path& directory, const Players& players) : PlotConfigurationFileWriter(directory / Path::PlayersDirectoryName / Path::WinRatesPlotFileStem) {
+  WinRatesPlotConfigurationFileWriter(const std::filesystem::path& directory, const Players& players) : PlotConfigurationFileWriter(directory / Path::PlayersDirectoryName / Path::WinRatesPlotFileStem) {
     line("set title \"\"");
     line("set grid xtics ytics mxtics mytics");
     line("set key horizontal center top outside");
@@ -32,6 +32,6 @@ public:
     }
   }
 
-};
+}; // class WinRatesPlotConfigurationFileWriter
 
 } // namespace TI4Echelon

@@ -25,12 +25,6 @@ protected:
     blank_line();
   }
 
-  void subsubsection(const std::string& subsubsection_title) noexcept {
-    blank_line();
-    line("### " + subsubsection_title);
-    blank_line();
-  }
-
   void table(const Table& table) noexcept {
     line(table.print_as_markdown());
   }
@@ -51,11 +45,6 @@ protected:
   void link_back_to_top() noexcept {
     blank_line();
     line("[(Back to Top)](#)");
-  }
-
-  void link_back_to_main_page() noexcept {
-    blank_line();
-    line("[(Back to Main Page)](../../#)");
   }
 
 }; // class MarkdownFileWriter
