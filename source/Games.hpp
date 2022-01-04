@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Game.hpp"
+#include "GamesDurationVersusNumberOfPlayers.hpp"
 #include "TextFileReader.hpp"
 
 namespace TI4Echelon {
@@ -17,7 +17,8 @@ public:
     for (const std::string& line : games_file_reader) {
       if (line.empty()) {
         if (!game_lines.empty()) {
-          data_.push_back(game_lines);
+          data_.emplace_back(game_lines);
+          duration_versus_number_of_players_.insert(data_.back());
         }
         game_lines.clear();
       } else {
@@ -25,16 +26,22 @@ public:
       }
     }
     if (!game_lines.empty()) {
-      data_.push_back(game_lines);
+      data_.emplace_back(game_lines);
+      duration_versus_number_of_players_.insert(data_.back());
     }
     std::sort(data_.begin(), data_.end(), Game::sort());
     for (std::size_t index = 0; index < data_.size(); ++index) {
       data_[index].set_index(data_.size() - 1 - index);
     }
+    duration_versus_number_of_players_.initialize_linear_regression();
     message("Read " + std::to_string(data_.size()) + " games from the games file:");
     for (const Game& game : data_) {
       message("- " + game.print() + ".");
     }
+  }
+
+  const GamesDurationVersusNumberOfPlayers& duration_versus_number_of_players() const noexcept {
+    return duration_versus_number_of_players_;
   }
 
   struct const_iterator : public std::vector<Game>::const_iterator {
@@ -86,6 +93,8 @@ public:
   }
 
 private:
+
+  GamesDurationVersusNumberOfPlayers duration_versus_number_of_players_;
 
   /// \brief Sorted in reverse-chronological order, i.e. from most recent to oldest.
   std::vector<Game> data_;

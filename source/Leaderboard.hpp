@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DataFileWriter.hpp"
+#include "DurationPlotConfigurationFileWriter.hpp"
 #include "LeaderboardFileWriter.hpp"
 #include "PointsPlotConfigurationFileWriter.hpp"
 #include "RatingsPlotConfigurationFileWriter.hpp"
@@ -17,9 +18,12 @@ public:
     if (!directory.empty()) {
       create_directories(directory, players);
       write_player_data_files(directory, players);
+      write_duration_data_file(directory, games);
       write_leaderboard_file(directory, games, players);
       write_player_plot_configuration_files(directory, players);
+      write_duration_plot_configuration_file(directory, games);
       generate_player_plots(directory);
+      generate_duration_plot(directory);
       message("Wrote the leaderboard to '" + directory.string() + "'.");
     }
   }
@@ -58,9 +62,22 @@ private:
         table.column(7).insert_row(snapshot->place_percentage({2}));
         table.column(8).insert_row(snapshot->place_percentage({3}));
       }
-      DataFileWriter{directory / Path::PlayersDirectoryName / std::filesystem::path{player.name().value()} / Path::DataFileName, table};
+      DataFileWriter{directory / Path::PlayersDirectoryName / std::filesystem::path{player.name().value()} / Path::PlayerDataFileName, table};
     }
     message("Wrote the player data files.");
+  }
+
+  void write_duration_data_file(const std::filesystem::path& directory, const Games& games) const noexcept {
+    Table table;
+    table.insert_column("NumberOfPlayers"); // Column index 0
+    table.insert_column("GameDurationInHours"); // Column index 1
+    table.insert_column("RegressionFit"); // Column index 2
+    for (const std::pair<double, double>& number_of_players_and_game_duration_in_hours : games.duration_versus_number_of_players()) {
+      table.column(0).insert_row(number_of_players_and_game_duration_in_hours.first);
+      table.column(1).insert_row(number_of_players_and_game_duration_in_hours.second);
+      table.column(2).insert_row({games.duration_versus_number_of_players().linear_regression()(number_of_players_and_game_duration_in_hours.first), 2});
+    }
+    DataFileWriter{directory / Path::DurationDataFileName, table};
   }
 
   void write_leaderboard_file(const std::filesystem::path& directory, const Games& games, const Players& players) const {
@@ -75,12 +92,23 @@ private:
     message("Wrote the player plot configuration Gnuplot files.");
   }
 
+  void write_duration_plot_configuration_file(const std::filesystem::path& directory, const Games& games) const noexcept {
+    DurationPlotConfigurationFileWriter{directory, games};
+    message("Wrote the duration plot configuration Gnuplot file.");
+  }
+
   void generate_player_plots(const std::filesystem::path& directory) const {
     message("Generating the player plots...");
     generate_plot(directory / Path::PlayersDirectoryName / file_name(Path::RatingsPlotFileStem, Path::PlotConfigurationFileExtension));
     generate_plot(directory / Path::PlayersDirectoryName / file_name(Path::PointsPlotFileStem, Path::PlotConfigurationFileExtension));
     generate_plot(directory / Path::PlayersDirectoryName / file_name(Path::WinRatesPlotFileStem, Path::PlotConfigurationFileExtension));
     message("Generated the player plots.");
+  }
+
+  void generate_duration_plot(const std::filesystem::path& directory) const {
+    message("Generating the duration plot...");
+    generate_plot(directory / file_name(Path::DurationPlotFileStem, Path::PlotConfigurationFileExtension));
+    message("Generated the duration plot.");
   }
 
   /// \brief Generate a plot using Gnuplot. If the path points to a file that does not exist, no plot is generated.

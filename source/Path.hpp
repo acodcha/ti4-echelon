@@ -6,6 +6,9 @@ namespace TI4Echelon {
 
 // leaderboard/
 //     README.md
+//     duration.dat
+//     duration.gnuplot
+//     duration.png
 //     players/
 //         points.gnuplot
 //         points.png
@@ -33,13 +36,19 @@ const std::filesystem::path FactionsDirectoryName{"factions"};
 
 const std::filesystem::path LeaderboardFileName{"README.md"};
 
-const std::filesystem::path DataFileName{"data.dat"};
+const std::filesystem::path PlayerDataFileName{"data.dat"};
+
+const std::filesystem::path FactionDataFileName{"data.dat"};
+
+const std::filesystem::path DurationDataFileName{"duration.dat"};
 
 const std::filesystem::path RatingsPlotFileStem{"ratings"};
 
 const std::filesystem::path PointsPlotFileStem{"points"};
 
 const std::filesystem::path WinRatesPlotFileStem{"winrates"};
+
+const std::filesystem::path DurationPlotFileStem{"duration"};
 
 const std::filesystem::path PlotConfigurationFileExtension{"gnuplot"};
 
