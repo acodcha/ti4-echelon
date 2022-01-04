@@ -160,7 +160,7 @@ private:
       table_.column(2).insert_row(game.mode());
       table_.column(3).insert_row(game.victory_point_goal());
       table_.column(4).insert_row(game.player_names().size());
-      table_.column(5).insert_row(game.participants().print());
+      table_.column(5).insert_row((game.duration().has_value() ? game.duration().value().print() + ", " : "") + game.participants().print());
     }
     table(table_);
   }
