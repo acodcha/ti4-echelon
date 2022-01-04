@@ -57,7 +57,7 @@ ti4-echelon --games <path> --leaderboard <path>
 The games file is a plain text file with the following format:
 
 ```
-2021-07-31 free-for-all 10
+2021-07-31 free-for-all 10 8h35m
 1st Alice 10 Winnu
 2nd Bob 9 Xxcha Kingdom
 3rd Carol 8 Clan of Saar
@@ -78,10 +78,11 @@ etc.
 
 - Games are separated by one or more blank lines.
 - Each game consists of a header line followed by a number of result lines.
-- The header line must contain a **date**, a **game mode**, and a **goal number of victory points**, in this order, each separated by whitespace.
+- The header line must contain a **date**, a **game mode**, a **goal number of victory points**, and an optional **time duration**, in this order, each separated by whitespace.
 - Each result line must contain a **place**, a **player name**, a **number of victory points**, and a **faction name**, in this order, each separated by whitespace.
 - Dates must be in the YYYY-MM-DD format.
 - The game mode must be one of either `free-for-all` or `teams`.
+- The time duration is optional. If included, it must be in the `<hours>h<minutes>m` format, such as 8h35m.
 - Places are case-sensitive and must exactly match one of the following spellings: `1st`, `2nd`, `3rd`, `4th`, `5th`, `6th`, `7th`, `8th`.
 - In free-for-all games, each player must have a unique place. Recall that initiative breaks ties in victory points, and additional victory points in excess of the game's goal number of victory points are worthless.
 - When playing in teams, all players on the same team must have the same place; this is how teams are identified.
