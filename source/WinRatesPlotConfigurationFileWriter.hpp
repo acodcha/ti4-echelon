@@ -11,7 +11,8 @@ public:
 
   WinRatesPlotConfigurationFileWriter(const std::filesystem::path& directory, const Players& players) : PlotConfigurationFileWriter(directory / Path::PlayersDirectoryName / Path::WinRatesPlotFileStem) {
     line("set title \"\"");
-    line("set grid xtics ytics mxtics mytics");
+    line("set object 1 rectangle from screen 0,0 to screen 1,1 fillstyle solid 1.0 fillcolor rgb \"#BFBFBF\" behind");
+    line("set grid xtics ytics mxtics mytics back");
     line("set key horizontal center top outside");
     line("set xlabel \"Game Number\"");
     line("set xtics nomirror out");
