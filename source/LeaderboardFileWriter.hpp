@@ -21,6 +21,7 @@ public:
     introduction();
     players_section(players);
     factions_section();
+    duration_section();
     games_section(games);
     license_section();
     blank_line();
@@ -31,6 +32,8 @@ private:
   const std::string section_title_players_{"Players"};
 
   const std::string section_title_factions_{"Factions"};
+
+  const std::string section_title_duration_{"Time Duration"};
 
   const std::string section_title_games_{"Games"};
 
@@ -55,6 +58,7 @@ private:
     nested_list_link(section_title_factions_ + ": " + subsection_title_ratings_);
     nested_list_link(section_title_factions_ + ": " + subsection_title_points_);
     nested_list_link(section_title_factions_ + ": " + subsection_title_win_rates_);
+    list_link(section_title_duration_);
     list_link(section_title_games_);
     list_link(section_title_license_);
     blank_line();
@@ -140,6 +144,12 @@ private:
     link_back_to_section(section_title_factions_);
   }
 
+  void duration_section() noexcept {
+    section(section_title_duration_);
+    line("![Duration Plot](" + std::filesystem::path{file_name(Path::DurationPlotFileStem, Path::PlotImageFileExtension)}.string() + ")");
+    link_back_to_top();
+  }
+
   void games_section(const Games& games) noexcept {
     section(section_title_games_);
     games_table(games);
@@ -160,7 +170,7 @@ private:
       table_.column(2).insert_row(game.mode());
       table_.column(3).insert_row(game.victory_point_goal());
       table_.column(4).insert_row(game.player_names().size());
-      table_.column(5).insert_row(game.participants().print());
+      table_.column(5).insert_row((game.duration().has_value() ? game.duration().value().print() + ", " : "") + game.participants().print());
     }
     table(table_);
   }

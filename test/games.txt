@@ -1,4 +1,4 @@
-2021-07-31 free-for-all 10
+2021-07-31 free-for-all 10 8h35m
 1st Alice 10 Winnu
 2nd Bob 9 Xxcha Kingdom
 3rd Carol 8 Clan of Saar
@@ -14,13 +14,13 @@
 3rd David 12 Yssaril Tribes
 3rd Hugo 10 Arborec
 
-2021-07-10 free-for-all 10
+2021-07-10 free-for-all 10 7h14m
 1st Carol 10 Clan of Saar
 2nd Erin 8 Vuil'raith Cabal
 3rd Gabby 7 Federation of Sol
 4th Hugo 7 Universities of Jol-Nar
 
-2021-07-03 free-for-all 14
+2021-07-03 free-for-all 14 5h52m
 1st Bob 15 Federation of Sol
 2nd Alice 14 Nekro Virus
 3rd Frank 11 Naaz-Rokha Alliance
@@ -32,7 +32,7 @@
 4th Carol 7 Naalu Collective
 5th Frank 6 L1z1x Mindnet
 
-2021-05-29 free-for-all 10
+2021-05-29 free-for-all 10 9h37m
 1st Carol 11 Custom
 2nd David 10 Custom
 3rd Alice 9 Custom
@@ -40,7 +40,7 @@
 5th Erin 8 Custom
 6th Gabby 7 Custom
 
-2021-05-01 free-for-all 10
+2021-05-01 free-for-all 10 12h08m
 1st Bob 10 Naalu Collective
 2nd Alice 9 Titans of Ul
 3rd Carol 8 Embers of Muaat
@@ -50,7 +50,7 @@
 7th David 6 Barony of Letnev
 8th Frank 5 Sardakk N'orr
 
-2021-04-17 teams 14
+2021-04-17 teams 14 4h42m
 1st Gabby 14 Argent Flight
 1st Erin 11 Xxcha Kingdom
 2nd Alice 12 L1z1x Mindnet
@@ -65,7 +65,7 @@
 6th Carol 4 Custom
 7th Frank 3 Custom
 
-2021-02-20 free-for-all 10
+2021-02-20 free-for-all 10 7h26m
 1st Alice 10 Sardakk N'orr
 2nd Gabby 8 Mahact Gene-Sorcerers
 3rd Bob 8 Universities of Jol-Nar

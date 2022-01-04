@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Date.hpp"
+#include "Duration.hpp"
 #include "GameMode.hpp"
 #include "Participants.hpp"
 #include "Teams.hpp"
@@ -49,6 +50,10 @@ public:
 
   constexpr GameMode mode() const noexcept {
     return mode_;
+  }
+
+  std::optional<Duration> duration() const noexcept {
+    return duration_;
   }
 
   const Participants& participants() const noexcept {
@@ -164,7 +169,7 @@ public:
   }
 
   std::string print() const noexcept {
-    std::string text{date_.print() + ", " + label(mode_) + ", " + victory_point_goal_.print() + " Victory Points, " + std::to_string(participants_.size()) + " Players, " + participants_.print()};
+    std::string text{date_.print() + ", " + label(mode_) + ", " + victory_point_goal_.print() + " Victory Points, " + std::to_string(participants_.size()) + " Players, " + (duration_.has_value() ? duration_.value().print() + ", " : "") + participants_.print()};
     return text;
   }
 
@@ -188,6 +193,8 @@ private:
   VictoryPoints victory_point_goal_{10};
 
   GameMode mode_{GameMode::FreeForAll};
+
+  std::optional<Duration> duration_;
 
   /// \brief Participants in this game.
   Participants participants_;
@@ -220,9 +227,10 @@ private:
   std::multimap<FactionName, VictoryPoints, std::less<FactionName>> faction_names_to_victory_points_;
 
   void initialize_header(const std::string& line) {
-    // The line is expected to read: "<date> <game-mode> <victory-points-goal>""
+    // The line is expected to read: "<date> <game-mode> <victory-points-goal> <duration>"
+    // The duration is optional.
     const std::vector<std::string> words{split_by_whitespace(line)};
-    if (words.size() == 3) {
+    if (words.size() == 3 || words.size() == 4) {
       date_ = {words[0]};
       const std::optional<GameMode> optional_mode{type<GameMode>(words[1])};
       if (!optional_mode.has_value()) {
@@ -233,8 +241,11 @@ private:
       if (victory_point_goal_ <= VictoryPoints{0}) {
         error("'" + victory_point_goal_.print() + "' is not a valid victory point goal for the game played on " + date_.print() + ".");
       }
+      if (words.size() == 4) {
+        duration_ = {words[3]};
+      }
     } else {
-      error("'" + line + "' does not contain a date, a game mode, and a number of victory points.");
+      error("'" + line + "' does not contain a date, a game mode, a number of victory points, and an optional duration.");
     }
   }
 
