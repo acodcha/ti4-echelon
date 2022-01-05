@@ -23,11 +23,19 @@ protected:
   }
 
   int64_t nearest_higher_nice_number(const double value, const int64_t increment) const noexcept {
-    return increment * static_cast<int64_t>(std::ceil(value / increment));
+    if (std::ceil(value) == value) {
+      return increment * (static_cast<int64_t>(std::ceil(value / increment)) + 1);
+    } else {
+      return increment * static_cast<int64_t>(std::ceil(value / increment));
+    }
   }
 
   int64_t nearest_lower_nice_number(const double value, const int64_t increment) const noexcept {
-    return increment * static_cast<int64_t>(std::floor(value / increment));
+    if (std::floor(value) == value) {
+      return increment * (static_cast<int64_t>(std::floor(value / increment)) - 1);
+    } else {
+      return increment * static_cast<int64_t>(std::floor(value / increment));
+    }
   }
 
 }; // class PlotConfigurationFileWriter

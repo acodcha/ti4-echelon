@@ -40,7 +40,9 @@ const std::filesystem::path PlayerDataFileName{"data.dat"};
 
 const std::filesystem::path FactionDataFileName{"data.dat"};
 
-const std::filesystem::path DurationDataFileName{"duration.dat"};
+const std::filesystem::path DurationValuesDataFileName{"duration_data.dat"};
+
+const std::filesystem::path DurationRegressionFitDataFileName{"duration_regression_fit.dat"};
 
 const std::filesystem::path RatingsPlotFileStem{"ratings"};
 

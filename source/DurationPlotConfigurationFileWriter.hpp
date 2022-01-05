@@ -18,7 +18,7 @@ public:
     line("set grid xtics ytics mxtics mytics back");
     line("set key horizontal center top outside");
     line("set xlabel \"Number of Players\"");
-    line("set xrange [2:8]");
+    line("set xrange [" + std::to_string(PlotMinimumNumberOfPlayers) + ":" + std::to_string(PlotMaximumNumberOfPlayers) + "]");
     line("set xtics nomirror out 1");
     line("set mxtics 1");
     line("set ylabel \"Game Duration in Hours\"");
@@ -30,8 +30,8 @@ public:
     line("set y2tics mirror in 1");
     line("set my2tics 4");
     line("plot \\");
-    line("  \"" + std::filesystem::path{directory / Path::DurationDataFileName}.string() + "\" u 1:2 w p pt 7 ps 1 lt rgb \"#000000\" t \"\" , \\");
-    line("  \"" + std::filesystem::path{directory / Path::DurationDataFileName}.string() + "\" u 1:3 w lp lw 2 pt 7 ps 0.1 lt rgb \"#000000\" t \"" + games.duration_versus_number_of_players().print() + "\" , \\");
+    line("  \"" + std::filesystem::path{directory / Path::DurationValuesDataFileName}.string() + "\" u 1:2 w p pt 7 ps 1 lt rgb \"#000000\" t \"\" , \\");
+    line("  \"" + std::filesystem::path{directory / Path::DurationRegressionFitDataFileName}.string() + "\" u 1:2 w lp lw 2 pt 7 ps 0.1 lt rgb \"#000000\" t \"" + games.duration_versus_number_of_players().print() + "\" , \\");
   }
 
 private:
