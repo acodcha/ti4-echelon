@@ -98,13 +98,13 @@ private:
     table_.insert_column("3rd Place", Alignment::Center); // Column index 7
     for (const Player& player : players) {
       table_.column(0).insert_row(player.name());
-      table_.column(1).insert_row(player.snapshots().size());
-      table_.column(2).insert_row(player.snapshots().latest().value().current_elo_rating());
-      table_.column(3).insert_row(player.snapshots().latest().value().average_elo_rating());
-      table_.column(4).insert_row(player.snapshots().latest().value().average_victory_points_per_game());
-      table_.column(5).insert_row(player.snapshots().latest().value().print_place_percentage_and_count({1}));
-      table_.column(6).insert_row(player.snapshots().latest().value().print_place_percentage_and_count({2}));
-      table_.column(7).insert_row(player.snapshots().latest().value().print_place_percentage_and_count({3}));
+      table_.column(1).insert_row(player.number_of_snapshots());
+      table_.column(2).insert_row(player.latest_snapshot().value().current_elo_rating());
+      table_.column(3).insert_row(player.latest_snapshot().value().average_elo_rating());
+      table_.column(4).insert_row(player.latest_snapshot().value().average_victory_points_per_game());
+      table_.column(5).insert_row(player.latest_snapshot().value().print_place_percentage_and_count({1}));
+      table_.column(6).insert_row(player.latest_snapshot().value().print_place_percentage_and_count({2}));
+      table_.column(7).insert_row(player.latest_snapshot().value().print_place_percentage_and_count({3}));
     }
     table(table_);
   }
@@ -169,7 +169,7 @@ private:
       table_.column(1).insert_row(game.date());
       table_.column(2).insert_row(game.mode());
       table_.column(3).insert_row(game.victory_point_goal());
-      table_.column(4).insert_row(game.player_names().size());
+      table_.column(4).insert_row(game.participants().size());
       table_.column(5).insert_row((game.duration().has_value() ? game.duration().value().print() + ", " : "") + game.participants().print());
     }
     table(table_);

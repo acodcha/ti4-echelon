@@ -122,12 +122,12 @@ private:
   std::unordered_map<PlayerName, std::size_t> number_of_games(const Games& games) const noexcept {
     std::unordered_map<PlayerName, std::size_t> number_of_games_;
     for (const Game& game : games) {
-      for (const PlayerName& player_name : game.player_names()) {
-        const std::unordered_map<PlayerName, std::size_t>::iterator found{number_of_games_.find(player_name)};
+      for (const Participant& participant : game.participants()) {
+        const std::unordered_map<PlayerName, std::size_t>::iterator found{number_of_games_.find(participant.player_name())};
         if (found != number_of_games_.cend()) {
           ++(found->second);
         } else {
-          number_of_games_.emplace(player_name, 1);
+          number_of_games_.emplace(participant.player_name(), 1);
         }
       }
     }
@@ -161,7 +161,7 @@ private:
   std::unordered_map<PlayerName, EloRating> current_elo_ratings() const noexcept {
     std::unordered_map<PlayerName, EloRating> elo_ratings_;
     for (const Player& player : data_) {
-      const std::optional<PlayerSnapshot> latest_snapshot{player.snapshots().latest()};
+      const std::optional<Snapshot> latest_snapshot{player.latest_snapshot()};
       if (latest_snapshot.has_value()) {
         elo_ratings_.emplace(player.name(), latest_snapshot.value().current_elo_rating());
       } else {
