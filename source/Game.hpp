@@ -4,7 +4,7 @@
 #include "Duration.hpp"
 #include "GameMode.hpp"
 #include "Participants.hpp"
-#include "Teams.hpp"
+#include "Team.hpp"
 
 namespace TI4Echelon {
 
@@ -60,30 +60,17 @@ public:
     return participants_;
   }
 
-  const PlayerNames& player_names() const noexcept {
-    return player_names_;
-  }
-
-  const Teams& teams() const noexcept {
-    return teams_;
-  }
-
-  std::size_t number_of_players_on_team(const PlayerName& player_name) const {
-    const std::optional<Place> optional_place{place(player_name)};
-    if (optional_place.has_value()) {
-      const Teams::const_iterator team{teams_.find(optional_place.value())};
-      if (team != teams_.cend()) {
-        return team->player_names().size();
-      } else {
-        error("Player '" + player_name.value() + "' is not on any team.");;
-      }
+  std::size_t number_of_players_on_team(const Place& place) const {
+    const std::set<Team, Team::sort>::const_iterator team{teams_.find(place)};
+    if (team != teams_.cend()) {
+      return team->size();
     } else {
-      return 0;
+      error("Place '" + place.print() + "' is not on any team for the game played on " + date_.print() + ".");;
     }
   }
 
   bool exists(const PlayerName& player_name) const noexcept {
-    return player_names_.exists(player_name);
+    return player_names_.find(player_name) != player_names_.cend();
   }
 
   bool exists(const FactionName& faction_name) const noexcept {
@@ -100,8 +87,8 @@ public:
     }
   }
 
-  std::set<Place> places(const FactionName& faction) const noexcept {
-    std::set<Place> places;
+  std::set<Place, Place::sort> places(const FactionName& faction) const noexcept {
+    std::set<Place, Place::sort> places;
     const std::pair<std::multimap<FactionName, Place, std::less<FactionName>>::const_iterator, std::multimap<FactionName, Place, std::less<FactionName>>::const_iterator> range{faction_names_to_places_.equal_range(faction)};
     for (std::multimap<FactionName, Place, std::less<FactionName>>::const_iterator i = range.first; i != range.second; ++i) {
       places.insert(i->second);
@@ -140,20 +127,20 @@ public:
   std::optional<double> adjusted_victory_points(const PlayerName& player_name) const noexcept {
     const std::optional<VictoryPoints> raw_victory_points_{raw_victory_points(player_name)};
     if (raw_victory_points_.has_value()) {
-      const VictoryPoints limited{std::min(raw_victory_points_.value(), victory_point_goal_)};
-      return static_cast<double>(limited.value()) / static_cast<double>(victory_point_goal_.value()) * 10.0;
+      const VictoryPoints limited_victory_points{std::min(raw_victory_points_.value(), victory_point_goal_)};
+      return static_cast<double>(limited_victory_points.value()) / static_cast<double>(victory_point_goal_.value()) * 10.0;
     } else {
       const std::optional<double> no_data;
       return no_data;
     }
   }
 
-  std::multiset<double> adjusted_victory_points(const FactionName& faction) const noexcept {
+  std::multiset<double, std::greater<double>> adjusted_victory_points(const FactionName& faction) const noexcept {
     const std::multiset<VictoryPoints, VictoryPoints::sort> raw_victory_points_multiset{raw_victory_points(faction)};
-    std::multiset<double> adjusted_victory_points_;
+    std::multiset<double, std::greater<double>> adjusted_victory_points_;
     for (const VictoryPoints& raw_victory_points : raw_victory_points_multiset) {
-      const VictoryPoints limited{std::min(raw_victory_points, victory_point_goal_)};
-      adjusted_victory_points_.insert(static_cast<double>(limited.value()) / static_cast<double>(victory_point_goal_.value()) * 10.0);
+      const VictoryPoints limited_victory_points{std::min(raw_victory_points, victory_point_goal_)};
+      adjusted_victory_points_.insert(static_cast<double>(limited_victory_points.value()) / static_cast<double>(victory_point_goal_.value()) * 10.0);
     }
     return adjusted_victory_points_;
   }
@@ -200,10 +187,10 @@ private:
   Participants participants_;
 
   /// \brief Teams in this game.
-  Teams teams_;
+  std::set<Team, Team::sort> teams_;
 
   /// \brief Set of player names. Player names are unique.
-  PlayerNames player_names_;
+  std::set<PlayerName, PlayerName::sort> player_names_;
 
   /// \brief Place of each player name.
   std::map<PlayerName, Place, PlayerName::sort> player_names_to_places_;
@@ -289,15 +276,15 @@ private:
   }
 
   void update_teams(const Place& place, const PlayerName& player_name) noexcept {
-    const Teams::const_iterator found{teams_.find({place})};
-    if (found != teams_.end()) {
-      if (found->player_names().exists(player_name)) {
-        error("Player '" + player_name.value() + "' is already on team '" + found->print() + "'.");
+    const std::set<Team, Team::sort>::const_iterator team{teams_.find({place})};
+    if (team != teams_.end()) {
+      if (team->exists(player_name)) {
+        error("Player '" + player_name.value() + "' is already on team '" + team->print() + "'.");
       } else {
-        Team team{*found};
-        team.mutable_player_names().insert(player_name);
-        teams_.erase(found);
-        teams_.insert(team);
+        Team updated_team{*team};
+        updated_team.insert(player_name);
+        teams_.erase(team);
+        teams_.insert(updated_team);
       }
     } else {
       teams_.emplace(place, player_name);
@@ -305,7 +292,7 @@ private:
   }
 
   void initialize_player_names(const Place& place, const PlayerName& player_name, const VictoryPoints& victory_points, const FactionName& faction_name) {
-    const std::pair<PlayerNames::const_iterator, bool> result{player_names_.insert(player_name)};
+    const std::pair<std::set<PlayerName, PlayerName::sort>::const_iterator, bool> result{player_names_.insert(player_name)};
     if (!result.second) {
       error("Player '" + player_name.value() + "' appears twice in the game played on " + date_.print() + ".");
     }

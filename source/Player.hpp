@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Color.hpp"
-#include "PlayerSnapshots.hpp"
+#include "Snapshot.hpp"
 
 namespace TI4Echelon {
 
@@ -33,13 +33,18 @@ public:
     return highest_elo_rating_;
   }
 
-  const PlayerSnapshots& snapshots() const noexcept {
-    return snapshots_;
+  std::optional<Snapshot> latest_snapshot() const {
+    if (!snapshots_.empty()) {
+      return {snapshots_.back()};
+    } else {
+      const std::optional<Snapshot> no_data;
+      return no_data;
+    }
   }
 
   void update(const Game& game, const std::unordered_map<PlayerName, EloRating>& elo_ratings) noexcept {
-    if (game.player_names().exists(name_)) {
-      snapshots_.emplace_back(name_, game, elo_ratings);
+    if (game.exists(name_)) {
+      snapshots_.emplace_back(name_, game, elo_ratings, latest_snapshot());
       update_lowest_and_highest_elo_ratings();
     }
   }
@@ -47,11 +52,11 @@ public:
   /// \brief Prints this player's latest statistics.
   std::string print() const noexcept {
     std::string text{name_.value() + ": "};
-    const std::optional<PlayerSnapshot> latest_snapshot{snapshots_.latest()};
-    if (latest_snapshot.has_value()) {
-      text += latest_snapshot.value().print();
+    const std::optional<Snapshot> latest_snapshot_{latest_snapshot()};
+    if (latest_snapshot_.has_value()) {
+      text += latest_snapshot_.value().print();
     } else {
-      text += PlayerSnapshot{}.print();
+      text += Snapshot{}.print();
     }
     return text;
   }
@@ -86,6 +91,50 @@ public:
     }
   };
 
+  struct const_iterator : public std::vector<Snapshot>::const_iterator {
+    const_iterator(const std::vector<Snapshot>::const_iterator i) noexcept : std::vector<Snapshot>::const_iterator(i) {}
+  };
+
+  struct const_reverse_iterator : public std::vector<Snapshot>::const_reverse_iterator {
+    const_reverse_iterator(const std::vector<Snapshot>::const_reverse_iterator i) noexcept : std::vector<Snapshot>::const_reverse_iterator(i) {}
+  };
+
+  std::size_t number_of_snapshots() const noexcept {
+    return snapshots_.size();
+  }
+
+  const_iterator begin() const noexcept {
+    return const_iterator(snapshots_.begin());
+  }
+
+  const_iterator cbegin() const noexcept {
+    return const_iterator(snapshots_.cbegin());
+  }
+
+  const_reverse_iterator rbegin() const noexcept {
+    return const_reverse_iterator(snapshots_.rbegin());
+  }
+
+  const_reverse_iterator crbegin() const noexcept {
+    return const_reverse_iterator(snapshots_.crbegin());
+  }
+
+  const_iterator end() const noexcept {
+    return const_iterator(snapshots_.end());
+  }
+
+  const_iterator cend() const noexcept {
+    return const_iterator(snapshots_.cend());
+  }
+
+  const_reverse_iterator rend() const noexcept {
+    return const_reverse_iterator(snapshots_.rend());
+  }
+
+  const_reverse_iterator crend() const noexcept {
+    return const_reverse_iterator(snapshots_.crend());
+  }
+
 private:
 
   PlayerName name_;
@@ -96,15 +145,15 @@ private:
 
   EloRating highest_elo_rating_;
 
-  PlayerSnapshots snapshots_;
+  std::vector<Snapshot> snapshots_;
 
   void update_lowest_and_highest_elo_ratings() noexcept {
-    const std::optional<PlayerSnapshot> latest_snapshot{snapshots_.latest()};
-    if (latest_snapshot.value().current_elo_rating() < lowest_elo_rating_) {
-      lowest_elo_rating_ = latest_snapshot.value().current_elo_rating();
+    const std::optional<Snapshot> latest_snapshot_{latest_snapshot()};
+    if (latest_snapshot_.value().current_elo_rating() < lowest_elo_rating_) {
+      lowest_elo_rating_ = latest_snapshot_.value().current_elo_rating();
     }
-    if (latest_snapshot.value().current_elo_rating() > highest_elo_rating_) {
-      highest_elo_rating_ = latest_snapshot.value().current_elo_rating();
+    if (latest_snapshot_.value().current_elo_rating() > highest_elo_rating_) {
+      highest_elo_rating_ = latest_snapshot_.value().current_elo_rating();
     }
   }
 

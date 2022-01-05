@@ -51,9 +51,9 @@ private:
       table.insert_column("1stPlacePercentage"); // Column index 6
       table.insert_column("2ndPlacePercentage"); // Column index 7
       table.insert_column("3rdPlacePercentage"); // Column index 8
-      for (PlayerSnapshots::const_reverse_iterator snapshot = player.snapshots().crbegin(); snapshot != player.snapshots().crend(); ++snapshot) {
+      for (Player::const_reverse_iterator snapshot = player.crbegin(); snapshot != player.crend(); ++snapshot) {
         table.column(0).insert_row(snapshot->global_game_number());
-        table.column(1).insert_row(snapshot->player_game_number());
+        table.column(1).insert_row(snapshot->local_game_number());
         table.column(2).insert_row(snapshot->date());
         table.column(3).insert_row(snapshot->current_elo_rating());
         table.column(4).insert_row(snapshot->average_elo_rating());

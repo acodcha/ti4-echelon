@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Place.hpp"
-#include "PlayerNames.hpp"
+#include "PlayerName.hpp"
 
 namespace TI4Echelon {
 
@@ -17,25 +17,30 @@ public:
   Team(const Place& place) noexcept : place_(place) {}
 
   /// \brief Constructor that initializes the team to a place and a single player name. Additional player names can be inserted later.
-  Team(const Place& place, const PlayerName& player_name) noexcept : place_(place), player_names_(player_name) {}
-
-  /// \brief Constructor that initializes the team to a place and player names.
-  Team(const Place& place, const PlayerNames& player_names) noexcept : place_(place), player_names_(player_names) {}
+  Team(const Place& place, const PlayerName& player_name) noexcept : place_(place), player_names_({player_name}) {}
 
   const Place& place() const noexcept {
     return place_;
   }
 
-  const PlayerNames& player_names() const noexcept {
-    return player_names_;
+  bool exists(const PlayerName& player_name) const noexcept {
+    return player_names_.find(player_name) != player_names_.cend();
   }
 
-  PlayerNames& mutable_player_names() noexcept {
-    return player_names_;
+  std::size_t size() const noexcept {
+    return player_names_.size();
+  }
+
+  std::pair<std::set<PlayerName, PlayerName::sort>::const_iterator, bool> insert(const PlayerName& player_name) noexcept {
+    return {player_names_.insert(player_name)};
   }
 
   std::string print() const noexcept {
-    return place_.print() + " " + player_names_.print();
+    std::string text{place_.print()};
+    for (const PlayerName& player_name : player_names_) {
+      text += " " + player_name.value();
+    }
+    return text;
   }
 
   bool operator==(const Team& other) const noexcept {
@@ -73,7 +78,7 @@ private:
 
   Place place_;
 
-  PlayerNames player_names_;
+  std::set<PlayerName, PlayerName::sort> player_names_;
 
 }; // class Team
 
