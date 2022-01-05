@@ -17,9 +17,9 @@ const std::string Description{"Leaderboard generator for the Twilight Imperium 4
 
 } // namespace Program
 
-constexpr const int16_t PlotWidthPixels{1000};
+constexpr const int16_t PlotWidthPixels{640};
 
-constexpr const int16_t PlotHeightPixels{750};
+constexpr const int16_t PlotHeightPixels{640};
 
 void create(const std::filesystem::path& directory) {
   std::filesystem::create_directory(directory);

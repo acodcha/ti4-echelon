@@ -13,7 +13,7 @@ public:
     const int64_t y_minimum{std::min(static_cast<int64_t>(EloRating{}.value() - increment_), nearest_lower_nice_number(players.lowest_elo_rating().value(), increment_))};
     const int64_t y_maximum{std::max(static_cast<int64_t>(EloRating{}.value() + increment_), nearest_higher_nice_number(players.highest_elo_rating().value(), increment_))};
     line("set title \"\"");
-    line("set object 1 rectangle from screen 0,0 to screen 1,1 fillstyle solid 1.0 fillcolor rgb \"#BFBFBF\" behind");
+    line("set object 1 rectangle from screen 0,0 to screen 1,1 fillstyle solid 1.0 fillcolor rgb \"#" + color_code(Color::LightGray) + "\" behind");
     line("set grid xtics ytics mxtics mytics back");
     line("set key horizontal center top outside");
     line("set xlabel \"Game Number\"");
