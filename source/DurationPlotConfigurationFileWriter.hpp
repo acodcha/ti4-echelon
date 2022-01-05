@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Color.hpp"
 #include "Games.hpp"
 #include "PlotConfigurationFileWriter.hpp"
 
@@ -13,7 +14,7 @@ public:
     const int64_t y_minimum{std::max(static_cast<int64_t>(0), nearest_lower_nice_number(games.duration_versus_number_of_players().minimum_duration_in_hours(), increment_))};
     const int64_t y_maximum{std::max(increment_, nearest_higher_nice_number(games.duration_versus_number_of_players().maximum_duration_in_hours(), increment_))};
     line("set title \"\"");
-    line("set object 1 rectangle from screen 0,0 to screen 1,1 fillstyle solid 1.0 fillcolor rgb \"#BFBFBF\" behind");
+    line("set object 1 rectangle from screen 0,0 to screen 1,1 fillstyle solid 1.0 fillcolor rgb \"#" + color_code(Color::LightGray) + "\" behind");
     line("set grid xtics ytics mxtics mytics back");
     line("set key horizontal center top outside");
     line("set xlabel \"Number of Players\"");

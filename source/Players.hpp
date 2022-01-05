@@ -94,7 +94,7 @@ private:
     std::set<PlayerName, PlayerName::sort> player_names_without_colors;
     // Assign a color to a number of players with the most games played, and at least 2 games played.
     for (const std::pair<std::size_t, PlayerName>& number_of_games_and_player_name : player_names_by_number_of_games_) {
-      if (player_names_with_colors.size() < Colors.size() && number_of_games_and_player_name.first >= 2) {
+      if (player_names_with_colors.size() < PlotDataColors.size() && number_of_games_and_player_name.first >= 2) {
         player_names_with_colors.insert(number_of_games_and_player_name.second);
       } else {
         player_names_without_colors.insert(number_of_games_and_player_name.second);
@@ -102,7 +102,7 @@ private:
     }
     for (const PlayerName& player_name : player_names_with_colors) {
       const std::size_t color_index{data_.size()};
-      data_.emplace_back(player_name, color(color_index));
+      data_.emplace_back(player_name, plot_data_color(color_index));
     }
     for (const PlayerName& player_name : player_names_without_colors) {
       data_.emplace_back(player_name);

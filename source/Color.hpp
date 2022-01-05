@@ -5,65 +5,52 @@
 namespace TI4Echelon {
 
 enum class Color : int8_t {
-  Red,
+  Maroon2,
   Blue,
-  Green,
+  ForestGreen,
   Yellow,
-  Orange,
-  Purple,
-  Cyan,
-  Magenta,
-  Teal,
-  Brown,
-  Pink,
-  Olive
+  DarkOrange,
+  Indigo,
+  Fuchsia,
+  Aqua,
+  Lime,
+  Cornflower,
+  HotPink,
+  DarkSlateGray,
+  LightGray
 };
 
-template <> const std::unordered_map<Color, std::string> labels<Color>{
-  {Color::Red, "Red"},
-  {Color::Blue, "Blue"},
-  {Color::Green, "Green"},
-  {Color::Yellow, "Yellow"},
-  {Color::Orange, "Orange"},
-  {Color::Purple, "Purple"},
-  {Color::Cyan, "Cyan"},
-  {Color::Magenta, "Magenta"},
-  {Color::Teal, "Teal"},
-  {Color::Brown, "Brown"},
-  {Color::Pink, "Pink"},
-  {Color::Olive, "Olive"}
-};
-
-template <> const std::unordered_map<std::string, Color> spellings<Color>{
-  {"Red", Color::Red},
-  {"Blue", Color::Blue},
-  {"Green", Color::Green},
-  {"Yellow", Color::Yellow},
-  {"Orange", Color::Orange},
-  {"Purple", Color::Purple},
-  {"Cyan", Color::Cyan},
-  {"Magenta", Color::Magenta},
-  {"Teal", Color::Teal},
-  {"Brown", Color::Brown},
-  {"Pink", Color::Pink},
-  {"Olive", Color::Olive}
-};
+/*
+maroon2 #7f0000
+blue #0000ff
+forestgreen #228b22
+yellow #ffff00
+darkorange #ff8c00
+indigo #4b0082
+fuchsia #ff00ff
+aqua #00ffff
+lime #00ff00
+cornflower #6495ed
+hotpink #ff69b4
+darkslategray #2f4f4f
+*/
 
 namespace {
 
 const std::unordered_map<Color, std::string> color_codes{
-  {Color::Red, "E6194B"},
-  {Color::Blue, "0082C8"},
-  {Color::Green, "3CB44B"},
-  {Color::Yellow, "FFE119"},
-  {Color::Orange, "F58231"},
-  {Color::Purple, "911EB4"},
-  {Color::Cyan, "46F0F0"},
-  {Color::Magenta, "F032E6"},
-  {Color::Teal, "008080"},
-  {Color::Brown, "AA6E28"},
-  {Color::Pink, "FABEBE"},
-  {Color::Olive, "808000"}
+  {Color::Maroon2, "7f0000"},
+  {Color::Blue, "0000ff"},
+  {Color::ForestGreen, "228b22"},
+  {Color::Yellow, "ffff00"},
+  {Color::DarkOrange, "ff8c00"},
+  {Color::Indigo, "4b0082"},
+  {Color::Fuchsia, "ff00ff"},
+  {Color::Aqua, "00ffff"},
+  {Color::Lime, "00ff00"},
+  {Color::Cornflower, "6495ed"},
+  {Color::HotPink, "ff69b4"},
+  {Color::DarkSlateGray, "2f4f4f"},
+  {Color::LightGray, "d3d3d3"}
 };
 
 } // namespace
@@ -77,25 +64,25 @@ std::string color_code(const Color color) noexcept {
   }
 }
 
-/// \brief Ordered sequence of colors.
-const std::vector<Color> Colors{
-  Color::Red,
+/// \brief Ordered sequence of colors for plot series.
+const std::vector<Color> PlotDataColors{
+  Color::Maroon2,
   Color::Blue,
-  Color::Green,
+  Color::ForestGreen,
   Color::Yellow,
-  Color::Orange,
-  Color::Purple,
-  Color::Cyan,
-  Color::Magenta,
-  Color::Teal,
-  Color::Brown,
-  Color::Pink,
-  Color::Olive
+  Color::DarkOrange,
+  Color::Indigo,
+  Color::Fuchsia,
+  Color::Aqua,
+  Color::Lime,
+  Color::Cornflower,
+  Color::HotPink,
+  Color::DarkSlateGray
 };
 
-Color color(const std::size_t counter) noexcept {
-  const std::size_t color_index{counter % Colors.size()};
-  return Colors[color_index];
+Color plot_data_color(const std::size_t counter) noexcept {
+  const std::size_t color_index{counter % PlotDataColors.size()};
+  return PlotDataColors[color_index];
 }
 
 } // namespace TI4Echelon

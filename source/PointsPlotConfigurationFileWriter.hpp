@@ -11,7 +11,7 @@ public:
 
   PointsPlotConfigurationFileWriter(const std::filesystem::path& directory, const Players& players) : PlotConfigurationFileWriter(directory / Path::PlayersDirectoryName / Path::PointsPlotFileStem) {
     line("set title \"\"");
-    line("set object 1 rectangle from screen 0,0 to screen 1,1 fillstyle solid 1.0 fillcolor rgb \"#BFBFBF\" behind");
+    line("set object 1 rectangle from screen 0,0 to screen 1,1 fillstyle solid 1.0 fillcolor rgb \"#" + color_code(Color::LightGray) + "\" behind");
     line("set grid xtics ytics mxtics mytics back");
     line("set key horizontal center top outside");
     line("set xlabel \"Game Number\"");
