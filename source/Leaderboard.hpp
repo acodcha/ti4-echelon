@@ -18,7 +18,7 @@ public:
     if (!directory.empty()) {
       create_directories(directory, players);
       write_player_data_files(directory, players);
-      write_duration_data_file(directory, games);
+      write_duration_data_files(directory, games);
       write_leaderboard_file(directory, games, players);
       write_player_plot_configuration_files(directory, players);
       write_duration_plot_configuration_file(directory, games);
@@ -67,17 +67,32 @@ private:
     message("Wrote the player data files.");
   }
 
-  void write_duration_data_file(const std::filesystem::path& directory, const Games& games) const noexcept {
+  void write_duration_data_files(const std::filesystem::path& directory, const Games& games) const noexcept {
+    write_duration_values_data_files(directory, games);
+    write_duration_regression_fit_data_files(directory, games);
+  }
+
+  void write_duration_values_data_files(const std::filesystem::path& directory, const Games& games) const noexcept {
     Table table;
     table.insert_column("NumberOfPlayers"); // Column index 0
     table.insert_column("GameDurationInHours"); // Column index 1
-    table.insert_column("RegressionFit"); // Column index 2
     for (const std::pair<double, double>& number_of_players_and_game_duration_in_hours : games.duration_versus_number_of_players()) {
       table.column(0).insert_row(number_of_players_and_game_duration_in_hours.first);
       table.column(1).insert_row(number_of_players_and_game_duration_in_hours.second);
-      table.column(2).insert_row({games.duration_versus_number_of_players().linear_regression()(number_of_players_and_game_duration_in_hours.first), 2});
     }
-    DataFileWriter{directory / Path::DurationDataFileName, table};
+    DataFileWriter{directory / Path::DurationValuesDataFileName, table};
+  }
+
+  void write_duration_regression_fit_data_files(const std::filesystem::path& directory, const Games& games) const noexcept {
+    Table table;
+    table.insert_column("NumberOfPlayers"); // Column index 0
+    table.insert_column("GameDurationInHours"); // Column index 1
+    const std::set<std::size_t> numbers_of_players{PlotMinimumNumberOfPlayers, PlotMaximumNumberOfPlayers};
+    for (const std::size_t number_of_players : numbers_of_players) {
+      table.column(0).insert_row(number_of_players);
+      table.column(1).insert_row({games.duration_versus_number_of_players().linear_regression()(number_of_players), 2});
+    }
+    DataFileWriter{directory / Path::DurationRegressionFitDataFileName, table};
   }
 
   void write_leaderboard_file(const std::filesystem::path& directory, const Games& games, const Players& players) const {

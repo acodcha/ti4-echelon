@@ -17,6 +17,10 @@ const std::string Description{"Leaderboard generator for the Twilight Imperium 4
 
 } // namespace Program
 
+constexpr const std::size_t PlotMinimumNumberOfPlayers{1};
+
+constexpr const std::size_t PlotMaximumNumberOfPlayers{9};
+
 constexpr const int16_t PlotWidthPixels{640};
 
 constexpr const int16_t PlotHeightPixels{640};
