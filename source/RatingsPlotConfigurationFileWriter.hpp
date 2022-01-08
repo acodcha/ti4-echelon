@@ -22,11 +22,11 @@ public:
     line("set ylabel \"Rating\"");
     line("set yrange [" + std::to_string(y_minimum) + ":" + std::to_string(y_maximum) + "]");
     line("set ytics mirror out");
-    line("set mytics 10");
+    line("set mytics 5");
     line("set y2label \"\"");
     line("set y2range [" + std::to_string(y_minimum) + ":" + std::to_string(y_maximum) + "]");
     line("set y2tics mirror in");
-    line("set my2tics 10");
+    line("set my2tics 5");
     line("plot \\");
     for (const Player& player : players) {
       if (player.color().has_value()) {

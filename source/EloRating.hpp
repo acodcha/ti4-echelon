@@ -26,8 +26,6 @@ public:
     if (!place.has_value()) {
       error("Player " + player_name.value() + " is not a participant in the game: " + game.print());
     }
-    const std::size_t number_of_opponents{game.participants().size() - game.number_of_players_on_team(place.value())};
-    const double maximum_update_factor_{maximum_update_factor(number_of_opponents)};
     EloRating elo_rating{previous_elo_rating(player_name, previous_elo_ratings)};
     // Update the Elo rating using the actual and expected outcomes.
     for (const Participant& participant : game.participants() ) {
@@ -36,7 +34,7 @@ public:
         const EloRating opponent_elo_rating{previous_elo_rating(participant.player_name(), previous_elo_ratings)};
         const double actual_outcome{place.value().outcome(participant.place())};
         const double expected_outcome{elo_rating.expected_outcome(opponent_elo_rating)};
-        elo_rating += maximum_update_factor_ * (actual_outcome - expected_outcome);
+        elo_rating += update_factor_ * (actual_outcome - expected_outcome);
       }
     }
     value_ = elo_rating.value();
@@ -52,8 +50,6 @@ public:
     if (!places.empty()) {
       EloRating elo_rating{previous_elo_rating(faction_name, previous_elo_ratings)};
       for (const Place& place : places) {
-        const std::size_t number_of_opponents{game.participants().size() - game.number_of_players_on_team(place.value())};
-        const double maximum_update_factor_{maximum_update_factor(number_of_opponents)};
         // Update the Elo rating using the actual and expected outcomes.
         for (const Participant& participant : game.participants() ) {
           // Do not compete against yourself or your allies. The place handles both of these checks.
@@ -61,7 +57,7 @@ public:
             const EloRating opponent_elo_rating{previous_elo_rating(participant.faction_name(), previous_elo_ratings)};
             const double actual_outcome{place.outcome(participant.place())};
             const double expected_outcome{elo_rating.expected_outcome(opponent_elo_rating)};
-            elo_rating += maximum_update_factor_ * (actual_outcome - expected_outcome);
+            elo_rating += update_factor_ * (actual_outcome - expected_outcome);
           }
         }
       }
@@ -164,21 +160,15 @@ private:
   /// \brief Elo ratings start with a value of 1000.
   double value_{1000.0};
 
+  /// \brief When an Elo rating is updated, it changes by at most its update factor.
+  static constexpr const double update_factor_{64.0};
+
   /// \brief The expected outcome depends on the difference in Elo rating between two opponents.
   constexpr double expected_outcome(const EloRating& opponent_elo_rating) const noexcept {
     return 1.0 / (1.0 + std::pow(10.0, (opponent_elo_rating.value() - value_) / 400.0));
   }
 
-  static constexpr double maximum_update_factor(const std::size_t number_of_opponents) noexcept {
-    if (number_of_opponents <= 1) {
-      return 64.0;
-    } else {
-      // In a free-for-all game with N players, each player faces off against N-1 other players, and there are 0.5*N*(N-1) two-player pairs.
-      return 64.0 / number_of_opponents;
-    }
-  }
-
-  EloRating previous_elo_rating(const PlayerName& player_name, const std::unordered_map<PlayerName, EloRating>& previous_elo_ratings) const {
+  static EloRating previous_elo_rating(const PlayerName& player_name, const std::unordered_map<PlayerName, EloRating>& previous_elo_ratings) {
     const std::unordered_map<PlayerName, EloRating>::const_iterator found{previous_elo_ratings.find(player_name)};
     if (found != previous_elo_ratings.cend()) {
       return found->second;
@@ -188,7 +178,7 @@ private:
     }
   }
 
-  EloRating previous_elo_rating(const FactionName& faction_name, const std::unordered_map<FactionName, EloRating>& previous_elo_ratings) const {
+  static EloRating previous_elo_rating(const FactionName& faction_name, const std::unordered_map<FactionName, EloRating>& previous_elo_ratings) {
     const std::unordered_map<FactionName, EloRating>::const_iterator found{previous_elo_ratings.find(faction_name)};
     if (found != previous_elo_ratings.cend()) {
       return found->second;
