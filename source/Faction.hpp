@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Color.hpp"
 #include "Snapshot.hpp"
 
 namespace TI4Echelon {

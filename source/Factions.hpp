@@ -89,50 +89,10 @@ private:
   /// \brief Initialize the factions with their names and colors.
   /// \details Only a limited number of factions with the most games played are assigned a color.
   void initialize_data(const Games& games) noexcept {
-    const std::multimap<std::size_t, FactionName, std::greater<std::size_t>> faction_names_by_number_of_games_(faction_names_by_number_of_games(games));
-    std::set<FactionName, std::less<FactionName>> faction_names_with_colors;
-    std::set<FactionName, std::less<FactionName>> faction_names_without_colors;
-    // Assign a color to a number of factions with the most games played, and at least 2 games played.
-    for (const std::pair<std::size_t, FactionName>& number_of_games_and_faction_name : faction_names_by_number_of_games_) {
-      if (number_of_games_and_faction_name.second != FactionName::Custom && faction_names_with_colors.size() < PlotDataColors.size() && number_of_games_and_faction_name.first >= 2) {
-        faction_names_with_colors.insert(number_of_games_and_faction_name.second);
-      } else {
-        faction_names_without_colors.insert(number_of_games_and_faction_name.second);
-      }
-    }
-    for (const FactionName faction_name : faction_names_with_colors) {
-      const std::size_t color_index{data_.size()};
-      data_.emplace_back(faction_name, plot_data_color(color_index));
-    }
-    for (const FactionName faction_name : faction_names_without_colors) {
-      data_.emplace_back(faction_name);
+    for (const FactionName faction_name : FactionNames) {
+      data_.emplace_back(faction_name, color(faction_name));
     }
     std::sort(data_.begin(), data_.end(), Faction::sort());
-  }
-
-  std::multimap<std::size_t, FactionName, std::greater<std::size_t>> faction_names_by_number_of_games(const Games& games) const noexcept {
-    const std::unordered_map<FactionName, std::size_t> number_of_games_(number_of_games(games));
-    std::multimap<std::size_t, FactionName, std::greater<std::size_t>> faction_names_by_number_of_games_;
-    for (const std::pair<FactionName, std::size_t>& faction_name_and_number_of_games : number_of_games_) {
-      faction_names_by_number_of_games_.emplace(faction_name_and_number_of_games.second, faction_name_and_number_of_games.first);
-    }
-    return faction_names_by_number_of_games_;
-  }
-
-  std::unordered_map<FactionName, std::size_t> number_of_games(const Games& games) const noexcept {
-    std::unordered_map<FactionName, std::size_t> number_of_games_;
-    for (const FactionName faction_name : FactionNames) {
-      number_of_games_.emplace(faction_name, 0);
-    }
-    for (const Game& game : games) {
-      for (const Participant& participant : game.participants()) {
-        const std::unordered_map<FactionName, std::size_t>::iterator found{number_of_games_.find(participant.faction_name())};
-        if (found != number_of_games_.cend()) {
-          ++(found->second);
-        }
-      }
-    }
-    return number_of_games_;
   }
 
   void initialize_indices() noexcept {
