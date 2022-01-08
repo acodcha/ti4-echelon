@@ -14,7 +14,7 @@ public:
 
   Participant() noexcept {}
 
-  Participant(const Place& place, const PlayerName& player_name, const VictoryPoints& victory_points, const FactionName& faction_name) noexcept :
+  Participant(const Place& place, const PlayerName& player_name, const VictoryPoints& victory_points, const FactionName faction_name) noexcept :
     place_(place), player_name_(player_name), victory_points_(victory_points), faction_name_(faction_name) {}
 
   constexpr const Place& place() const noexcept {
@@ -29,7 +29,7 @@ public:
     return victory_points_;
   }
 
-  constexpr const FactionName& faction_name() const noexcept {
+  constexpr const FactionName faction_name() const noexcept {
     return faction_name_;
   }
 

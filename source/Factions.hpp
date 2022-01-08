@@ -63,11 +63,11 @@ public:
    return const_iterator(data_.cend());
   }
 
-  bool exists(const FactionName& name) const noexcept {
+  bool exists(const FactionName name) const noexcept {
     return indices_.find(name) != indices_.cend();
   }
 
-  const_iterator find(const FactionName& name) const noexcept {
+  const_iterator find(const FactionName name) const noexcept {
     const std::unordered_map<FactionName, std::size_t>::const_iterator found{indices_.find(name)};
     if (found != indices_.cend()) {
       return data_.cbegin() + found->second;

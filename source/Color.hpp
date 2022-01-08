@@ -5,51 +5,36 @@
 namespace TI4Echelon {
 
 enum class Color : int8_t {
-  Maroon2,
+  Red,
   Blue,
-  ForestGreen,
+  Green,
   Yellow,
-  DarkOrange,
-  Indigo,
-  Fuchsia,
-  Aqua,
-  Lime,
-  Cornflower,
-  HotPink,
-  DarkSlateGray,
+  Orange,
+  Cyan,
+  Magenta,
+  Brown,
+  Mint,
+  Pink,
+  White,
+  Black,
   LightGray
 };
-
-/*
-maroon2 #7f0000
-blue #0000ff
-forestgreen #228b22
-yellow #ffff00
-darkorange #ff8c00
-indigo #4b0082
-fuchsia #ff00ff
-aqua #00ffff
-lime #00ff00
-cornflower #6495ed
-hotpink #ff69b4
-darkslategray #2f4f4f
-*/
 
 namespace {
 
 const std::unordered_map<Color, std::string> color_codes{
-  {Color::Maroon2, "7f0000"},
-  {Color::Blue, "0000ff"},
-  {Color::ForestGreen, "228b22"},
-  {Color::Yellow, "ffff00"},
-  {Color::DarkOrange, "ff8c00"},
-  {Color::Indigo, "4b0082"},
-  {Color::Fuchsia, "ff00ff"},
-  {Color::Aqua, "00ffff"},
-  {Color::Lime, "00ff00"},
-  {Color::Cornflower, "6495ed"},
-  {Color::HotPink, "ff69b4"},
-  {Color::DarkSlateGray, "2f4f4f"},
+  {Color::Red, "e6194b"},
+  {Color::Blue, "4363d8"},
+  {Color::Green, "3cb44b"},
+  {Color::Yellow, "ffe119"},
+  {Color::Orange, "f58231"},
+  {Color::Cyan, "42d4f4"},
+  {Color::Magenta, "f032e6"},
+  {Color::Brown, "9a6324"},
+  {Color::Mint, "aaffc3"},
+  {Color::Pink, "fabed4"},
+  {Color::White, "ffffff"},
+  {Color::Black, "000000"},
   {Color::LightGray, "d3d3d3"}
 };
 
@@ -66,18 +51,18 @@ std::string color_code(const Color color) noexcept {
 
 /// \brief Ordered sequence of colors for plot series.
 const std::vector<Color> PlotDataColors{
-  Color::Maroon2,
+  Color::Red,
   Color::Blue,
-  Color::ForestGreen,
+  Color::Green,
   Color::Yellow,
-  Color::DarkOrange,
-  Color::Indigo,
-  Color::Fuchsia,
-  Color::Aqua,
-  Color::Lime,
-  Color::Cornflower,
-  Color::HotPink,
-  Color::DarkSlateGray
+  Color::Orange,
+  Color::Cyan,
+  Color::Magenta,
+  Color::Brown,
+  Color::Mint,
+  Color::Pink,
+  Color::White,
+  Color::Black
 };
 
 Color plot_data_color(const std::size_t counter) noexcept {

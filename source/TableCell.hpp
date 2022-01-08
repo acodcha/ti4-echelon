@@ -22,9 +22,9 @@ public:
 
   TableCell(const EloRating& elo_rating) noexcept : value_(elo_rating.print()) {}
 
-  TableCell(const FactionName& faction_name) noexcept : value_(label(faction_name)) {}
+  TableCell(const FactionName faction_name) noexcept : value_(label(faction_name)) {}
 
-  TableCell(const GameMode& game_mode) noexcept : value_(label(game_mode)) {}
+  TableCell(const GameMode game_mode) noexcept : value_(label(game_mode)) {}
 
   TableCell(const Percentage& percentage) noexcept : value_(percentage.print()) {}
 
