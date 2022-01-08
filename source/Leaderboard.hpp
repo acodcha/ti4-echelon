@@ -14,15 +14,18 @@ class Leaderboard {
 
 public:
 
-  Leaderboard(const std::filesystem::path& directory, const Games& games, const Players& players) {
+  Leaderboard(const std::filesystem::path& directory, const Games& games, const Players& players, const Factions& factions) {
     if (!directory.empty()) {
-      create_directories(directory, players);
+      create_directories(directory, players, factions);
       write_player_data_files(directory, players);
+      write_faction_data_files(directory, factions);
       write_duration_data_files(directory, games);
-      write_leaderboard_file(directory, games, players);
+      write_leaderboard_file(directory, games, players, factions);
       write_player_plot_configuration_files(directory, players);
+      write_faction_plot_configuration_files(directory, factions);
       write_duration_plot_configuration_file(directory, games);
       generate_player_plots(directory);
+      generate_faction_plots(directory);
       generate_duration_plot(directory);
       message("Wrote the leaderboard to '" + directory.string() + "'.");
     }
@@ -30,11 +33,15 @@ public:
 
 private:
 
-  void create_directories(const std::filesystem::path& directory, const Players& players) const {
+  void create_directories(const std::filesystem::path& directory, const Players& players, const Factions& factions) const {
     create(directory);
     create(directory / Path::PlayersDirectoryName);
+    create(directory / Path::FactionsDirectoryName);
     for (const Player& player : players) {
-      create(directory / Path::PlayersDirectoryName / std::filesystem::path{player.name().value()});
+      create(directory / Path::PlayersDirectoryName / player.path());
+    }
+    for (const Faction& faction : factions) {
+      create(directory / Path::FactionsDirectoryName / faction.path());
     }
     message("Created the directories.");
   }
@@ -62,9 +69,37 @@ private:
         table.column(7).insert_row(snapshot->place_percentage({2}));
         table.column(8).insert_row(snapshot->place_percentage({3}));
       }
-      DataFileWriter{directory / Path::PlayersDirectoryName / std::filesystem::path{player.name().value()} / Path::PlayerDataFileName, table};
+      DataFileWriter{directory / Path::PlayersDirectoryName / player.path() / Path::PlayerDataFileName, table};
     }
     message("Wrote the player data files.");
+  }
+
+  void write_faction_data_files(const std::filesystem::path& directory, const Factions& factions) const {
+    for (const Faction& faction : factions) {
+      Table table;
+      table.insert_column("GlobalGameNumber"); // Column index 0
+      table.insert_column("PlayerGameNumber"); // Column index 1
+      table.insert_column("Date"); // Column index 2
+      table.insert_column("CurrentRating"); // Column index 3
+      table.insert_column("AverageRating"); // Column index 4
+      table.insert_column("AveragePointsPerGame"); // Column index 5
+      table.insert_column("1stPlacePercentage"); // Column index 6
+      table.insert_column("2ndPlacePercentage"); // Column index 7
+      table.insert_column("3rdPlacePercentage"); // Column index 8
+      for (Player::const_reverse_iterator snapshot = faction.crbegin(); snapshot != faction.crend(); ++snapshot) {
+        table.column(0).insert_row(snapshot->global_game_number());
+        table.column(1).insert_row(snapshot->local_game_number());
+        table.column(2).insert_row(snapshot->date());
+        table.column(3).insert_row(snapshot->current_elo_rating());
+        table.column(4).insert_row(snapshot->average_elo_rating());
+        table.column(5).insert_row(snapshot->average_victory_points_per_game());
+        table.column(6).insert_row(snapshot->place_percentage({1}));
+        table.column(7).insert_row(snapshot->place_percentage({2}));
+        table.column(8).insert_row(snapshot->place_percentage({3}));
+      }
+      DataFileWriter{directory / Path::FactionsDirectoryName / faction.path() / Path::FactionDataFileName, table};
+    }
+    message("Wrote the faction data files.");
   }
 
   void write_duration_data_files(const std::filesystem::path& directory, const Games& games) const noexcept {
@@ -95,8 +130,8 @@ private:
     DataFileWriter{directory / Path::DurationRegressionFitDataFileName, table};
   }
 
-  void write_leaderboard_file(const std::filesystem::path& directory, const Games& games, const Players& players) const {
-    LeaderboardFileWriter{directory, games, players};
+  void write_leaderboard_file(const std::filesystem::path& directory, const Games& games, const Players& players, const Factions& factions) const {
+    LeaderboardFileWriter{directory, games, players, factions};
     message("Wrote the leaderboard Markdown file.");
   }
 
@@ -105,6 +140,13 @@ private:
     PointsPlotConfigurationFileWriter{directory, players};
     WinRatesPlotConfigurationFileWriter{directory, players};
     message("Wrote the player plot configuration Gnuplot files.");
+  }
+
+  void write_faction_plot_configuration_files(const std::filesystem::path& directory, const Factions& factions) const {
+    RatingsPlotConfigurationFileWriter{directory, factions};
+    PointsPlotConfigurationFileWriter{directory, factions};
+    WinRatesPlotConfigurationFileWriter{directory, factions};
+    message("Wrote the faction plot configuration Gnuplot files.");
   }
 
   void write_duration_plot_configuration_file(const std::filesystem::path& directory, const Games& games) const noexcept {
@@ -118,6 +160,14 @@ private:
     generate_plot(directory / Path::PlayersDirectoryName / file_name(Path::PointsPlotFileStem, Path::PlotConfigurationFileExtension));
     generate_plot(directory / Path::PlayersDirectoryName / file_name(Path::WinRatesPlotFileStem, Path::PlotConfigurationFileExtension));
     message("Generated the player plots.");
+  }
+
+  void generate_faction_plots(const std::filesystem::path& directory) const {
+    message("Generating the faction plots...");
+    generate_plot(directory / Path::FactionsDirectoryName / file_name(Path::RatingsPlotFileStem, Path::PlotConfigurationFileExtension));
+    generate_plot(directory / Path::FactionsDirectoryName / file_name(Path::PointsPlotFileStem, Path::PlotConfigurationFileExtension));
+    generate_plot(directory / Path::FactionsDirectoryName / file_name(Path::WinRatesPlotFileStem, Path::PlotConfigurationFileExtension));
+    message("Generated the faction plots.");
   }
 
   void generate_duration_plot(const std::filesystem::path& directory) const {
