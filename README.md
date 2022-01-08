@@ -2,6 +2,8 @@
 
 [Setup](#setup) · [Usage](#usage) · [Games File](#games-file) · [Factions](#factions) · [Documentation](#documentation) · [License](#license)
 
+See https://acodcha.github.io/ti4-leaderboard/leaderboard for an example of a leaderboard that uses this generator.
+
 # Setup
 
 The following packages are required:
