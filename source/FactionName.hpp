@@ -88,7 +88,7 @@ template <> const std::unordered_map<std::string, FactionName> spellings<Faction
   {"Custom", FactionName::Custom}
 };
 
-const std::set<FactionName> FactionNames{
+const std::set<FactionName, std::less<FactionName>> FactionNames{
   FactionName::Arborec,
   FactionName::ArgentFlight,
   FactionName::BaronyOfLetnev,

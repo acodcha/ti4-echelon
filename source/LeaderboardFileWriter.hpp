@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Factions.hpp"
 #include "MarkdownFileWriter.hpp"
 #include "Path.hpp"
 #include "Players.hpp"
@@ -14,13 +15,14 @@ public:
   LeaderboardFileWriter(
     const std::filesystem::path& directory,
     const Games& games,
-    const Players& players
+    const Players& players,
+    const Factions& factions
   ) noexcept :
     MarkdownFileWriter(directory / Path::LeaderboardFileName)
   {
     introduction();
     players_section(players);
-    factions_section();
+    factions_section(factions);
     duration_section();
     games_section(games);
     license_section();
@@ -110,20 +112,20 @@ private:
   }
 
   void players_ratings_plot() noexcept {
-    line("![Ratings Plot](" + std::filesystem::path{Path::PlayersDirectoryName / file_name(Path::RatingsPlotFileStem, Path::PlotImageFileExtension)}.string() + ")");
+    line("![Players Ratings Plot](" + std::filesystem::path{Path::PlayersDirectoryName / file_name(Path::RatingsPlotFileStem, Path::PlotImageFileExtension)}.string() + ")");
   }
 
   void players_points_plot() noexcept {
-    line("![Points Plot](" + std::filesystem::path{Path::PlayersDirectoryName / file_name(Path::PointsPlotFileStem, Path::PlotImageFileExtension)}.string() + ")");
+    line("![Players Points Plot](" + std::filesystem::path{Path::PlayersDirectoryName / file_name(Path::PointsPlotFileStem, Path::PlotImageFileExtension)}.string() + ")");
     blank_line();
     line("Victory points are adjusted relative to a 10-point game.");
   }
 
   void players_win_rates_plot() noexcept {
-    line("![Win Rates Plot](" + std::filesystem::path{Path::PlayersDirectoryName / file_name(Path::WinRatesPlotFileStem, Path::PlotImageFileExtension)}.string() + ")");
+    line("![Players Win Rates Plot](" + std::filesystem::path{Path::PlayersDirectoryName / file_name(Path::WinRatesPlotFileStem, Path::PlotImageFileExtension)}.string() + ")");
   }
 
-  void factions_section() noexcept {
+  void factions_section(const Factions& factions) noexcept {
     section(section_title_factions_);
     list_link(section_title_factions_ + ": " + subsection_title_summary_);
     list_link(section_title_factions_ + ": " + subsection_title_ratings_);
@@ -131,17 +133,56 @@ private:
     list_link(section_title_factions_ + ": " + subsection_title_win_rates_);
     link_back_to_top();
     subsection(section_title_factions_ + ": " + subsection_title_summary_);
-    line("Coming soon!");
+    factions_summary_table(factions);
     link_back_to_section(section_title_factions_);
     subsection(section_title_factions_ + ": " + subsection_title_ratings_);
-    line("Coming soon!");
+    factions_ratings_plot();
     link_back_to_section(section_title_factions_);
     subsection(section_title_factions_ + ": " + subsection_title_points_);
-    line("Coming soon!");
+    factions_points_plot();
     link_back_to_section(section_title_factions_);
     subsection(section_title_factions_ + ": " + subsection_title_win_rates_);
-    line("Coming soon!");
+    factions_win_rates_plot();
     link_back_to_section(section_title_factions_);
+  }
+
+  void factions_summary_table(const Factions& factions) noexcept {
+    Table table_;
+    table_.insert_column("Player", Alignment::Left); // Column index 0
+    table_.insert_column("Games", Alignment::Center); // Column index 1
+    table_.insert_column("Current Rating", Alignment::Center); // Column index 2
+    table_.insert_column("Avg Rating", Alignment::Center); // Column index 3
+    table_.insert_column("Avg Points", Alignment::Center); // Column index 4
+    table_.insert_column("1st Place", Alignment::Center); // Column index 5
+    table_.insert_column("2nd Place", Alignment::Center); // Column index 6
+    table_.insert_column("3rd Place", Alignment::Center); // Column index 7
+    for (const Faction& faction : factions) {
+      if (faction.name() != FactionName::Custom) {
+        table_.column(0).insert_row(faction.name());
+        table_.column(1).insert_row(faction.number_of_snapshots());
+        table_.column(2).insert_row(faction.latest_snapshot().value().current_elo_rating());
+        table_.column(3).insert_row(faction.latest_snapshot().value().average_elo_rating());
+        table_.column(4).insert_row(faction.latest_snapshot().value().average_victory_points_per_game());
+        table_.column(5).insert_row(faction.latest_snapshot().value().print_place_percentage_and_count({1}));
+        table_.column(6).insert_row(faction.latest_snapshot().value().print_place_percentage_and_count({2}));
+        table_.column(7).insert_row(faction.latest_snapshot().value().print_place_percentage_and_count({3}));
+      }
+    }
+    table(table_);
+  }
+
+  void factions_ratings_plot() noexcept {
+    line("![Factions Ratings Plot](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::RatingsPlotFileStem, Path::PlotImageFileExtension)}.string() + ")");
+  }
+
+  void factions_points_plot() noexcept {
+    line("![Factions Points Plot](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::PointsPlotFileStem, Path::PlotImageFileExtension)}.string() + ")");
+    blank_line();
+    line("Victory points are adjusted relative to a 10-point game.");
+  }
+
+  void factions_win_rates_plot() noexcept {
+    line("![Factions Win Rates Plot](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::WinRatesPlotFileStem, Path::PlotImageFileExtension)}.string() + ")");
   }
 
   void duration_section() noexcept {

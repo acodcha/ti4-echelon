@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Factions.hpp"
 #include "Players.hpp"
 #include "PlotConfigurationFileWriter.hpp"
 
@@ -10,6 +11,26 @@ class WinRatesPlotConfigurationFileWriter : public PlotConfigurationFileWriter {
 public:
 
   WinRatesPlotConfigurationFileWriter(const std::filesystem::path& directory, const Players& players) : PlotConfigurationFileWriter(directory / Path::PlayersDirectoryName / Path::WinRatesPlotFileStem) {
+    initialize();
+    for (const Player& player : players) {
+      if (player.color().has_value()) {
+        line("  \"" + std::filesystem::path{directory / Path::PlayersDirectoryName / player.path() / Path::PlayerDataFileName}.string() + "\" u 1:7 w lp lw 2 pt 7 ps 0.1 lt rgb \"#" + color_code(player.color().value()) + "\" t \"" + player.name().value() + "\" , \\");
+      }
+    }
+  }
+
+  WinRatesPlotConfigurationFileWriter(const std::filesystem::path& directory, const Factions& factions) : PlotConfigurationFileWriter(directory / Path::FactionsDirectoryName / Path::WinRatesPlotFileStem) {
+    initialize();
+    for (const Faction& faction : factions) {
+      if (faction.color().has_value()) {
+        line("  \"" + std::filesystem::path{directory / Path::FactionsDirectoryName / faction.path() / Path::FactionDataFileName}.string() + "\" u 1:7 w lp lw 2 pt 7 ps 0.1 lt rgb \"#" + color_code(faction.color().value()) + "\" t \"" + label(faction.name()) + "\" , \\");
+      }
+    }
+  }
+
+private:
+
+  void initialize() noexcept {
     line("set title \"\"");
     line("set object 1 rectangle from screen 0,0 to screen 1,1 fillstyle solid 1.0 fillcolor rgb \"#" + color_code(Color::LightGray) + "\" behind");
     line("set grid xtics ytics mxtics mytics back");
@@ -26,11 +47,6 @@ public:
     line("set y2tics mirror in 10.0");
     line("set my2tics 10");
     line("plot \\");
-    for (const Player& player : players) {
-      if (player.color().has_value()) {
-        line("  \"" + std::filesystem::path{directory / Path::PlayersDirectoryName / std::filesystem::path{player.name().value()} / Path::PlayerDataFileName}.string() + "\" u 1:7 w lp lw 2 pt 7 ps 0.1 lt rgb \"#" + color_code(player.color().value()) + "\" t \"" + player.name().value() + "\" , \\");
-      }
-    }
   }
 
 }; // class WinRatesPlotConfigurationFileWriter

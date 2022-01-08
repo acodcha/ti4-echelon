@@ -5,24 +5,24 @@
 
 namespace TI4Echelon {
 
-/// \brief A player along with a history of snapshots.
-class Player {
+/// \brief A faction along with a history of snapshots.
+class Faction {
 
 public:
 
   /// \brief Default constructor.
-  Player() noexcept {}
+  Faction() noexcept {}
 
-  /// \brief Constructs a player, initially without any snapshots. Snapshots can be added from games later.
-  /// \details If a player does not have a color defined, that player does not appear in plots.
-  Player(const PlayerName& name, const std::optional<Color>& color = std::optional<Color>{}) noexcept : name_(name), color_(color) {}
+  /// \brief Constructs a faction, initially without any snapshots. Snapshots can be added from games later.
+  /// \details If a faction does not have a color defined, that faction does not appear in plots.
+  Faction(const FactionName& name, const std::optional<Color>& color = std::optional<Color>{}) noexcept : name_(name), color_(color) {}
 
-  const PlayerName& name() const noexcept {
+  const FactionName& name() const noexcept {
     return name_;
   }
 
   std::filesystem::path path() const noexcept {
-    return {remove_non_alphanumeric_characters(name_.value())};
+    return {remove_non_alphanumeric_characters(label(name_))};
   }
 
   const std::optional<Color>& color() const noexcept {
@@ -46,16 +46,16 @@ public:
     }
   }
 
-  void update(const Game& game, const std::unordered_map<PlayerName, EloRating>& elo_ratings) noexcept {
+  void update(const Game& game, const std::unordered_map<FactionName, EloRating>& elo_ratings) noexcept {
     if (game.exists(name_)) {
       snapshots_.emplace_back(name_, game, elo_ratings, latest_snapshot());
       update_lowest_and_highest_elo_ratings();
     }
   }
 
-  /// \brief Prints this player's latest statistics.
+  /// \brief Prints this faction's latest statistics.
   std::string print() const noexcept {
-    std::string text{name_.value() + ": "};
+    std::string text{label(name_) + ": "};
     const std::optional<Snapshot> latest_snapshot_{latest_snapshot()};
     if (latest_snapshot_.has_value()) {
       text += latest_snapshot_.value().print();
@@ -65,33 +65,33 @@ public:
     return text;
   }
 
-  bool operator==(const Player& other) const noexcept {
+  bool operator==(const Faction& other) const noexcept {
     return name_ == other.name_;
   }
 
-  bool operator!=(const Player& other) const noexcept {
+  bool operator!=(const Faction& other) const noexcept {
     return name_ != other.name_;
   }
 
-  bool operator<(const Player& other) const noexcept {
+  bool operator<(const Faction& other) const noexcept {
     return name_ < other.name_;
   }
 
-  bool operator<=(const Player& other) const noexcept {
+  bool operator<=(const Faction& other) const noexcept {
     return name_ <= other.name_;
   }
 
-  bool operator>(const Player& other) const noexcept {
+  bool operator>(const Faction& other) const noexcept {
     return name_ > other.name_;
   }
 
-  bool operator>=(const Player& other) const noexcept {
+  bool operator>=(const Faction& other) const noexcept {
     return name_ >= other.name_;
   }
 
   struct sort {
-    bool operator()(const Player& player_1, const Player& player_2) const noexcept {
-      return player_1 < player_2;
+    bool operator()(const Faction& faction_1, const Faction& faction_2) const noexcept {
+      return faction_1 < faction_2;
     }
   };
 
@@ -141,7 +141,7 @@ public:
 
 private:
 
-  PlayerName name_;
+  FactionName name_;
 
   std::optional<Color> color_;
 
@@ -161,16 +161,16 @@ private:
     }
   }
 
-}; // class Player
+}; // class Faction
 
 } // namespace TI4Echelon
 
 namespace std {
 
-  template <> struct hash<TI4Echelon::Player> {
+  template <> struct hash<TI4Echelon::Faction> {
 
-    size_t operator()(const TI4Echelon::Player& player) const {
-      return hash<TI4Echelon::PlayerName>()(player.name());
+    size_t operator()(const TI4Echelon::Faction& faction) const {
+      return hash<TI4Echelon::FactionName>()(faction.name());
     }
 
   };
