@@ -75,7 +75,7 @@ public:
     return {data_.insert(participant)};
   }
 
-  std::pair<const_iterator, bool> emplace(const Place& place, const PlayerName& player_name, const VictoryPoints& victory_points, const FactionName& faction_name) noexcept {
+  std::pair<const_iterator, bool> emplace(const Place& place, const PlayerName& player_name, const VictoryPoints& victory_points, const FactionName faction_name) noexcept {
     return {data_.emplace(place, player_name, victory_points, faction_name)};
   }
 

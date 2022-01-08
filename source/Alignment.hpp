@@ -28,7 +28,7 @@ const std::map<Alignment, std::string> markdown_alignments{
   {Alignment::Right, "---:"}
 };
 
-std::string markdown(const Alignment& alignment) noexcept {
+std::string markdown(const Alignment alignment) noexcept {
   return markdown_alignments.find(alignment)->second;
 }
 

@@ -42,7 +42,7 @@ public:
 
   /// \brief Constructs an updated Elo rating for a faction given a game and a set of previous Elo ratings.
   EloRating(
-    const FactionName& faction_name,
+    const FactionName faction_name,
     const Game& game,
     const std::unordered_map<FactionName, EloRating>& previous_elo_ratings
   ) {
@@ -178,7 +178,7 @@ private:
     }
   }
 
-  static EloRating previous_elo_rating(const FactionName& faction_name, const std::unordered_map<FactionName, EloRating>& previous_elo_ratings) {
+  static EloRating previous_elo_rating(const FactionName faction_name, const std::unordered_map<FactionName, EloRating>& previous_elo_ratings) {
     const std::unordered_map<FactionName, EloRating>::const_iterator found{previous_elo_ratings.find(faction_name)};
     if (found != previous_elo_ratings.cend()) {
       return found->second;

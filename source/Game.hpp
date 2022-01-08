@@ -73,7 +73,7 @@ public:
     return player_names_.find(player_name) != player_names_.cend();
   }
 
-  bool exists(const FactionName& faction_name) const noexcept {
+  bool exists(const FactionName faction_name) const noexcept {
     return faction_names_.find(faction_name) != faction_names_.cend();
   }
 
@@ -87,18 +87,18 @@ public:
     }
   }
 
-  std::set<Place, Place::sort> places(const FactionName& faction) const noexcept {
+  std::set<Place, Place::sort> places(const FactionName faction_name) const noexcept {
     std::set<Place, Place::sort> places;
-    const std::pair<std::multimap<FactionName, Place, std::less<FactionName>>::const_iterator, std::multimap<FactionName, Place, std::less<FactionName>>::const_iterator> range{faction_names_to_places_.equal_range(faction)};
+    const std::pair<std::multimap<FactionName, Place, std::less<FactionName>>::const_iterator, std::multimap<FactionName, Place, std::less<FactionName>>::const_iterator> range{faction_names_to_places_.equal_range(faction_name)};
     for (std::multimap<FactionName, Place, std::less<FactionName>>::const_iterator i = range.first; i != range.second; ++i) {
       places.insert(i->second);
     }
     return places;
   }
 
-  std::set<PlayerName> player_names(const FactionName& faction) const noexcept {
+  std::set<PlayerName> player_names(const FactionName faction_name) const noexcept {
     std::set<PlayerName> player_names;
-    const std::pair<std::multimap<FactionName, PlayerName, std::less<FactionName>>::const_iterator, std::multimap<FactionName, PlayerName, std::less<FactionName>>::const_iterator> range{faction_names_to_player_names_.equal_range(faction)};
+    const std::pair<std::multimap<FactionName, PlayerName, std::less<FactionName>>::const_iterator, std::multimap<FactionName, PlayerName, std::less<FactionName>>::const_iterator> range{faction_names_to_player_names_.equal_range(faction_name)};
     for (std::multimap<FactionName, PlayerName, std::less<FactionName>>::const_iterator i = range.first; i != range.second; ++i) {
       player_names.insert(i->second);
     }
@@ -115,9 +115,9 @@ public:
     }
   }
 
-  std::multiset<VictoryPoints, VictoryPoints::sort> raw_victory_points(const FactionName& faction) const noexcept {
+  std::multiset<VictoryPoints, VictoryPoints::sort> raw_victory_points(const FactionName faction_name) const noexcept {
     std::multiset<VictoryPoints, VictoryPoints::sort> victory_points;
-    const std::pair<std::multimap<FactionName, VictoryPoints, std::less<FactionName>>::const_iterator, std::multimap<FactionName, VictoryPoints, std::less<FactionName>>::const_iterator> range{faction_names_to_victory_points_.equal_range(faction)};
+    const std::pair<std::multimap<FactionName, VictoryPoints, std::less<FactionName>>::const_iterator, std::multimap<FactionName, VictoryPoints, std::less<FactionName>>::const_iterator> range{faction_names_to_victory_points_.equal_range(faction_name)};
     for (std::multimap<FactionName, VictoryPoints, std::less<FactionName>>::const_iterator i = range.first; i != range.second; ++i) {
       victory_points.insert(i->second);
     }
@@ -135,8 +135,8 @@ public:
     }
   }
 
-  std::multiset<double, std::greater<double>> adjusted_victory_points(const FactionName& faction) const noexcept {
-    const std::multiset<VictoryPoints, VictoryPoints::sort> raw_victory_points_multiset{raw_victory_points(faction)};
+  std::multiset<double, std::greater<double>> adjusted_victory_points(const FactionName faction_name) const noexcept {
+    const std::multiset<VictoryPoints, VictoryPoints::sort> raw_victory_points_multiset{raw_victory_points(faction_name)};
     std::multiset<double, std::greater<double>> adjusted_victory_points_;
     for (const VictoryPoints& raw_victory_points : raw_victory_points_multiset) {
       const VictoryPoints limited_victory_points{std::min(raw_victory_points, victory_point_goal_)};
@@ -291,7 +291,7 @@ private:
     }
   }
 
-  void initialize_player_names(const Place& place, const PlayerName& player_name, const VictoryPoints& victory_points, const FactionName& faction_name) {
+  void initialize_player_names(const Place& place, const PlayerName& player_name, const VictoryPoints& victory_points, const FactionName faction_name) {
     const std::pair<std::set<PlayerName, PlayerName::sort>::const_iterator, bool> result{player_names_.insert(player_name)};
     if (!result.second) {
       error("Player '" + player_name.value() + "' appears twice in the game played on " + date_.print() + ".");
@@ -301,7 +301,7 @@ private:
     player_names_to_faction_names_.emplace(player_name, faction_name);
   }
 
-  void initialize_faction_names(const Place& place, const PlayerName& player_name, const VictoryPoints& victory_points, const FactionName& faction_name) noexcept {
+  void initialize_faction_names(const Place& place, const PlayerName& player_name, const VictoryPoints& victory_points, const FactionName faction_name) noexcept {
     faction_names_.insert(faction_name);
     faction_names_to_places_.emplace(faction_name, place);
     faction_names_to_player_names_.emplace(faction_name, player_name);

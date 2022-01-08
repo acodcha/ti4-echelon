@@ -15,9 +15,9 @@ public:
 
   /// \brief Constructs a faction, initially without any snapshots. Snapshots can be added from games later.
   /// \details If a faction does not have a color defined, that faction does not appear in plots.
-  Faction(const FactionName& name, const std::optional<Color>& color = std::optional<Color>{}) noexcept : name_(name), color_(color) {}
+  Faction(const FactionName name, const std::optional<Color>& color = std::optional<Color>{}) noexcept : name_(name), color_(color) {}
 
-  const FactionName& name() const noexcept {
+  FactionName name() const noexcept {
     return name_;
   }
 

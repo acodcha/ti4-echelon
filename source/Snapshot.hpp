@@ -31,7 +31,7 @@ public:
   }
 
   Snapshot(
-    const FactionName& faction_name,
+    const FactionName faction_name,
     const Game& game,
     const std::unordered_map<FactionName, EloRating>& elo_ratings,
     const std::optional<Snapshot>& previous
@@ -146,7 +146,7 @@ private:
     }
   }
 
-  void initialize_average_victory_points_per_game(const FactionName& faction_name, const Game& game, const std::optional<Snapshot>& previous) noexcept {
+  void initialize_average_victory_points_per_game(const FactionName faction_name, const Game& game, const std::optional<Snapshot>& previous) noexcept {
     const std::multiset<double, std::greater<double>> adjusted_victory_points{game.adjusted_victory_points(faction_name)};
     if (!adjusted_victory_points.empty()) {
       double average_adjusted_victory_points{0.0};
@@ -181,7 +181,7 @@ private:
     }
   }
 
-  void initialize_place_counts(const FactionName& faction_name, const Game& game, const std::optional<Snapshot>& previous) noexcept {
+  void initialize_place_counts(const FactionName faction_name, const Game& game, const std::optional<Snapshot>& previous) noexcept {
     if (previous.has_value()) {
       place_counts_ = previous.value().place_counts_;
     }
@@ -215,7 +215,7 @@ private:
   }
 
   void initialize_current_elo_rating(
-    const FactionName& faction_name,
+    const FactionName faction_name,
     const Game& game,
     const std::unordered_map<FactionName, EloRating>& elo_ratings
   ) noexcept {
