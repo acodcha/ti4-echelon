@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Color.hpp"
 #include "Half.hpp"
 
 namespace TI4Echelon {
@@ -164,6 +165,46 @@ const std::set<FactionName, std::less<FactionName>>& half_faction_names(const Ha
     case Half::Second:
       return HalfFactionNames<Half::Second>;
       break;
+  }
+}
+
+namespace {
+
+const std::map<FactionName, std::size_t, std::less<FactionName>> FactionNamesAndColorIndices{
+  {FactionName::Arborec, 0},
+  {FactionName::ArgentFlight, 1},
+  {FactionName::BaronyOfLetnev, 2},
+  {FactionName::ClanOfSaar, 3},
+  {FactionName::EmbersOfMuaat, 4},
+  {FactionName::EmiratesOfHacan, 5},
+  {FactionName::Empyrean, 6},
+  {FactionName::FederationOfSol, 7},
+  {FactionName::GhostsOfCreuss, 8},
+  {FactionName::L1z1xMindnet, 9},
+  {FactionName::MahactGeneSorcerers, 10},
+  {FactionName::MentakCoalition, 11},
+  {FactionName::NaaluCollective, 12},
+  {FactionName::NaazRokhaAlliance, 13},
+  {FactionName::NekroVirus, 14},
+  {FactionName::Nomad, 15},
+  {FactionName::SardakkNorr, 16},
+  {FactionName::TitansOfUl, 17},
+  {FactionName::UniversitiesOfJolNar, 18},
+  {FactionName::VuilraithCabal, 19},
+  {FactionName::Winnu, 20},
+  {FactionName::XxchaKingdom, 21},
+  {FactionName::YinBrotherhood, 22},
+  {FactionName::YssarilTribes, 23}
+};
+
+} // namespace
+
+Color color(const FactionName faction_name) noexcept {
+  const std::map<FactionName, std::size_t, std::less<FactionName>>::const_iterator found{FactionNamesAndColorIndices.find(faction_name)};
+  if (found != FactionNamesAndColorIndices.cend()) {
+    return plot_data_color(found->second);
+  } else {
+    return plot_data_color(0);
   }
 }
 

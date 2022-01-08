@@ -92,9 +92,9 @@ private:
     const std::multimap<std::size_t, PlayerName, std::greater<std::size_t>> player_names_by_number_of_games_(player_names_by_number_of_games(games));
     std::set<PlayerName, PlayerName::sort> player_names_with_colors;
     std::set<PlayerName, PlayerName::sort> player_names_without_colors;
-    // Assign a color to a number of players with the most games played, and at least 2 games played.
+    // Assign a color to a number of players with the most games played.
     for (const std::pair<std::size_t, PlayerName>& number_of_games_and_player_name : player_names_by_number_of_games_) {
-      if (player_names_with_colors.size() < PlotDataColors.size() && number_of_games_and_player_name.first >= 2) {
+      if (player_names_with_colors.size() < PlotDataColors.size()) {
         player_names_with_colors.insert(number_of_games_and_player_name.second);
       } else {
         player_names_without_colors.insert(number_of_games_and_player_name.second);
