@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Base.hpp"
+#include "Half.hpp"
 
 namespace TI4Echelon {
 
@@ -88,6 +88,11 @@ template <> const std::unordered_map<std::string, FactionName> spellings<Faction
   {"Custom", FactionName::Custom}
 };
 
+std::filesystem::path path(const FactionName faction_name) noexcept {
+  return {remove_non_alphanumeric_characters(label(faction_name))};
+}
+
+/// \brief All faction names listed alphabetically, except for the Custom faction name.
 const std::set<FactionName, std::less<FactionName>> FactionNames{
   FactionName::Arborec,
   FactionName::ArgentFlight,
@@ -112,8 +117,54 @@ const std::set<FactionName, std::less<FactionName>> FactionNames{
   FactionName::Winnu,
   FactionName::XxchaKingdom,
   FactionName::YinBrotherhood,
-  FactionName::YssarilTribes,
-  FactionName::Custom
+  FactionName::YssarilTribes
 };
+
+namespace {
+
+template <Half half> const std::set<FactionName, std::less<FactionName>> HalfFactionNames;
+
+template <> const std::set<FactionName, std::less<FactionName>> HalfFactionNames<Half::First>{
+  FactionName::Arborec,
+  FactionName::ArgentFlight,
+  FactionName::BaronyOfLetnev,
+  FactionName::ClanOfSaar,
+  FactionName::EmbersOfMuaat,
+  FactionName::EmiratesOfHacan,
+  FactionName::Empyrean,
+  FactionName::FederationOfSol,
+  FactionName::GhostsOfCreuss,
+  FactionName::L1z1xMindnet,
+  FactionName::MahactGeneSorcerers,
+  FactionName::MentakCoalition
+};
+
+template <> const std::set<FactionName, std::less<FactionName>> HalfFactionNames<Half::Second>{
+  FactionName::NaaluCollective,
+  FactionName::NaazRokhaAlliance,
+  FactionName::NekroVirus,
+  FactionName::Nomad,
+  FactionName::SardakkNorr,
+  FactionName::TitansOfUl,
+  FactionName::UniversitiesOfJolNar,
+  FactionName::VuilraithCabal,
+  FactionName::Winnu,
+  FactionName::XxchaKingdom,
+  FactionName::YinBrotherhood,
+  FactionName::YssarilTribes
+};
+
+} // namespace
+
+const std::set<FactionName, std::less<FactionName>>& half_faction_names(const Half half) noexcept {
+  switch (half) {
+    case Half::First:
+      return HalfFactionNames<Half::First>;
+      break;
+    case Half::Second:
+      return HalfFactionNames<Half::Second>;
+      break;
+  }
+}
 
 } // namespace TI4Echelon

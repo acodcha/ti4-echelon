@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Base.hpp"
+#include "Half.hpp"
 
 namespace TI4Echelon {
 
@@ -60,6 +60,10 @@ const std::filesystem::path PlotImageFileExtension{"png"};
 
 const std::filesystem::path file_name(const std::filesystem::path& stem, const std::filesystem::path& extension) noexcept {
   return {stem.string() + "." + extension.string()};
+}
+
+const std::filesystem::path file_name(const std::filesystem::path& stem, const Half half, const std::filesystem::path& extension) noexcept {
+  return {stem.string() + label(half) + "." + extension.string()};
 }
 
 } // namespace TI4Echelon

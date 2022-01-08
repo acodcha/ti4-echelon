@@ -16,6 +16,10 @@ public:
     return value_;
   }
 
+  std::filesystem::path path() const noexcept {
+    return {remove_non_alphanumeric_characters(value_)};
+  }
+
   bool operator==(const PlayerName& other) const noexcept {
     return value_ == other.value_;
   }

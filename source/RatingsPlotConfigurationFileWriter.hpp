@@ -16,18 +16,19 @@ public:
     initialize(y_minimum, y_maximum);
     for (const Player& player : players) {
       if (player.color().has_value()) {
-        line("  \"" + std::filesystem::path{directory / Path::PlayersDirectoryName / player.path() / Path::PlayerDataFileName}.string() + "\" u 1:4 w lp lw 2 pt 7 ps 0.1 lt rgb \"#" + color_code(player.color().value()) + "\" t \"" + player.name().value() + "\" , \\");
+        line("  \"" + std::filesystem::path{directory / Path::PlayersDirectoryName / player.name().path() / Path::PlayerDataFileName}.string() + "\" u 1:4 w lp lw 2 pt 7 ps 0.1 lt rgb \"#" + color_code(player.color().value()) + "\" t \"" + player.name().value() + "\" , \\");
       }
     }
   }
 
-  RatingsPlotConfigurationFileWriter(const std::filesystem::path& directory, const Factions& factions) : PlotConfigurationFileWriter(directory / Path::FactionsDirectoryName / Path::RatingsPlotFileStem) {
+  RatingsPlotConfigurationFileWriter(const std::filesystem::path& directory, const Factions& factions, const Half half) : PlotConfigurationFileWriter(directory / Path::FactionsDirectoryName / std::filesystem::path{Path::RatingsPlotFileStem.string() + label(half)}) {
     const int64_t y_minimum{std::min(static_cast<int64_t>(EloRating{}.value() - increment_), nearest_lower_nice_number(factions.lowest_elo_rating().value(), increment_))};
     const int64_t y_maximum{std::max(static_cast<int64_t>(EloRating{}.value() + increment_), nearest_higher_nice_number(factions.highest_elo_rating().value(), increment_))};
     initialize(y_minimum, y_maximum);
-    for (const Faction& faction : factions) {
-      if (faction.color().has_value()) {
-        line("  \"" + std::filesystem::path{directory / Path::FactionsDirectoryName / faction.path() / Path::FactionDataFileName}.string() + "\" u 1:4 w lp lw 2 pt 7 ps 0.1 lt rgb \"#" + color_code(faction.color().value()) + "\" t \"" + label(faction.name()) + "\" , \\");
+    for (const FactionName faction_name : half_faction_names(half)) {
+      const Factions::const_iterator faction{factions.find(faction_name)};
+      if (faction->color().has_value()) {
+        line("  \"" + std::filesystem::path{directory / Path::FactionsDirectoryName / TI4Echelon::path(faction->name()) / Path::FactionDataFileName}.string() + "\" u 1:4 w lp lw 2 pt 7 ps 0.1 lt rgb \"#" + color_code(faction->color().value()) + "\" t \"" + label(faction->name()) + "\" , \\");
       }
     }
   }

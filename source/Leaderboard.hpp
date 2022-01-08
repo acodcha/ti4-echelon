@@ -38,10 +38,10 @@ private:
     create(directory / Path::PlayersDirectoryName);
     create(directory / Path::FactionsDirectoryName);
     for (const Player& player : players) {
-      create(directory / Path::PlayersDirectoryName / player.path());
+      create(directory / Path::PlayersDirectoryName / player.name().path());
     }
     for (const Faction& faction : factions) {
-      create(directory / Path::FactionsDirectoryName / faction.path());
+      create(directory / Path::FactionsDirectoryName / path(faction.name()));
     }
     message("Created the directories.");
   }
@@ -69,7 +69,7 @@ private:
         table.column(7).insert_row(snapshot->place_percentage({2}));
         table.column(8).insert_row(snapshot->place_percentage({3}));
       }
-      DataFileWriter{directory / Path::PlayersDirectoryName / player.path() / Path::PlayerDataFileName, table};
+      DataFileWriter{directory / Path::PlayersDirectoryName / player.name().path() / Path::PlayerDataFileName, table};
     }
     message("Wrote the player data files.");
   }
@@ -97,7 +97,7 @@ private:
         table.column(7).insert_row(snapshot->place_percentage({2}));
         table.column(8).insert_row(snapshot->place_percentage({3}));
       }
-      DataFileWriter{directory / Path::FactionsDirectoryName / faction.path() / Path::FactionDataFileName, table};
+      DataFileWriter{directory / Path::FactionsDirectoryName / path(faction.name()) / Path::FactionDataFileName, table};
     }
     message("Wrote the faction data files.");
   }
@@ -143,9 +143,12 @@ private:
   }
 
   void write_faction_plot_configuration_files(const std::filesystem::path& directory, const Factions& factions) const {
-    RatingsPlotConfigurationFileWriter{directory, factions};
-    PointsPlotConfigurationFileWriter{directory, factions};
-    WinRatesPlotConfigurationFileWriter{directory, factions};
+    RatingsPlotConfigurationFileWriter{directory, factions, Half::First};
+    PointsPlotConfigurationFileWriter{directory, factions, Half::First};
+    WinRatesPlotConfigurationFileWriter{directory, factions, Half::First};
+    RatingsPlotConfigurationFileWriter{directory, factions, Half::Second};
+    PointsPlotConfigurationFileWriter{directory, factions, Half::Second};
+    WinRatesPlotConfigurationFileWriter{directory, factions, Half::Second};
     message("Wrote the faction plot configuration Gnuplot files.");
   }
 
@@ -164,9 +167,12 @@ private:
 
   void generate_faction_plots(const std::filesystem::path& directory) const {
     message("Generating the faction plots...");
-    generate_plot(directory / Path::FactionsDirectoryName / file_name(Path::RatingsPlotFileStem, Path::PlotConfigurationFileExtension));
-    generate_plot(directory / Path::FactionsDirectoryName / file_name(Path::PointsPlotFileStem, Path::PlotConfigurationFileExtension));
-    generate_plot(directory / Path::FactionsDirectoryName / file_name(Path::WinRatesPlotFileStem, Path::PlotConfigurationFileExtension));
+    generate_plot(directory / Path::FactionsDirectoryName / file_name(Path::RatingsPlotFileStem, Half::First, Path::PlotConfigurationFileExtension));
+    generate_plot(directory / Path::FactionsDirectoryName / file_name(Path::RatingsPlotFileStem, Half::Second, Path::PlotConfigurationFileExtension));
+    generate_plot(directory / Path::FactionsDirectoryName / file_name(Path::PointsPlotFileStem, Half::First, Path::PlotConfigurationFileExtension));
+    generate_plot(directory / Path::FactionsDirectoryName / file_name(Path::PointsPlotFileStem, Half::Second, Path::PlotConfigurationFileExtension));
+    generate_plot(directory / Path::FactionsDirectoryName / file_name(Path::WinRatesPlotFileStem, Half::First, Path::PlotConfigurationFileExtension));
+    generate_plot(directory / Path::FactionsDirectoryName / file_name(Path::WinRatesPlotFileStem, Half::Second, Path::PlotConfigurationFileExtension));
     message("Generated the faction plots.");
   }
 
