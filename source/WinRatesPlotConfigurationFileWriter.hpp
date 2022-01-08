@@ -14,16 +14,17 @@ public:
     initialize();
     for (const Player& player : players) {
       if (player.color().has_value()) {
-        line("  \"" + std::filesystem::path{directory / Path::PlayersDirectoryName / player.path() / Path::PlayerDataFileName}.string() + "\" u 1:7 w lp lw 2 pt 7 ps 0.1 lt rgb \"#" + color_code(player.color().value()) + "\" t \"" + player.name().value() + "\" , \\");
+        line("  \"" + std::filesystem::path{directory / Path::PlayersDirectoryName / player.name().path() / Path::PlayerDataFileName}.string() + "\" u 1:7 w lp lw 2 pt 7 ps 0.1 lt rgb \"#" + color_code(player.color().value()) + "\" t \"" + player.name().value() + "\" , \\");
       }
     }
   }
 
-  WinRatesPlotConfigurationFileWriter(const std::filesystem::path& directory, const Factions& factions) : PlotConfigurationFileWriter(directory / Path::FactionsDirectoryName / Path::WinRatesPlotFileStem) {
+  WinRatesPlotConfigurationFileWriter(const std::filesystem::path& directory, const Factions& factions, const Half half) : PlotConfigurationFileWriter(directory / Path::FactionsDirectoryName / std::filesystem::path{Path::WinRatesPlotFileStem.string() + label(half)}) {
     initialize();
-    for (const Faction& faction : factions) {
-      if (faction.color().has_value()) {
-        line("  \"" + std::filesystem::path{directory / Path::FactionsDirectoryName / faction.path() / Path::FactionDataFileName}.string() + "\" u 1:7 w lp lw 2 pt 7 ps 0.1 lt rgb \"#" + color_code(faction.color().value()) + "\" t \"" + label(faction.name()) + "\" , \\");
+    for (const FactionName faction_name : half_faction_names(half)) {
+      const Factions::const_iterator faction{factions.find(faction_name)};
+      if (faction->color().has_value()) {
+        line("  \"" + std::filesystem::path{directory / Path::FactionsDirectoryName / TI4Echelon::path(faction->name()) / Path::FactionDataFileName}.string() + "\" u 1:7 w lp lw 2 pt 7 ps 0.1 lt rgb \"#" + color_code(faction->color().value()) + "\" t \"" + label(faction->name()) + "\" , \\");
       }
     }
   }

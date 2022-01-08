@@ -21,10 +21,6 @@ public:
     return name_;
   }
 
-  std::filesystem::path path() const noexcept {
-    return {remove_non_alphanumeric_characters(name_.value())};
-  }
-
   const std::optional<Color>& color() const noexcept {
     return color_;
   }
