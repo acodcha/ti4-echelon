@@ -40,13 +40,13 @@ private:
     line("set xtics nomirror out");
     line("set mxtics 1");
     line("set ylabel \"Average Victory Points per Game\"");
-    line("set yrange [0:10]");
+    line("set yrange [4:11]");
     line("set ytics mirror out 1.0");
-    line("set mytics 10");
+    line("set mytics 5");
     line("set y2label \"\"");
-    line("set y2range [0:10]");
+    line("set y2range [4:11]");
     line("set y2tics mirror in 1.0");
-    line("set my2tics 10");
+    line("set my2tics 5");
     line("plot \\");
   }
 

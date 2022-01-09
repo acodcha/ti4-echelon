@@ -42,11 +42,11 @@ private:
     line("set ylabel \"Win Rate Percentage");
     line("set yrange [0:100]");
     line("set ytics mirror out 10.0");
-    line("set mytics 10");
+    line("set mytics 5");
     line("set y2label \"\"");
     line("set y2range [0:100]");
     line("set y2tics mirror in 10.0");
-    line("set my2tics 10");
+    line("set my2tics 5");
     line("plot \\");
   }
 
