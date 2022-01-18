@@ -35,7 +35,7 @@ private:
 
   const std::string section_title_factions_{"Factions"};
 
-  const std::string section_title_duration_{"Time Duration"};
+  const std::string section_title_duration_{"Duration"};
 
   const std::string section_title_games_{"Games"};
 
@@ -45,39 +45,29 @@ private:
 
   const std::string subsection_title_ratings_{"Ratings"};
 
-  const std::string subsection_title_points_{"Average Victory Points per Game"};
+  const std::string subsection_title_points_{"Points"};
 
   const std::string subsection_title_win_rates_{"Win Rates"};
 
   void introduction() noexcept {
-    list_link(section_title_players_);
-    nested_list_link(section_title_players_ + ": " + subsection_title_summary_);
-    nested_list_link(section_title_players_ + ": " + subsection_title_ratings_);
-    nested_list_link(section_title_players_ + ": " + subsection_title_points_);
-    nested_list_link(section_title_players_ + ": " + subsection_title_win_rates_);
-    list_link(section_title_factions_);
-    nested_list_link(section_title_factions_ + ": " + subsection_title_summary_);
-    nested_list_link(section_title_factions_ + ": " + subsection_title_ratings_);
-    nested_list_link(section_title_factions_ + ": " + subsection_title_points_);
-    nested_list_link(section_title_factions_ + ": " + subsection_title_win_rates_);
-    list_link(section_title_duration_);
-    list_link(section_title_games_);
-    list_link(section_title_license_);
+    list(link(section_title_players_) + ": " + link(subsection_title_summary_, section_title_players_ + ": " + subsection_title_summary_) + ", " + link(subsection_title_ratings_, section_title_players_ + ": " + subsection_title_ratings_) + ", " + link(subsection_title_points_, section_title_players_ + ": " + subsection_title_points_) + ", " + link(subsection_title_win_rates_, section_title_players_ + ": " + subsection_title_win_rates_));
+    list(link(section_title_factions_) + ": " + link(subsection_title_summary_, section_title_factions_ + ": " + subsection_title_summary_) + ", " + link(subsection_title_ratings_, section_title_factions_ + ": " + subsection_title_ratings_) + ", " + link(subsection_title_points_, section_title_factions_ + ": " + subsection_title_points_) + ", " + link(subsection_title_win_rates_, section_title_factions_ + ": " + subsection_title_win_rates_));
+    list(link(section_title_duration_));
+    list(link(section_title_games_));
+    list(link(section_title_license_));
     blank_line();
     line("Last updated " + current_utc_date_and_time() + ".");
   }
 
   void players_section(const Players& players) noexcept {
     section(section_title_players_);
-    list_link(section_title_players_ + ": " + subsection_title_summary_);
-    list_link(section_title_players_ + ": " + subsection_title_ratings_);
-    list_link(section_title_players_ + ": " + subsection_title_points_);
-    list_link(section_title_players_ + ": " + subsection_title_win_rates_);
+    list(link(subsection_title_summary_, section_title_players_ + ": " + subsection_title_summary_));
+    list(link(subsection_title_ratings_, section_title_players_ + ": " + subsection_title_ratings_));
+    list(link(subsection_title_points_, section_title_players_ + ": " + subsection_title_points_));
+    list(link(subsection_title_win_rates_, section_title_players_ + ": " + subsection_title_win_rates_));
     link_back_to_top();
     subsection(section_title_players_ + ": " + subsection_title_summary_);
     players_summary_table(players);
-    blank_line();
-    line("Average victory points per game are adjusted relative to 10-point games, and effective win rates are calculated relative to 6-player games.");
     link_back_to_section(section_title_players_);
     subsection(section_title_players_ + ": " + subsection_title_ratings_);
     players_ratings_plot();
@@ -114,6 +104,8 @@ private:
       table_.column(8).insert_row(player->latest_snapshot().value().print_place_percentage_and_count({3}));
     }
     table(table_);
+    blank_line();
+    line("Average victory points per game are adjusted relative to 10-point games, and effective win rates are calculated relative to 6-player games.");
   }
 
   std::map<EloRating, PlayerName, EloRating::sort> sorted_current_elo_ratings_and_player_names(const Players& players) const noexcept {
@@ -145,15 +137,13 @@ private:
 
   void factions_section(const Factions& factions) noexcept {
     section(section_title_factions_);
-    list_link(section_title_factions_ + ": " + subsection_title_summary_);
-    list_link(section_title_factions_ + ": " + subsection_title_ratings_);
-    list_link(section_title_factions_ + ": " + subsection_title_points_);
-    list_link(section_title_factions_ + ": " + subsection_title_win_rates_);
+    list(link(subsection_title_summary_, section_title_factions_ + ": " + subsection_title_summary_));
+    list(link(subsection_title_ratings_, section_title_factions_ + ": " + subsection_title_ratings_));
+    list(link(subsection_title_points_, section_title_factions_ + ": " + subsection_title_points_));
+    list(link(subsection_title_win_rates_, section_title_factions_ + ": " + subsection_title_win_rates_));
     link_back_to_top();
     subsection(section_title_factions_ + ": " + subsection_title_summary_);
     factions_summary_table(factions);
-    blank_line();
-    line("Average victory points per game are adjusted relative to 10-point games, and effective win rates are calculated relative to 6-player games.");
     link_back_to_section(section_title_factions_);
     subsection(section_title_factions_ + ": " + subsection_title_ratings_);
     factions_ratings_plot();
@@ -190,6 +180,8 @@ private:
       table_.column(8).insert_row(faction->latest_snapshot().value().print_place_percentage_and_count({3}));
     }
     table(table_);
+    blank_line();
+    line("Average victory points per game are adjusted relative to 10-point games, and effective win rates are calculated relative to 6-player games.");
   }
 
   std::map<EloRating, FactionName, EloRating::sort> sorted_current_elo_ratings_and_faction_names(const Factions& factions) const noexcept {
