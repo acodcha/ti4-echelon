@@ -39,7 +39,7 @@ private:
     line("set xlabel \"Game Number\"");
     line("set xtics nomirror out");
     line("set mxtics 1");
-    line("set ylabel \"Win Rate Percentage");
+    line("set ylabel \"Effective Win Rate Percentage");
     line("set yrange [0:100]");
     line("set ytics mirror out 10.0");
     line("set mytics 5");

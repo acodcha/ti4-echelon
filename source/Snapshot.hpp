@@ -26,6 +26,7 @@ public:
     initialize_average_victory_points_per_game(player_name, game, previous);
     initialize_place_counts(player_name, game, previous);
     initialize_place_percentages();
+    initialize_effective_win_rate(player_name, game, previous);
     initialize_current_elo_rating(player_name, game, elo_ratings);
     initialize_average_elo_rating(previous);
   }
@@ -43,6 +44,7 @@ public:
     initialize_average_victory_points_per_game(faction_name, game, previous);
     initialize_place_counts(faction_name, game, previous);
     initialize_place_percentages();
+    initialize_effective_win_rate(faction_name, game, previous);
     initialize_current_elo_rating(faction_name, game, elo_ratings);
     initialize_average_elo_rating(previous);
   }
@@ -89,6 +91,10 @@ public:
     return place_percentage(place).print() + " (" + std::to_string(place_count(place)) + ")";
   }
 
+  constexpr Percentage effective_win_rate() const noexcept {
+    return effective_win_rate_;
+  }
+
   constexpr const EloRating& current_elo_rating() const noexcept {
     return current_elo_rating_;
   }
@@ -98,7 +104,7 @@ public:
   }
 
   std::string print() const noexcept {
-    return std::to_string(local_game_number()) + " games, " + current_elo_rating_.print() + " current rating, " + average_elo_rating_.print() + " average rating, " + real_number_to_string(average_victory_points_per_game_, 2) + " average victory points, " + place_percentage({1}).print() + " (" + std::to_string(place_count({1})) + ") 1st place, " + place_percentage({2}).print() + " (" + std::to_string(place_count({2})) + ") 2nd place, " + place_percentage({3}).print() + " (" + std::to_string(place_count({3})) + ") 3rd place";
+    return std::to_string(local_game_number()) + " games, " + current_elo_rating_.print() + " current rating, " + average_elo_rating_.print() + " average rating, " + real_number_to_string(average_victory_points_per_game_, 2) + " average victory points, " + effective_win_rate_.print() + " effective win rate, " + place_percentage({1}).print() + " (" + std::to_string(place_count({1})) + ") 1st place, " + place_percentage({2}).print() + " (" + std::to_string(place_count({2})) + ") 2nd place, " + place_percentage({3}).print() + " (" + std::to_string(place_count({3})) + ") 3rd place";
   }
 
   /// \brief Sort from most recent to oldest.
@@ -122,6 +128,9 @@ private:
   std::map<Place, std::size_t, Place::sort> place_counts_;
 
   std::map<Place, Percentage, Place::sort> place_percentages_;
+
+  /// \brief This is the efective win rate as if each game was a 6-player game.
+  Percentage effective_win_rate_;
 
   EloRating current_elo_rating_;
 
@@ -203,6 +212,38 @@ private:
   void initialize_place_percentages() noexcept {
     for (const std::pair<Place, int64_t>& place_count : place_counts_) {
       place_percentages_.insert({place_count.first, {static_cast<double>(place_count.second) / local_game_number()}});
+    }
+  }
+
+  void initialize_effective_win_rate(const PlayerName& player_name, const Game& game, const std::optional<Snapshot>& previous) noexcept {
+    const std::optional<Place> place{game.place(player_name)};
+    if (previous.has_value()) {
+      if (place.has_value()) {
+        if (place.value() == Place{1}) {
+          effective_win_rate_ = (previous.value().effective_win_rate() * previous.value().local_game_number() + Percentage{game.participants().size() / 6.0}) / local_game_number();
+        } else {
+          effective_win_rate_ = (previous.value().effective_win_rate() * previous.value().local_game_number()) / local_game_number();
+        }
+      }
+    } else {
+      if (place.has_value() && place.value() == Place{1}) {
+        effective_win_rate_ = {game.participants().size() / 6.0};
+      }
+    }
+  }
+
+  void initialize_effective_win_rate(const FactionName faction_name, const Game& game, const std::optional<Snapshot>& previous) noexcept {
+    const std::set<Place, Place::sort> places{game.places(faction_name)};
+    if (previous.has_value()) {
+      if (places.find(Place{1}) != places.cend()) {
+          effective_win_rate_ = (previous.value().effective_win_rate() * previous.value().local_game_number() + Percentage{game.participants().size() / 6.0}) / local_game_number();
+      } else {
+        effective_win_rate_ = (previous.value().effective_win_rate() * previous.value().local_game_number()) / local_game_number();
+      }
+    } else {
+      if (places.find(Place{1}) != places.cend()) {
+        effective_win_rate_ = {game.participants().size() / 6.0};
+      }
     }
   }
 
