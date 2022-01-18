@@ -55,9 +55,10 @@ private:
       table.insert_column("CurrentRating"); // Column index 3
       table.insert_column("AverageRating"); // Column index 4
       table.insert_column("AveragePointsPerGame"); // Column index 5
-      table.insert_column("1stPlacePercentage"); // Column index 6
-      table.insert_column("2ndPlacePercentage"); // Column index 7
-      table.insert_column("3rdPlacePercentage"); // Column index 8
+      table.insert_column("EffectiveWinRate"); // Column index 6
+      table.insert_column("1stPlacePercentage"); // Column index 7
+      table.insert_column("2ndPlacePercentage"); // Column index 8
+      table.insert_column("3rdPlacePercentage"); // Column index 9
       for (Player::const_reverse_iterator snapshot = player.crbegin(); snapshot != player.crend(); ++snapshot) {
         table.column(0).insert_row(snapshot->global_game_number());
         table.column(1).insert_row(snapshot->local_game_number());
@@ -65,9 +66,10 @@ private:
         table.column(3).insert_row(snapshot->current_elo_rating());
         table.column(4).insert_row(snapshot->average_elo_rating());
         table.column(5).insert_row(snapshot->average_victory_points_per_game());
-        table.column(6).insert_row(snapshot->place_percentage({1}));
-        table.column(7).insert_row(snapshot->place_percentage({2}));
-        table.column(8).insert_row(snapshot->place_percentage({3}));
+        table.column(6).insert_row(snapshot->effective_win_rate());
+        table.column(7).insert_row(snapshot->place_percentage({1}));
+        table.column(8).insert_row(snapshot->place_percentage({2}));
+        table.column(9).insert_row(snapshot->place_percentage({3}));
       }
       DataFileWriter{directory / Path::PlayersDirectoryName / player.name().path() / Path::PlayerDataFileName, table};
     }
@@ -83,9 +85,10 @@ private:
       table.insert_column("CurrentRating"); // Column index 3
       table.insert_column("AverageRating"); // Column index 4
       table.insert_column("AveragePointsPerGame"); // Column index 5
-      table.insert_column("1stPlacePercentage"); // Column index 6
-      table.insert_column("2ndPlacePercentage"); // Column index 7
-      table.insert_column("3rdPlacePercentage"); // Column index 8
+      table.insert_column("EffectiveWinRate"); // Column index 6
+      table.insert_column("1stPlacePercentage"); // Column index 7
+      table.insert_column("2ndPlacePercentage"); // Column index 8
+      table.insert_column("3rdPlacePercentage"); // Column index 9
       for (Player::const_reverse_iterator snapshot = faction.crbegin(); snapshot != faction.crend(); ++snapshot) {
         table.column(0).insert_row(snapshot->global_game_number());
         table.column(1).insert_row(snapshot->local_game_number());
@@ -93,9 +96,10 @@ private:
         table.column(3).insert_row(snapshot->current_elo_rating());
         table.column(4).insert_row(snapshot->average_elo_rating());
         table.column(5).insert_row(snapshot->average_victory_points_per_game());
-        table.column(6).insert_row(snapshot->place_percentage({1}));
-        table.column(7).insert_row(snapshot->place_percentage({2}));
-        table.column(8).insert_row(snapshot->place_percentage({3}));
+        table.column(6).insert_row(snapshot->effective_win_rate());
+        table.column(7).insert_row(snapshot->place_percentage({1}));
+        table.column(8).insert_row(snapshot->place_percentage({2}));
+        table.column(9).insert_row(snapshot->place_percentage({3}));
       }
       DataFileWriter{directory / Path::FactionsDirectoryName / path(faction.name()) / Path::FactionDataFileName, table};
     }
