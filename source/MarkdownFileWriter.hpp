@@ -29,22 +29,26 @@ protected:
     line(table.print_as_markdown());
   }
 
-  void list_link(const std::string link) noexcept {
-    line("- [" + link + "](#" + lowercase((replace_character(remove_non_alphanumeric_non_space_characters(link), ' ', '-'))) + ")");
+  void list(const std::string& text) noexcept {
+    line("- " + text);
   }
 
-  void nested_list_link(const std::string link) noexcept {
-    line("    - [" + link + "](#" + lowercase(replace_character(remove_non_alphanumeric_non_space_characters(link), ' ', '-')) + ")");
-  }
-
-  void link_back_to_section(const std::string link) noexcept {
+  void link_back_to_section(const std::string& section) noexcept {
     blank_line();
-    line("[(Back to " + link + ")](#" + lowercase(replace_character(remove_non_alphanumeric_non_space_characters(link), ' ', '-')) + ")");
+    line("[(Back to " + section + ")](#" + lowercase(replace_character(remove_non_alphanumeric_non_space_characters(section), ' ', '-')) + ")");
   }
 
   void link_back_to_top() noexcept {
     blank_line();
     line("[(Back to Top)](#)");
+  }
+
+  std::string link(const std::string& section) const noexcept {
+    return "[" + section + "](#" + lowercase(replace_character(remove_non_alphanumeric_non_space_characters(section), ' ', '-')) + ")";
+  }
+
+  std::string link(const std::string& title, const std::string& section) const noexcept {
+    return "[" + title + "](#" + lowercase(replace_character(remove_non_alphanumeric_non_space_characters(section), ' ', '-')) + ")";
   }
 
 }; // class MarkdownFileWriter
