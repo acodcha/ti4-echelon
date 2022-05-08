@@ -91,7 +91,7 @@ private:
     table_.insert_column("1st Place", Alignment::Center); // Column index 6
     table_.insert_column("2nd Place", Alignment::Center); // Column index 7
     table_.insert_column("3rd Place", Alignment::Center); // Column index 8
-    for (const std::pair<EloRating, PlayerName> average_elo_rating_and_player_name : sorted_current_elo_ratings_and_player_names(players)) {
+    for (const std::pair<EloRating, PlayerName> average_elo_rating_and_player_name : sorted_average_elo_ratings_and_player_names(players)) {
       const Players::const_iterator player{players.find(average_elo_rating_and_player_name.second)};
       table_.column(0).insert_row(player->name());
       table_.column(1).insert_row(player->number_of_snapshots());
@@ -108,15 +108,15 @@ private:
     line("Average victory points per game are adjusted relative to 10-point games, and effective win rates are calculated relative to 6-player games.");
   }
 
-  std::map<EloRating, PlayerName, EloRating::sort> sorted_current_elo_ratings_and_player_names(const Players& players) const noexcept {
-    std::map<EloRating, PlayerName, EloRating::sort> sorted_current_elo_ratings_and_player_names_;
+  std::map<EloRating, PlayerName, EloRating::sort> sorted_average_elo_ratings_and_player_names(const Players& players) const noexcept {
+    std::map<EloRating, PlayerName, EloRating::sort> sorted_average_elo_ratings_and_player_names_;
     for (const Player& player : players) {
       const std::optional<Snapshot> latest_snapshot{player.latest_snapshot()};
       if (latest_snapshot.has_value()) {
-        sorted_current_elo_ratings_and_player_names_.emplace(latest_snapshot.value().current_elo_rating(), player.name());
+        sorted_average_elo_ratings_and_player_names_.emplace(latest_snapshot.value().average_elo_rating(), player.name());
       }
     }
-    return sorted_current_elo_ratings_and_player_names_;
+    return sorted_average_elo_ratings_and_player_names_;
   }
 
   void players_ratings_plot() noexcept {
