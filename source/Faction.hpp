@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Color.hpp"
+#include "Half.hpp"
 #include "Snapshot.hpp"
 
 namespace TI4Echelon {
@@ -13,11 +15,15 @@ public:
   Faction() noexcept {}
 
   /// \brief Constructs a faction, initially without any snapshots. Snapshots can be added from games later.
-  /// \details If a faction does not have a color defined, that faction does not appear in plots.
-  Faction(const FactionName name, const std::optional<Color>& color = std::optional<Color>{}) noexcept : name_(name), color_(color) {}
+  /// \details If a faction does not have a half or a color, then that faction does not appear in plots.
+  Faction(const FactionName name, const std::optional<Half> half = std::optional<Half>{}, const std::optional<Color>& color = std::optional<Color>{}) noexcept : name_(name), half_(half), color_(color) {}
 
   FactionName name() const noexcept {
     return name_;
+  }
+
+  const std::optional<Half>& half() const noexcept {
+    return half_;
   }
 
   const std::optional<Color>& color() const noexcept {
@@ -137,6 +143,8 @@ public:
 private:
 
   FactionName name_;
+
+  std::optional<Half> half_;
 
   std::optional<Color> color_;
 

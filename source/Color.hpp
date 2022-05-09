@@ -10,13 +10,14 @@ enum class Color : int8_t {
   Green,
   Yellow,
   Orange,
-  Cyan,
   Magenta,
+  Cyan,
   Brown,
   Mint,
   Pink,
   White,
   Black,
+  DarkGray,
   LightGray
 };
 
@@ -28,13 +29,14 @@ const std::unordered_map<Color, std::string> color_codes{
   {Color::Green, "3cb44b"},
   {Color::Yellow, "ffe119"},
   {Color::Orange, "f58231"},
-  {Color::Cyan, "42d4f4"},
   {Color::Magenta, "f032e6"},
+  {Color::Cyan, "42d4f4"},
   {Color::Brown, "9a6324"},
   {Color::Mint, "aaffc3"},
   {Color::Pink, "fabed4"},
   {Color::White, "ffffff"},
   {Color::Black, "000000"},
+  {Color::DarkGray, "808080"},
   {Color::LightGray, "d3d3d3"}
 };
 
@@ -56,13 +58,14 @@ const std::vector<Color> PlotDataColors{
   Color::Green,
   Color::Yellow,
   Color::Orange,
-  Color::Cyan,
   Color::Magenta,
+  Color::Cyan,
   Color::Brown,
   Color::Mint,
   Color::Pink,
   Color::White,
-  Color::Black
+  Color::Black,
+  Color::DarkGray
 };
 
 Color plot_data_color(const std::size_t counter) noexcept {

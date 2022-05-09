@@ -25,10 +25,9 @@ public:
     const int64_t y_minimum{std::min(static_cast<int64_t>(EloRating{}.value() - increment_), nearest_lower_nice_number(factions.lowest_elo_rating().value(), increment_))};
     const int64_t y_maximum{std::max(static_cast<int64_t>(EloRating{}.value() + increment_), nearest_higher_nice_number(factions.highest_elo_rating().value(), increment_))};
     initialize(y_minimum, y_maximum);
-    for (const FactionName faction_name : half_faction_names(half)) {
-      const Factions::const_iterator faction{factions.find(faction_name)};
-      if (faction->color().has_value()) {
-        line("  \"" + std::filesystem::path{directory / Path::FactionsDirectoryName / TI4Echelon::path(faction->name()) / Path::FactionDataFileName}.string() + "\" u 1:4 w lp lw 2 pt 7 ps 0.1 lt rgb \"#" + color_code(faction->color().value()) + "\" t \"" + label(faction->name()) + "\" , \\");
+    for (const Faction& faction : factions) {
+      if (faction.half().has_value() && faction.half().value() == half && faction.color().has_value()) {
+        line("  \"" + std::filesystem::path{directory / Path::FactionsDirectoryName / TI4Echelon::path(faction.name()) / Path::FactionDataFileName}.string() + "\" u 1:4 w lp lw 2 pt 7 ps 0.1 lt rgb \"#" + color_code(faction.color().value()) + "\" t \"" + label(faction.name()) + "\" , \\");
       }
     }
   }

@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Color.hpp"
-#include "Half.hpp"
+#include "Base.hpp"
 
 namespace TI4Echelon {
 
@@ -10,6 +9,7 @@ enum class FactionName : int8_t {
   ArgentFlight,
   BaronyOfLetnev,
   ClanOfSaar,
+  CouncilKeleres,
   EmbersOfMuaat,
   EmiratesOfHacan,
   Empyrean,
@@ -38,6 +38,7 @@ template <> const std::unordered_map<FactionName, std::string> labels<FactionNam
   {FactionName::ArgentFlight, "Argent Flight"},
   {FactionName::BaronyOfLetnev, "Barony of Letnev"},
   {FactionName::ClanOfSaar, "Clan of Saar"},
+  {FactionName::CouncilKeleres, "Council Keleres"},
   {FactionName::EmbersOfMuaat, "Embers of Muaat"},
   {FactionName::EmiratesOfHacan, "Emirates of Hacan"},
   {FactionName::Empyrean, "Empyrean"},
@@ -66,6 +67,7 @@ template <> const std::unordered_map<std::string, FactionName> spellings<Faction
   {"Argent Flight", FactionName::ArgentFlight},
   {"Barony of Letnev", FactionName::BaronyOfLetnev},
   {"Clan of Saar", FactionName::ClanOfSaar},
+  {"Council Keleres", FactionName::CouncilKeleres},
   {"Embers of Muaat", FactionName::EmbersOfMuaat},
   {"Emirates of Hacan", FactionName::EmiratesOfHacan},
   {"Empyrean", FactionName::Empyrean},
@@ -99,6 +101,7 @@ const std::set<FactionName, std::less<FactionName>> FactionNames{
   FactionName::ArgentFlight,
   FactionName::BaronyOfLetnev,
   FactionName::ClanOfSaar,
+  FactionName::CouncilKeleres,
   FactionName::EmbersOfMuaat,
   FactionName::EmiratesOfHacan,
   FactionName::Empyrean,
@@ -121,91 +124,14 @@ const std::set<FactionName, std::less<FactionName>> FactionNames{
   FactionName::YssarilTribes
 };
 
-namespace {
-
-template <Half half> const std::set<FactionName, std::less<FactionName>> HalfFactionNames;
-
-template <> const std::set<FactionName, std::less<FactionName>> HalfFactionNames<Half::First>{
-  FactionName::Arborec,
-  FactionName::ArgentFlight,
-  FactionName::BaronyOfLetnev,
-  FactionName::ClanOfSaar,
-  FactionName::EmbersOfMuaat,
-  FactionName::EmiratesOfHacan,
-  FactionName::Empyrean,
-  FactionName::FederationOfSol,
-  FactionName::GhostsOfCreuss,
-  FactionName::L1z1xMindnet,
-  FactionName::MahactGeneSorcerers,
-  FactionName::MentakCoalition
-};
-
-template <> const std::set<FactionName, std::less<FactionName>> HalfFactionNames<Half::Second>{
-  FactionName::NaaluCollective,
-  FactionName::NaazRokhaAlliance,
-  FactionName::NekroVirus,
-  FactionName::Nomad,
-  FactionName::SardakkNorr,
-  FactionName::TitansOfUl,
-  FactionName::UniversitiesOfJolNar,
-  FactionName::VuilraithCabal,
-  FactionName::Winnu,
-  FactionName::XxchaKingdom,
-  FactionName::YinBrotherhood,
-  FactionName::YssarilTribes
-};
-
-} // namespace
-
-const std::set<FactionName, std::less<FactionName>>& half_faction_names(const Half half) noexcept {
-  switch (half) {
-    case Half::First:
-      return HalfFactionNames<Half::First>;
-      break;
-    case Half::Second:
-      return HalfFactionNames<Half::Second>;
-      break;
+std::size_t number_of_non_custom_factions(const std::set<FactionName>& faction_names) noexcept {
+  std::size_t counter{0};
+  for (const FactionName faction_name : faction_names) {
+    if (faction_name != FactionName::Custom) {
+      ++counter;
+    }
   }
-}
-
-namespace {
-
-const std::map<FactionName, std::size_t, std::less<FactionName>> FactionNamesAndColorIndices{
-  {FactionName::Arborec, 0},
-  {FactionName::ArgentFlight, 1},
-  {FactionName::BaronyOfLetnev, 2},
-  {FactionName::ClanOfSaar, 3},
-  {FactionName::EmbersOfMuaat, 4},
-  {FactionName::EmiratesOfHacan, 5},
-  {FactionName::Empyrean, 6},
-  {FactionName::FederationOfSol, 7},
-  {FactionName::GhostsOfCreuss, 8},
-  {FactionName::L1z1xMindnet, 9},
-  {FactionName::MahactGeneSorcerers, 10},
-  {FactionName::MentakCoalition, 11},
-  {FactionName::NaaluCollective, 12},
-  {FactionName::NaazRokhaAlliance, 13},
-  {FactionName::NekroVirus, 14},
-  {FactionName::Nomad, 15},
-  {FactionName::SardakkNorr, 16},
-  {FactionName::TitansOfUl, 17},
-  {FactionName::UniversitiesOfJolNar, 18},
-  {FactionName::VuilraithCabal, 19},
-  {FactionName::Winnu, 20},
-  {FactionName::XxchaKingdom, 21},
-  {FactionName::YinBrotherhood, 22},
-  {FactionName::YssarilTribes, 23}
-};
-
-} // namespace
-
-Color color(const FactionName faction_name) noexcept {
-  const std::map<FactionName, std::size_t, std::less<FactionName>>::const_iterator found{FactionNamesAndColorIndices.find(faction_name)};
-  if (found != FactionNamesAndColorIndices.cend()) {
-    return plot_data_color(found->second);
-  } else {
-    return plot_data_color(0);
-  }
+  return counter;
 }
 
 } // namespace TI4Echelon

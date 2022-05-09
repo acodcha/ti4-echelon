@@ -25,7 +25,7 @@ public:
       write_faction_plot_configuration_files(directory, factions);
       write_duration_plot_configuration_file(directory, games);
       generate_player_plots(directory);
-      generate_faction_plots(directory);
+      generate_faction_plots(directory, factions);
       generate_duration_plot(directory);
       message("Wrote the leaderboard to '" + directory.string() + "'.");
     }
@@ -169,14 +169,16 @@ private:
     message("Generated the player plots.");
   }
 
-  void generate_faction_plots(const std::filesystem::path& directory) const {
+  void generate_faction_plots(const std::filesystem::path& directory, const Factions& factions) const {
     message("Generating the faction plots...");
     generate_plot(directory / Path::FactionsDirectoryName / file_name(Path::RatingsPlotFileStem, Half::First, Path::PlotConfigurationFileExtension));
-    generate_plot(directory / Path::FactionsDirectoryName / file_name(Path::RatingsPlotFileStem, Half::Second, Path::PlotConfigurationFileExtension));
     generate_plot(directory / Path::FactionsDirectoryName / file_name(Path::PointsPlotFileStem, Half::First, Path::PlotConfigurationFileExtension));
-    generate_plot(directory / Path::FactionsDirectoryName / file_name(Path::PointsPlotFileStem, Half::Second, Path::PlotConfigurationFileExtension));
     generate_plot(directory / Path::FactionsDirectoryName / file_name(Path::WinRatesPlotFileStem, Half::First, Path::PlotConfigurationFileExtension));
-    generate_plot(directory / Path::FactionsDirectoryName / file_name(Path::WinRatesPlotFileStem, Half::Second, Path::PlotConfigurationFileExtension));
+    if (factions.need_two_plots()) {
+      generate_plot(directory / Path::FactionsDirectoryName / file_name(Path::RatingsPlotFileStem, Half::Second, Path::PlotConfigurationFileExtension));
+      generate_plot(directory / Path::FactionsDirectoryName / file_name(Path::PointsPlotFileStem, Half::Second, Path::PlotConfigurationFileExtension));
+      generate_plot(directory / Path::FactionsDirectoryName / file_name(Path::WinRatesPlotFileStem, Half::Second, Path::PlotConfigurationFileExtension));
+    }
     message("Generated the faction plots.");
   }
 

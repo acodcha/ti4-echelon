@@ -91,7 +91,7 @@ private:
     table_.insert_column("1st Place", Alignment::Center); // Column index 6
     table_.insert_column("2nd Place", Alignment::Center); // Column index 7
     table_.insert_column("3rd Place", Alignment::Center); // Column index 8
-    for (const std::pair<EloRating, PlayerName> average_elo_rating_and_player_name : sorted_current_elo_ratings_and_player_names(players)) {
+    for (const std::pair<EloRating, PlayerName> average_elo_rating_and_player_name : sorted_average_elo_ratings_and_player_names(players)) {
       const Players::const_iterator player{players.find(average_elo_rating_and_player_name.second)};
       table_.column(0).insert_row(player->name());
       table_.column(1).insert_row(player->number_of_snapshots());
@@ -108,15 +108,15 @@ private:
     line("Average victory points per game are adjusted relative to 10-point games, and effective win rates are calculated relative to 6-player games.");
   }
 
-  std::map<EloRating, PlayerName, EloRating::sort> sorted_current_elo_ratings_and_player_names(const Players& players) const noexcept {
-    std::map<EloRating, PlayerName, EloRating::sort> sorted_current_elo_ratings_and_player_names_;
+  std::map<EloRating, PlayerName, EloRating::sort> sorted_average_elo_ratings_and_player_names(const Players& players) const noexcept {
+    std::map<EloRating, PlayerName, EloRating::sort> sorted_average_elo_ratings_and_player_names_;
     for (const Player& player : players) {
       const std::optional<Snapshot> latest_snapshot{player.latest_snapshot()};
       if (latest_snapshot.has_value()) {
-        sorted_current_elo_ratings_and_player_names_.emplace(latest_snapshot.value().current_elo_rating(), player.name());
+        sorted_average_elo_ratings_and_player_names_.emplace(latest_snapshot.value().average_elo_rating(), player.name());
       }
     }
-    return sorted_current_elo_ratings_and_player_names_;
+    return sorted_average_elo_ratings_and_player_names_;
   }
 
   void players_ratings_plot() noexcept {
@@ -146,13 +146,13 @@ private:
     factions_summary_table(factions);
     link_back_to_section(section_title_factions_);
     subsection(section_title_factions_ + ": " + subsection_title_ratings_);
-    factions_ratings_plot();
+    factions_ratings_plots(factions);
     link_back_to_section(section_title_factions_);
     subsection(section_title_factions_ + ": " + subsection_title_points_);
-    factions_points_plot();
+    factions_points_plots(factions);
     link_back_to_section(section_title_factions_);
     subsection(section_title_factions_ + ": " + subsection_title_win_rates_);
-    factions_win_rates_plot();
+    factions_win_rates_plots(factions);
     link_back_to_section(section_title_factions_);
   }
 
@@ -167,7 +167,7 @@ private:
     table_.insert_column("1st Place", Alignment::Center); // Column index 6
     table_.insert_column("2nd Place", Alignment::Center); // Column index 7
     table_.insert_column("3rd Place", Alignment::Center); // Column index 8
-    for (const std::pair<EloRating, FactionName> average_elo_rating_and_faction_name : sorted_current_elo_ratings_and_faction_names(factions)) {
+    for (const std::pair<EloRating, FactionName> average_elo_rating_and_faction_name : sorted_average_elo_ratings_and_faction_names(factions)) {
       const Factions::const_iterator faction{factions.find(average_elo_rating_and_faction_name.second)};
       table_.column(0).insert_row(faction->name());
       table_.column(1).insert_row(faction->number_of_snapshots());
@@ -184,35 +184,41 @@ private:
     line("Average victory points per game are adjusted relative to 10-point games, and effective win rates are calculated relative to 6-player games.");
   }
 
-  std::map<EloRating, FactionName, EloRating::sort> sorted_current_elo_ratings_and_faction_names(const Factions& factions) const noexcept {
-    std::map<EloRating, FactionName, EloRating::sort> sorted_current_elo_ratings_and_faction_names_;
+  std::map<EloRating, FactionName, EloRating::sort> sorted_average_elo_ratings_and_faction_names(const Factions& factions) const noexcept {
+    std::map<EloRating, FactionName, EloRating::sort> sorted_average_elo_ratings_and_faction_names_;
     for (const Faction& faction : factions) {
       const std::optional<Snapshot> latest_snapshot{faction.latest_snapshot()};
       if (latest_snapshot.has_value()) {
-        sorted_current_elo_ratings_and_faction_names_.emplace(latest_snapshot.value().current_elo_rating(), faction.name());
+        sorted_average_elo_ratings_and_faction_names_.emplace(latest_snapshot.value().average_elo_rating(), faction.name());
       }
     }
-    return sorted_current_elo_ratings_and_faction_names_;
+    return sorted_average_elo_ratings_and_faction_names_;
   }
 
-  void factions_ratings_plot() noexcept {
-    line("![Factions Ratings Plot](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::RatingsPlotFileStem, Half::First, Path::PlotImageFileExtension)}.string() + ")");
-    blank_line();
-    line("![Factions Ratings Plot](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::RatingsPlotFileStem, Half::Second, Path::PlotImageFileExtension)}.string() + ")");
+  void factions_ratings_plots(const Factions& factions) noexcept {
+    line("![Factions Ratings Plot 1](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::RatingsPlotFileStem, Half::First, Path::PlotImageFileExtension)}.string() + ")");
+    if (factions.need_two_plots()) {
+      blank_line();
+      line("![Factions Ratings Plot 2](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::RatingsPlotFileStem, Half::Second, Path::PlotImageFileExtension)}.string() + ")");
+    }
   }
 
-  void factions_points_plot() noexcept {
-    line("![Factions Points Plot](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::PointsPlotFileStem, Half::First, Path::PlotImageFileExtension)}.string() + ")");
-    blank_line();
-    line("![Factions Points Plot](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::PointsPlotFileStem, Half::Second, Path::PlotImageFileExtension)}.string() + ")");
+  void factions_points_plots(const Factions& factions) noexcept {
+    line("![Factions Points Plot 1](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::PointsPlotFileStem, Half::First, Path::PlotImageFileExtension)}.string() + ")");
+    if (factions.need_two_plots()) {
+      blank_line();
+      line("![Factions Points Plot 2](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::PointsPlotFileStem, Half::Second, Path::PlotImageFileExtension)}.string() + ")");
+    }
     blank_line();
     line("Average victory points per game are adjusted relative to 10-point games.");
   }
 
-  void factions_win_rates_plot() noexcept {
-    line("![Factions Win Rates Plot](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::WinRatesPlotFileStem, Half::First, Path::PlotImageFileExtension)}.string() + ")");
-    blank_line();
-    line("![Factions Win Rates Plot](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::WinRatesPlotFileStem, Half::Second, Path::PlotImageFileExtension)}.string() + ")");
+  void factions_win_rates_plots(const Factions& factions) noexcept {
+    line("![Factions Win Rates Plot 1](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::WinRatesPlotFileStem, Half::First, Path::PlotImageFileExtension)}.string() + ")");
+    if (factions.need_two_plots()) {
+      blank_line();
+      line("![Factions Win Rates Plot 2](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::WinRatesPlotFileStem, Half::Second, Path::PlotImageFileExtension)}.string() + ")");
+    }
     blank_line();
     line("Effective win rates are calculated relative to 6-player games.");
   }

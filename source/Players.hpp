@@ -94,7 +94,7 @@ private:
     std::set<PlayerName, PlayerName::sort> player_names_without_colors;
     // Assign a color to a number of players with the most games played, and at least 2 games played.
     for (const std::pair<std::size_t, PlayerName>& number_of_games_and_player_name : player_names_by_number_of_games_) {
-      if (player_names_with_colors.size() < PlotDataColors.size() && number_of_games_and_player_name.first >= 2) {
+      if (player_names_with_colors.size() < maximum_number_of_players_with_colors() && number_of_games_and_player_name.first >= 2) {
         player_names_with_colors.insert(number_of_games_and_player_name.second);
       } else {
         player_names_without_colors.insert(number_of_games_and_player_name.second);
@@ -132,6 +132,11 @@ private:
       }
     }
     return number_of_games_;
+  }
+
+  std::size_t maximum_number_of_players_with_colors() const noexcept {
+    constexpr std::size_t limit{12};
+    return std::min(limit, PlotDataColors.size());
   }
 
   void initialize_indices() noexcept {
