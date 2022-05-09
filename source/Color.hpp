@@ -17,6 +17,7 @@ enum class Color : int8_t {
   Pink,
   White,
   Black,
+  DarkGray,
   LightGray
 };
 
@@ -35,6 +36,7 @@ const std::unordered_map<Color, std::string> color_codes{
   {Color::Pink, "fabed4"},
   {Color::White, "ffffff"},
   {Color::Black, "000000"},
+  {Color::DarkGray, "808080"},
   {Color::LightGray, "d3d3d3"}
 };
 
@@ -62,7 +64,8 @@ const std::vector<Color> PlotDataColors{
   Color::Mint,
   Color::Pink,
   Color::White,
-  Color::Black
+  Color::Black,
+  Color::DarkGray
 };
 
 Color plot_data_color(const std::size_t counter) noexcept {
