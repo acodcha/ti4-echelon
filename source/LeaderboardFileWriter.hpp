@@ -146,13 +146,13 @@ private:
     factions_summary_table(factions);
     link_back_to_section(section_title_factions_);
     subsection(section_title_factions_ + ": " + subsection_title_ratings_);
-    factions_ratings_plot();
+    factions_ratings_plots(factions);
     link_back_to_section(section_title_factions_);
     subsection(section_title_factions_ + ": " + subsection_title_points_);
-    factions_points_plot();
+    factions_points_plots(factions);
     link_back_to_section(section_title_factions_);
     subsection(section_title_factions_ + ": " + subsection_title_win_rates_);
-    factions_win_rates_plot();
+    factions_win_rates_plots(factions);
     link_back_to_section(section_title_factions_);
   }
 
@@ -195,24 +195,30 @@ private:
     return sorted_average_elo_ratings_and_faction_names_;
   }
 
-  void factions_ratings_plot() noexcept {
-    line("![Factions Ratings Plot](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::RatingsPlotFileStem, Half::First, Path::PlotImageFileExtension)}.string() + ")");
-    blank_line();
-    line("![Factions Ratings Plot](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::RatingsPlotFileStem, Half::Second, Path::PlotImageFileExtension)}.string() + ")");
+  void factions_ratings_plots(const Factions& factions) noexcept {
+    line("![Factions Ratings Plot 1](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::RatingsPlotFileStem, Half::First, Path::PlotImageFileExtension)}.string() + ")");
+    if (factions.need_two_plots()) {
+      blank_line();
+      line("![Factions Ratings Plot 2](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::RatingsPlotFileStem, Half::Second, Path::PlotImageFileExtension)}.string() + ")");
+    }
   }
 
-  void factions_points_plot() noexcept {
-    line("![Factions Points Plot](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::PointsPlotFileStem, Half::First, Path::PlotImageFileExtension)}.string() + ")");
-    blank_line();
-    line("![Factions Points Plot](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::PointsPlotFileStem, Half::Second, Path::PlotImageFileExtension)}.string() + ")");
+  void factions_points_plots(const Factions& factions) noexcept {
+    line("![Factions Points Plot 1](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::PointsPlotFileStem, Half::First, Path::PlotImageFileExtension)}.string() + ")");
+    if (factions.need_two_plots()) {
+      blank_line();
+      line("![Factions Points Plot 2](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::PointsPlotFileStem, Half::Second, Path::PlotImageFileExtension)}.string() + ")");
+    }
     blank_line();
     line("Average victory points per game are adjusted relative to 10-point games.");
   }
 
-  void factions_win_rates_plot() noexcept {
-    line("![Factions Win Rates Plot](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::WinRatesPlotFileStem, Half::First, Path::PlotImageFileExtension)}.string() + ")");
-    blank_line();
-    line("![Factions Win Rates Plot](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::WinRatesPlotFileStem, Half::Second, Path::PlotImageFileExtension)}.string() + ")");
+  void factions_win_rates_plots(const Factions& factions) noexcept {
+    line("![Factions Win Rates Plot 1](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::WinRatesPlotFileStem, Half::First, Path::PlotImageFileExtension)}.string() + ")");
+    if (factions.need_two_plots()) {
+      blank_line();
+      line("![Factions Win Rates Plot 2](" + std::filesystem::path{Path::FactionsDirectoryName / file_name(Path::WinRatesPlotFileStem, Half::Second, Path::PlotImageFileExtension)}.string() + ")");
+    }
     blank_line();
     line("Effective win rates are calculated relative to 6-player games.");
   }

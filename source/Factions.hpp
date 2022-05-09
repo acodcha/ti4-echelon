@@ -18,6 +18,10 @@ public:
     message(print());
   }
 
+  bool need_two_plots() const noexcept {
+    return need_two_plots_;
+  }
+
   const EloRating& lowest_elo_rating() const noexcept {
     return lowest_elo_rating_;
   }
@@ -78,6 +82,8 @@ public:
 
 private:
 
+  bool need_two_plots_{false};
+
   EloRating lowest_elo_rating_;
 
   EloRating highest_elo_rating_;
@@ -89,10 +95,48 @@ private:
   /// \brief Initialize the factions with their names and colors.
   /// \details Only a limited number of factions with the most games played are assigned a color.
   void initialize_data(const Games& games) noexcept {
-    for (const FactionName faction_name : FactionNames) {
-      data_.emplace_back(faction_name, color(faction_name));
+    const std::set<FactionName> played_faction_names_{played_faction_names(games)};
+    const std::size_t number_of_played_non_custom_faction_names{number_of_non_custom_factions(played_faction_names_)};
+    initialize_need_two_plots(number_of_played_non_custom_faction_names);
+    std::size_t first_half_index{0};
+    std::size_t second_half_index{0};
+    for (const FactionName faction_name : played_faction_names_) {
+      if (faction_name == FactionName::Custom) {
+        data_.emplace_back(faction_name);
+      } else {
+        if (need_two_plots_) {
+          if (data_.size() < std::lround(0.5 * static_cast<double>(number_of_played_non_custom_faction_names))) {
+            data_.emplace_back(faction_name, Half::First, plot_data_color(first_half_index));
+            ++first_half_index;
+          } else {
+            data_.emplace_back(faction_name, Half::Second, plot_data_color(second_half_index));
+            ++second_half_index;
+          }
+        } else {
+          data_.emplace_back(faction_name, Half::First, plot_data_color(first_half_index));
+          ++first_half_index;
+        }
+      }
     }
     std::sort(data_.begin(), data_.end(), Faction::sort());
+  }
+
+  std::set<FactionName> played_faction_names(const Games& games) const noexcept {
+    std::set<FactionName> played_faction_names_;
+    for (const Game& game : games) {
+      for (const Participant& participant : game.participants()) {
+        played_faction_names_.insert(participant.faction_name());
+      }
+    }
+    return played_faction_names_;
+  }
+
+  void initialize_need_two_plots(const std::size_t number_of_played_non_custom_faction_names) noexcept {
+    if (number_of_played_non_custom_faction_names > PlotDataColors.size()) {
+      need_two_plots_ = true;
+    } else {
+      need_two_plots_ = false;
+    }
   }
 
   void initialize_indices() noexcept {
