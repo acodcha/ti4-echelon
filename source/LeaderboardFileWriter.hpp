@@ -167,7 +167,7 @@ private:
     table_.insert_column("1st Place", Alignment::Center); // Column index 6
     table_.insert_column("2nd Place", Alignment::Center); // Column index 7
     table_.insert_column("3rd Place", Alignment::Center); // Column index 8
-    for (const std::pair<EloRating, FactionName> average_elo_rating_and_faction_name : sorted_current_elo_ratings_and_faction_names(factions)) {
+    for (const std::pair<EloRating, FactionName> average_elo_rating_and_faction_name : sorted_average_elo_ratings_and_faction_names(factions)) {
       const Factions::const_iterator faction{factions.find(average_elo_rating_and_faction_name.second)};
       table_.column(0).insert_row(faction->name());
       table_.column(1).insert_row(faction->number_of_snapshots());
@@ -184,15 +184,15 @@ private:
     line("Average victory points per game are adjusted relative to 10-point games, and effective win rates are calculated relative to 6-player games.");
   }
 
-  std::map<EloRating, FactionName, EloRating::sort> sorted_current_elo_ratings_and_faction_names(const Factions& factions) const noexcept {
-    std::map<EloRating, FactionName, EloRating::sort> sorted_current_elo_ratings_and_faction_names_;
+  std::map<EloRating, FactionName, EloRating::sort> sorted_average_elo_ratings_and_faction_names(const Factions& factions) const noexcept {
+    std::map<EloRating, FactionName, EloRating::sort> sorted_average_elo_ratings_and_faction_names_;
     for (const Faction& faction : factions) {
       const std::optional<Snapshot> latest_snapshot{faction.latest_snapshot()};
       if (latest_snapshot.has_value()) {
-        sorted_current_elo_ratings_and_faction_names_.emplace(latest_snapshot.value().current_elo_rating(), faction.name());
+        sorted_average_elo_ratings_and_faction_names_.emplace(latest_snapshot.value().average_elo_rating(), faction.name());
       }
     }
-    return sorted_current_elo_ratings_and_faction_names_;
+    return sorted_average_elo_ratings_and_faction_names_;
   }
 
   void factions_ratings_plot() noexcept {
