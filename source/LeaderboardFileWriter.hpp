@@ -169,15 +169,17 @@ private:
     table_.insert_column("3rd Place", Alignment::Center); // Column index 8
     for (const std::pair<EloRating, FactionName> average_elo_rating_and_faction_name : sorted_average_elo_ratings_and_faction_names(factions)) {
       const Factions::const_iterator faction{factions.find(average_elo_rating_and_faction_name.second)};
-      table_.column(0).insert_row(faction->name());
-      table_.column(1).insert_row(faction->number_of_snapshots());
-      table_.column(2).insert_row(faction->latest_snapshot().value().current_elo_rating());
-      table_.column(3).insert_row(faction->latest_snapshot().value().average_elo_rating());
-      table_.column(4).insert_row(faction->latest_snapshot().value().average_victory_points_per_game());
-      table_.column(5).insert_row(faction->latest_snapshot().value().effective_win_rate());
-      table_.column(6).insert_row(faction->latest_snapshot().value().print_place_percentage_and_count({1}));
-      table_.column(7).insert_row(faction->latest_snapshot().value().print_place_percentage_and_count({2}));
-      table_.column(8).insert_row(faction->latest_snapshot().value().print_place_percentage_and_count({3}));
+      if (faction->name() != FactionName::Custom) {
+        table_.column(0).insert_row(faction->name());
+        table_.column(1).insert_row(faction->number_of_snapshots());
+        table_.column(2).insert_row(faction->latest_snapshot().value().current_elo_rating());
+        table_.column(3).insert_row(faction->latest_snapshot().value().average_elo_rating());
+        table_.column(4).insert_row(faction->latest_snapshot().value().average_victory_points_per_game());
+        table_.column(5).insert_row(faction->latest_snapshot().value().effective_win_rate());
+        table_.column(6).insert_row(faction->latest_snapshot().value().print_place_percentage_and_count({1}));
+        table_.column(7).insert_row(faction->latest_snapshot().value().print_place_percentage_and_count({2}));
+        table_.column(8).insert_row(faction->latest_snapshot().value().print_place_percentage_and_count({3}));
+      }
     }
     table(table_);
     blank_line();
