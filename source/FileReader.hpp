@@ -6,11 +6,9 @@ namespace TI4Echelon {
 
 /// \brief General-purpose file reader.
 class FileReader : public File<std::ifstream> {
-
 protected:
-
   FileReader(const std::filesystem::path& path) : File(path) {}
 
-}; // class FileReader
+};  // class FileReader
 
-} // namespace TI4Echelon
+}  // namespace TI4Echelon

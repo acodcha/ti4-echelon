@@ -7,23 +7,20 @@ namespace TI4Echelon {
 
 /// \brief A player along with a history of snapshots.
 class Player {
-
 public:
-
   /// \brief Default constructor.
   Player() noexcept {}
 
-  /// \brief Constructs a player, initially without any snapshots. Snapshots can be added from games later.
-  /// \details If a player does not have a color defined, that player does not appear in plots.
-  Player(const PlayerName& name, const std::optional<Color>& color = std::optional<Color>{}) noexcept : name_(name), color_(color) {}
+  /// \brief Constructs a player, initially without any snapshots. Snapshots can
+  /// be added from games later. If a player does not have a color defined, that
+  /// player does not appear in plots.
+  Player(const PlayerName& name,
+         const std::optional<Color>& color = std::optional<Color>{}) noexcept
+    : name_(name), color_(color) {}
 
-  const PlayerName& name() const noexcept {
-    return name_;
-  }
+  const PlayerName& name() const noexcept { return name_; }
 
-  const std::optional<Color>& color() const noexcept {
-    return color_;
-  }
+  const std::optional<Color>& color() const noexcept { return color_; }
 
   const EloRating& lowest_elo_rating() const noexcept {
     return lowest_elo_rating_;
@@ -42,7 +39,9 @@ public:
     }
   }
 
-  void update(const Game& game, const std::unordered_map<PlayerName, EloRating>& elo_ratings) noexcept {
+  void update(
+      const Game& game,
+      const std::unordered_map<PlayerName, EloRating>& elo_ratings) noexcept {
     if (game.exists(name_)) {
       snapshots_.emplace_back(name_, game, elo_ratings, latest_snapshot());
       update_lowest_and_highest_elo_ratings();
@@ -86,22 +85,25 @@ public:
   }
 
   struct sort {
-    bool operator()(const Player& player_1, const Player& player_2) const noexcept {
+    bool operator()(
+        const Player& player_1, const Player& player_2) const noexcept {
       return player_1 < player_2;
     }
   };
 
   struct const_iterator : public std::vector<Snapshot>::const_iterator {
-    const_iterator(const std::vector<Snapshot>::const_iterator i) noexcept : std::vector<Snapshot>::const_iterator(i) {}
+    const_iterator(const std::vector<Snapshot>::const_iterator i) noexcept
+      : std::vector<Snapshot>::const_iterator(i) {}
   };
 
-  struct const_reverse_iterator : public std::vector<Snapshot>::const_reverse_iterator {
-    const_reverse_iterator(const std::vector<Snapshot>::const_reverse_iterator i) noexcept : std::vector<Snapshot>::const_reverse_iterator(i) {}
+  struct const_reverse_iterator
+    : public std::vector<Snapshot>::const_reverse_iterator {
+    const_reverse_iterator(
+        const std::vector<Snapshot>::const_reverse_iterator i) noexcept
+      : std::vector<Snapshot>::const_reverse_iterator(i) {}
   };
 
-  std::size_t number_of_snapshots() const noexcept {
-    return snapshots_.size();
-  }
+  std::size_t number_of_snapshots() const noexcept { return snapshots_.size(); }
 
   const_iterator begin() const noexcept {
     return const_iterator(snapshots_.begin());
@@ -136,7 +138,6 @@ public:
   }
 
 private:
-
   PlayerName name_;
 
   std::optional<Color> color_;
@@ -157,18 +158,16 @@ private:
     }
   }
 
-}; // class Player
+};  // class Player
 
-} // namespace TI4Echelon
+}  // namespace TI4Echelon
 
 namespace std {
 
-  template <> struct hash<TI4Echelon::Player> {
+template<> struct hash<TI4Echelon::Player> {
+  size_t operator()(const TI4Echelon::Player& player) const {
+    return hash<TI4Echelon::PlayerName>()(player.name());
+  }
+};
 
-    size_t operator()(const TI4Echelon::Player& player) const {
-      return hash<TI4Echelon::PlayerName>()(player.name());
-    }
-
-  };
-
-} // namespace std
+}  // namespace std

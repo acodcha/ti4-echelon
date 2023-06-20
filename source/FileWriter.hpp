@@ -6,20 +6,21 @@ namespace TI4Echelon {
 
 /// \brief General-purpose file writer.
 class FileWriter : public File<std::ofstream> {
-
 public:
-
-  ~FileWriter() noexcept {
-    set_permissions();
-  }
+  ~FileWriter() noexcept { set_permissions(); }
 
   const std::filesystem::perms& permissions() const noexcept {
     return permissions_;
   }
 
 protected:
-
-  FileWriter(const std::filesystem::path& path, const std::filesystem::perms& permissions = {std::filesystem::perms::owner_read | std::filesystem::perms::owner_write | std::filesystem::perms::group_read | std::filesystem::perms::others_read}) : File(path), permissions_(permissions) {}
+  FileWriter(const std::filesystem::path& path,
+             const std::filesystem::perms& permissions =
+                 {std::filesystem::perms::owner_read
+                  | std::filesystem::perms::owner_write
+                  | std::filesystem::perms::group_read
+                  | std::filesystem::perms::others_read})
+    : File(path), permissions_(permissions) {}
 
   std::filesystem::perms permissions_;
 
@@ -31,6 +32,6 @@ protected:
     }
   }
 
-}; // class FileWriter
+};  // class FileWriter
 
-} // namespace TI4Echelon
+}  // namespace TI4Echelon

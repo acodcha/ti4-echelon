@@ -8,9 +8,7 @@ namespace TI4Echelon {
 
 /// \brief Plot and linear regression of game duration versus number of players.
 class GamesDurationVersusNumberOfPlayers {
-
 public:
-
   GamesDurationVersusNumberOfPlayers() noexcept {}
 
   double minimum_duration_in_hours() const noexcept {
@@ -26,12 +24,15 @@ public:
   }
 
   std::string print() const noexcept {
-    return "hours = " + real_number_to_string(linear_regression_.intercept(), 2) + " + " + real_number_to_string(linear_regression_.slope(), 2) + " * players";
+    return "hours = " + real_number_to_string(linear_regression_.intercept(), 2)
+           + " + " + real_number_to_string(linear_regression_.slope(), 2)
+           + " * players";
   }
 
   void insert(const Game& game) noexcept {
     if (game.duration().has_value()) {
-      number_of_players_and_duration_in_hours_.emplace_back(game.participants().size(), game.duration().value().hours());
+      number_of_players_and_duration_in_hours_.emplace_back(
+          game.participants().size(), game.duration().value().hours());
       if (game.duration().value().hours() < minimum_duration_in_hours_) {
         minimum_duration_in_hours_ = game.duration().value().hours();
       }
@@ -45,12 +46,19 @@ public:
     linear_regression_ = {number_of_players_and_duration_in_hours_};
   }
 
-  struct const_iterator : public std::vector<std::pair<double, double>>::const_iterator {
-    const_iterator(const std::vector<std::pair<double, double>>::const_iterator i) noexcept : std::vector<std::pair<double, double>>::const_iterator(i) {}
+  struct const_iterator
+    : public std::vector<std::pair<double, double>>::const_iterator {
+    const_iterator(
+        const std::vector<std::pair<double, double>>::const_iterator i) noexcept
+      : std::vector<std::pair<double, double>>::const_iterator(i) {}
   };
 
-  struct const_reverse_iterator : public std::vector<std::pair<double, double>>::const_reverse_iterator {
-    const_reverse_iterator(const std::vector<std::pair<double, double>>::const_reverse_iterator i) noexcept : std::vector<std::pair<double, double>>::const_reverse_iterator(i) {}
+  struct const_reverse_iterator
+    : public std::vector<std::pair<double, double>>::const_reverse_iterator {
+    const_reverse_iterator(
+        const std::vector<std::pair<double, double>>::const_reverse_iterator
+            i) noexcept
+      : std::vector<std::pair<double, double>>::const_reverse_iterator(i) {}
   };
 
   bool empty() const noexcept {
@@ -70,11 +78,13 @@ public:
   }
 
   const_reverse_iterator rbegin() const noexcept {
-    return const_reverse_iterator(number_of_players_and_duration_in_hours_.rbegin());
+    return const_reverse_iterator(
+        number_of_players_and_duration_in_hours_.rbegin());
   }
 
   const_reverse_iterator crbegin() const noexcept {
-    return const_reverse_iterator(number_of_players_and_duration_in_hours_.crbegin());
+    return const_reverse_iterator(
+        number_of_players_and_duration_in_hours_.crbegin());
   }
 
   const_iterator end() const noexcept {
@@ -86,23 +96,25 @@ public:
   }
 
   const_reverse_iterator rend() const noexcept {
-    return const_reverse_iterator(number_of_players_and_duration_in_hours_.rend());
+    return const_reverse_iterator(
+        number_of_players_and_duration_in_hours_.rend());
   }
 
   const_reverse_iterator crend() const noexcept {
-    return const_reverse_iterator(number_of_players_and_duration_in_hours_.crend());
+    return const_reverse_iterator(
+        number_of_players_and_duration_in_hours_.crend());
   }
 
 private:
-
   double minimum_duration_in_hours_{10.0};
 
   double maximum_duration_in_hours_{0.0};
 
-  std::vector<std::pair<double, double>> number_of_players_and_duration_in_hours_;
+  std::vector<std::pair<double, double>>
+      number_of_players_and_duration_in_hours_;
 
   LinearRegression linear_regression_;
 
-}; // class GamesDurationVersusNumberOfPlayers
+};  // class GamesDurationVersusNumberOfPlayers
 
-} // namespace TI4Echelon
+}  // namespace TI4Echelon

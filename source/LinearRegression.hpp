@@ -6,14 +6,13 @@ namespace TI4Echelon {
 
 /// \brief Linear regression of x-y data.
 class LinearRegression {
-
 public:
-
   /// \brief Default constructor. Initializes to zero slope and zero intercept.
   constexpr LinearRegression() noexcept {}
 
   /// \brief Construct a linear regression from x-y data.
-  LinearRegression(const std::vector<std::pair<double, double>>& x_y_data) noexcept {
+  LinearRegression(
+      const std::vector<std::pair<double, double>>& x_y_data) noexcept {
     if (x_y_data.empty()) {
       // Do nothing.
     } else if (x_y_data.size() == 1) {
@@ -33,18 +32,15 @@ public:
         sum_xy += x_y.first * x_y.second;
         sum_yy += x_y.second * x_y.second;
       }
-      slope_ = ((n * sum_xy) - (sum_x * sum_y)) / ((n * sum_xx) - sum_x * sum_x);
+      slope_ =
+          ((n * sum_xy) - (sum_x * sum_y)) / ((n * sum_xx) - sum_x * sum_x);
       intercept_ = (sum_y - (slope_ * sum_x)) / n;
     }
   }
 
-  constexpr double slope() const noexcept {
-    return slope_;
-  }
+  constexpr double slope() const noexcept { return slope_; }
 
-  constexpr double intercept() const noexcept {
-    return intercept_;
-  }
+  constexpr double intercept() const noexcept { return intercept_; }
 
   /// \brief Use the linear regression to obtain y given x.
   double operator()(const double x) const noexcept {
@@ -52,11 +48,10 @@ public:
   }
 
 private:
-
   double slope_{0.0};
 
   double intercept_{0.0};
 
-}; // class LinearRegression
+};  // class LinearRegression
 
-} // namespace TI4Echelon
+}  // namespace TI4Echelon

@@ -7,7 +7,8 @@ namespace TI4Echelon {
 /// \brief Split a string into words using whitespace as a delimiter.
 std::vector<std::string> split_by_whitespace(const std::string& text) noexcept {
   std::istringstream stream{text};
-  std::vector<std::string> words{std::istream_iterator<std::string>{stream}, std::istream_iterator<std::string>{}};
+  std::vector<std::string> words{std::istream_iterator<std::string>{stream},
+                                 std::istream_iterator<std::string>{}};
   return words;
 }
 
@@ -22,8 +23,10 @@ std::vector<std::string> split_by_newline(const std::string& text) noexcept {
   return lines;
 }
 
-/// \brief Split a string into words using a given delimiter. The delimiter character is removed.
-std::vector<std::string> split_by_delimiter(const std::string& text, const char delimiter) noexcept {
+/// \brief Split a string into words using a given delimiter. The delimiter
+/// character is removed.
+std::vector<std::string> split_by_delimiter(
+    const std::string& text, const char delimiter) noexcept {
   std::stringstream stream(text);
   std::string word;
   std::vector<std::string> words;
@@ -36,19 +39,24 @@ std::vector<std::string> split_by_delimiter(const std::string& text, const char 
 /// \brief Make each character in a string lowercase.
 std::string lowercase(const std::string& text) noexcept {
   std::string transformed_text{text};
-  std::transform(transformed_text.begin(), transformed_text.end(), transformed_text.begin(), [](const char character)->char{return std::tolower(character);});
+  std::transform(transformed_text.begin(), transformed_text.end(),
+                 transformed_text.begin(), [](const char character) -> char {
+                   return std::tolower(character);
+                 });
   return transformed_text;
 }
 
 /// \brief Remove whitespace in a string.
 std::string remove_whitespace(const std::string& text) noexcept {
   std::string new_text{text};
-  new_text.erase(remove_if(new_text.begin(), new_text.end(), ::isspace), new_text.end());
+  new_text.erase(
+      remove_if(new_text.begin(), new_text.end(), ::isspace), new_text.end());
   return new_text;
 }
 
 /// \brief Remove non-alphanumeric characters in a string.
-std::string remove_non_alphanumeric_characters(const std::string& text) noexcept {
+std::string remove_non_alphanumeric_characters(
+    const std::string& text) noexcept {
   std::string new_text;
   for (const char character : text) {
     if (::isalnum(character)) {
@@ -59,7 +67,8 @@ std::string remove_non_alphanumeric_characters(const std::string& text) noexcept
 }
 
 /// \brief Remove non-alphanumeric non-space characters in a string.
-std::string remove_non_alphanumeric_non_space_characters(const std::string& text) noexcept {
+std::string remove_non_alphanumeric_non_space_characters(
+    const std::string& text) noexcept {
   std::string new_text;
   for (const char character : text) {
     if (::isalnum(character) || character == ' ') {
@@ -91,22 +100,28 @@ std::string remove_non_numeric_characters(const std::string& text) noexcept {
   return new_text;
 }
 
-/// \brief Replace all occurences of a given character with another character in a string.
-std::string replace_character(const std::string& text, const char original, const char replacement) noexcept {
+/// \brief Replace all occurences of a given character with another character in
+/// a string.
+std::string replace_character(const std::string& text, const char original,
+                              const char replacement) noexcept {
   std::string transformed_text{text};
-  std::transform(transformed_text.begin(), transformed_text.end(), transformed_text.begin(), [original, replacement](const char character)->char{
-    if (character == original) {
-      return replacement;
-    } else {
-      return character;
-    }
-  });
+  std::transform(transformed_text.begin(), transformed_text.end(),
+                 transformed_text.begin(),
+                 [original, replacement](const char character) -> char {
+                   if (character == original) {
+                     return replacement;
+                   } else {
+                     return character;
+                   }
+                 });
   return transformed_text;
 }
 
 /// \brief Pad a string to a given length using trailing spaces.
-/// \details If the string is already longer than the given length, nothing is changed.
-std::string pad_to_length(const std::string& text, const std::size_t length) noexcept {
+/// \details If the string is already longer than the given length, nothing is
+/// changed.
+std::string pad_to_length(
+    const std::string& text, const std::size_t length) noexcept {
   std::string padded_text{text};
   const std::size_t text_length{text.size()};
   if (length > text_length) {
@@ -125,14 +140,16 @@ std::string boolean_to_string(const bool value) noexcept {
 }
 
 /// \brief Print a real number as a string to a given number of decimals.
-std::string real_number_to_string(const double value, const int8_t decimals = 2) noexcept {
+std::string real_number_to_string(
+    const double value, const int8_t decimals = 2) noexcept {
   std::ostringstream stream;
   stream << std::fixed << std::setprecision(decimals) << value;
   return stream.str();
 }
 
 /// \brief Parse a string as an integer number.
-std::optional<int64_t> string_to_integer_number(const std::string& text) noexcept {
+std::optional<int64_t> string_to_integer_number(
+    const std::string& text) noexcept {
   char* end = 0;
   const long long int value = std::strtoll(text.c_str(), &end, 10);
   if (end != text.c_str() && *end == '\0' && value != LLONG_MAX) {
@@ -146,7 +163,8 @@ std::optional<int64_t> string_to_integer_number(const std::string& text) noexcep
 std::optional<double> string_to_real_number(const std::string& text) noexcept {
   char* end = 0;
   const double value = strtod(text.c_str(), &end);
-  if (end != text.c_str() && *end == '\0' && value != HUGE_VAL && value != -HUGE_VAL) {
+  if (end != text.c_str() && *end == '\0' && value != HUGE_VAL
+      && value != -HUGE_VAL) {
     return {value};
   }
   const std::optional<double> no_value;
@@ -157,4 +175,4 @@ std::string markdown_boldface(const std::string& text) noexcept {
   return "**" + text + "**";
 }
 
-} // namespace TI4Echelon
+}  // namespace TI4Echelon

@@ -4,6 +4,7 @@
 
 namespace TI4Echelon {
 
+// The directory and file structure is as follows:
 // leaderboard/
 //     README.md
 //     duration.dat
@@ -18,6 +19,9 @@ namespace TI4Echelon {
 //         winrates.png
 //         Alice/
 //             data.dat
+//         Bob/
+//             data.dat
+//         etc.
 //     factions/
 //         points.gnuplot
 //         points.png
@@ -27,6 +31,9 @@ namespace TI4Echelon {
 //         winrates.png
 //         Arborec/
 //             data.dat
+//         Argent Flight/
+//             data.dat
+//         etc.
 
 namespace Path {
 
@@ -42,7 +49,8 @@ const std::filesystem::path FactionDataFileName{"data.dat"};
 
 const std::filesystem::path DurationValuesDataFileName{"duration_data.dat"};
 
-const std::filesystem::path DurationRegressionFitDataFileName{"duration_regression_fit.dat"};
+const std::filesystem::path DurationRegressionFitDataFileName{
+    "duration_regression_fit.dat"};
 
 const std::filesystem::path RatingsPlotFileStem{"ratings"};
 
@@ -56,14 +64,18 @@ const std::filesystem::path PlotConfigurationFileExtension{"gnuplot"};
 
 const std::filesystem::path PlotImageFileExtension{"png"};
 
-} // namespace Path
+}  // namespace Path
 
-const std::filesystem::path file_name(const std::filesystem::path& stem, const std::filesystem::path& extension) noexcept {
+const std::filesystem::path file_name(
+    const std::filesystem::path& stem,
+    const std::filesystem::path& extension) noexcept {
   return {stem.string() + "." + extension.string()};
 }
 
-const std::filesystem::path file_name(const std::filesystem::path& stem, const Half half, const std::filesystem::path& extension) noexcept {
+const std::filesystem::path file_name(
+    const std::filesystem::path& stem, const Half half,
+    const std::filesystem::path& extension) noexcept {
   return {stem.string() + label(half) + "." + extension.string()};
 }
 
-} // namespace TI4Echelon
+}  // namespace TI4Echelon

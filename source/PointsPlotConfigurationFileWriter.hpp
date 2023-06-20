@@ -7,32 +7,55 @@
 namespace TI4Echelon {
 
 class PointsPlotConfigurationFileWriter : public PlotConfigurationFileWriter {
-
 public:
-
-  PointsPlotConfigurationFileWriter(const std::filesystem::path& directory, const Players& players) : PlotConfigurationFileWriter(directory / Path::PlayersDirectoryName / Path::PointsPlotFileStem) {
+  PointsPlotConfigurationFileWriter(
+      const std::filesystem::path& directory, const Players& players)
+    : PlotConfigurationFileWriter(
+        directory / Path::PlayersDirectoryName / Path::PointsPlotFileStem) {
     initialize();
     for (const Player& player : players) {
       if (player.color().has_value()) {
-        line("  \"" + std::filesystem::path{directory / Path::PlayersDirectoryName / player.name().path() / Path::PlayerDataFileName}.string() + "\" u 1:6 w lp lw 2 pt 7 ps 0.1 lt rgb \"#" + color_code(player.color().value()) + "\" t \"" + player.name().value() + "\" , \\");
+        line("  \""
+             + std::filesystem::path{directory / Path::PlayersDirectoryName
+                                     / player.name().path()
+                                     / Path::PlayerDataFileName}
+                   .string()
+             + "\" u 1:6 w lp lw 2 pt 7 ps 0.1 lt rgb \"#"
+             + color_code(player.color().value()) + "\" t \""
+             + player.name().value() + "\" , \\");
       }
     }
   }
 
-  PointsPlotConfigurationFileWriter(const std::filesystem::path& directory, const Factions& factions, const Half half) : PlotConfigurationFileWriter(directory / Path::FactionsDirectoryName / std::filesystem::path{Path::PointsPlotFileStem.string() + label(half)}) {
+  PointsPlotConfigurationFileWriter(const std::filesystem::path& directory,
+                                    const Factions& factions, const Half half)
+    : PlotConfigurationFileWriter(
+        directory / Path::FactionsDirectoryName
+        / std::filesystem::path{
+            Path::PointsPlotFileStem.string() + label(half)}) {
     initialize();
     for (const Faction& faction : factions) {
-      if (faction.half().has_value() && faction.half().value() == half && faction.color().has_value()) {
-        line("  \"" + std::filesystem::path{directory / Path::FactionsDirectoryName / TI4Echelon::path(faction.name()) / Path::FactionDataFileName}.string() + "\" u 1:6 w lp lw 2 pt 7 ps 0.1 lt rgb \"#" + color_code(faction.color().value()) + "\" t \"" + label(faction.name()) + "\" , \\");
+      if (faction.half().has_value() && faction.half().value() == half
+          && faction.color().has_value()) {
+        line("  \""
+             + std::filesystem::path{directory / Path::FactionsDirectoryName
+                                     / TI4Echelon::path(faction.name())
+                                     / Path::FactionDataFileName}
+                   .string()
+             + "\" u 1:6 w lp lw 2 pt 7 ps 0.1 lt rgb \"#"
+             + color_code(faction.color().value()) + "\" t \""
+             + label(faction.name()) + "\" , \\");
       }
     }
   }
 
 private:
-
   void initialize() noexcept {
     line("set title \"\"");
-    line("set object 1 rectangle from screen 0,0 to screen 1,1 fillstyle solid 1.0 fillcolor rgb \"#" + color_code(Color::LightGray) + "\" behind");
+    line(
+        "set object 1 rectangle from screen 0,0 to screen 1,1 fillstyle solid "
+        "1.0 fillcolor rgb \"#"
+        + color_code(Color::LightGray) + "\" behind");
     line("set grid xtics ytics mxtics mytics back");
     line("set key horizontal center top outside");
     line("set xlabel \"Game Number\"");
@@ -49,6 +72,6 @@ private:
     line("plot \\");
   }
 
-}; // class PointsPlotConfigurationFileWriter
+};  // class PointsPlotConfigurationFileWriter
 
-} // namespace TI4Echelon
+}  // namespace TI4Echelon

@@ -7,9 +7,7 @@ namespace TI4Echelon {
 
 /// \brief List of games read from the games file.
 class Games {
-
 public:
-
   Games(const std::filesystem::path& games_file_path) {
     message("Reading the games file...");
     const TextFileReader games_file_reader{games_file_path};
@@ -34,31 +32,33 @@ public:
       data_[index].set_index(data_.size() - 1 - index);
     }
     duration_versus_number_of_players_.initialize_linear_regression();
-    message("Read " + std::to_string(data_.size()) + " games from the games file:");
+    message(
+        "Read " + std::to_string(data_.size()) + " games from the games file:");
     for (const Game& game : data_) {
       message("- " + game.print() + ".");
     }
   }
 
-  const GamesDurationVersusNumberOfPlayers& duration_versus_number_of_players() const noexcept {
+  const GamesDurationVersusNumberOfPlayers&
+  duration_versus_number_of_players() const noexcept {
     return duration_versus_number_of_players_;
   }
 
   struct const_iterator : public std::vector<Game>::const_iterator {
-    const_iterator(const std::vector<Game>::const_iterator i) noexcept : std::vector<Game>::const_iterator(i) {}
+    const_iterator(const std::vector<Game>::const_iterator i) noexcept
+      : std::vector<Game>::const_iterator(i) {}
   };
 
-  struct const_reverse_iterator : public std::vector<Game>::const_reverse_iterator {
-    const_reverse_iterator(const std::vector<Game>::const_reverse_iterator i) noexcept : std::vector<Game>::const_reverse_iterator(i) {}
+  struct const_reverse_iterator
+    : public std::vector<Game>::const_reverse_iterator {
+    const_reverse_iterator(
+        const std::vector<Game>::const_reverse_iterator i) noexcept
+      : std::vector<Game>::const_reverse_iterator(i) {}
   };
 
-  bool empty() const noexcept {
-    return data_.empty();
-  }
+  bool empty() const noexcept { return data_.empty(); }
 
-  std::size_t size() const noexcept {
-    return data_.size();
-  }
+  std::size_t size() const noexcept { return data_.size(); }
 
   const_iterator begin() const noexcept {
     return const_iterator(data_.begin());
@@ -76,13 +76,9 @@ public:
     return const_reverse_iterator(data_.crbegin());
   }
 
-  const_iterator end() const noexcept {
-    return const_iterator(data_.end());
-  }
+  const_iterator end() const noexcept { return const_iterator(data_.end()); }
 
-  const_iterator cend() const noexcept {
-    return const_iterator(data_.cend());
-  }
+  const_iterator cend() const noexcept { return const_iterator(data_.cend()); }
 
   const_reverse_iterator rend() const noexcept {
     return const_reverse_iterator(data_.rend());
@@ -93,12 +89,12 @@ public:
   }
 
 private:
-
   GamesDurationVersusNumberOfPlayers duration_versus_number_of_players_;
 
-  /// \brief Sorted in reverse-chronological order, i.e. from most recent to oldest.
+  /// \brief Sorted in reverse-chronological order, i.e. from most recent to
+  /// oldest.
   std::vector<Game> data_;
 
-}; // class Games
+};  // class Games
 
-} // namespace TI4Echelon
+}  // namespace TI4Echelon
