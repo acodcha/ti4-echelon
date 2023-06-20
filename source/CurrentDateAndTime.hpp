@@ -14,14 +14,19 @@ std::string date_and_time(const std::tm* date_and_time) noexcept {
   const int hours{date_and_time->tm_hour};
   const int minutes{date_and_time->tm_min};
   const std::string year_string{std::to_string(year)};
-  const std::string month_string{month < 10 ? "0" + std::to_string(month) : std::to_string(month)};
-  const std::string day_string{day < 10 ? "0" + std::to_string(day) : std::to_string(day)};
-  const std::string hours_string{hours < 10 ? "0" + std::to_string(hours) : std::to_string(hours)};
-  const std::string minutes_string{minutes < 10 ? "0" + std::to_string(minutes) : std::to_string(minutes)};
-  return year_string + "-" + month_string + "-" + day_string + " " + hours_string + ":" + minutes_string;
+  const std::string month_string{
+      month < 10 ? "0" + std::to_string(month) : std::to_string(month)};
+  const std::string day_string{
+      day < 10 ? "0" + std::to_string(day) : std::to_string(day)};
+  const std::string hours_string{
+      hours < 10 ? "0" + std::to_string(hours) : std::to_string(hours)};
+  const std::string minutes_string{
+      minutes < 10 ? "0" + std::to_string(minutes) : std::to_string(minutes)};
+  return year_string + "-" + month_string + "-" + day_string + " "
+         + hours_string + ":" + minutes_string;
 }
 
-} // namespace
+}  // namespace
 
 std::string current_local_date_and_time() noexcept {
   const std::time_t number{std::time(0)};
@@ -35,4 +40,4 @@ std::string current_utc_date_and_time() noexcept {
   return date_and_time(current) + " UTC";
 }
 
-} // namespace TI4Echelon
+}  // namespace TI4Echelon

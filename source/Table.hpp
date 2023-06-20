@@ -4,12 +4,12 @@
 
 namespace TI4Echelon {
 
-/// \brief General-purpose table for printing in Data (.dat) or Markdown (.md) files.
+/// \brief General-purpose table for printing in Data (.dat) or Markdown (.md)
+/// files.
 class Table {
-
 public:
-
-  /// \brief Default constructor. Initializes to an empty table. Columns can be added later.
+  /// \brief Default constructor. Initializes to an empty table. Columns can be
+  /// added later.
   Table() noexcept {}
 
   std::string print_as_data() const noexcept {
@@ -34,28 +34,31 @@ public:
   }
 
   struct iterator : public std::vector<TableColumn>::iterator {
-    iterator(const std::vector<TableColumn>::iterator i) noexcept : std::vector<TableColumn>::iterator(i) {}
+    iterator(const std::vector<TableColumn>::iterator i) noexcept
+      : std::vector<TableColumn>::iterator(i) {}
   };
 
   struct const_iterator : public std::vector<TableColumn>::const_iterator {
-    const_iterator(const std::vector<TableColumn>::const_iterator i) noexcept : std::vector<TableColumn>::const_iterator(i) {}
+    const_iterator(const std::vector<TableColumn>::const_iterator i) noexcept
+      : std::vector<TableColumn>::const_iterator(i) {}
   };
 
   struct reverse_iterator : public std::vector<TableColumn>::reverse_iterator {
-    reverse_iterator(const std::vector<TableColumn>::reverse_iterator i) noexcept : std::vector<TableColumn>::reverse_iterator(i) {}
+    reverse_iterator(
+        const std::vector<TableColumn>::reverse_iterator i) noexcept
+      : std::vector<TableColumn>::reverse_iterator(i) {}
   };
 
-  struct const_reverse_iterator : public std::vector<TableColumn>::const_reverse_iterator {
-    const_reverse_iterator(const std::vector<TableColumn>::const_reverse_iterator i) noexcept : std::vector<TableColumn>::const_reverse_iterator(i) {}
+  struct const_reverse_iterator
+    : public std::vector<TableColumn>::const_reverse_iterator {
+    const_reverse_iterator(
+        const std::vector<TableColumn>::const_reverse_iterator i) noexcept
+      : std::vector<TableColumn>::const_reverse_iterator(i) {}
   };
 
-  bool empty() const noexcept {
-    return columns_.empty();
-  }
+  bool empty() const noexcept { return columns_.empty(); }
 
-  std::size_t number_of_columns() const noexcept {
-    return columns_.size();
-  }
+  std::size_t number_of_columns() const noexcept { return columns_.size(); }
 
   /// \brief Number of rows, excluding the header and alignment rows, if any.
   std::size_t number_of_rows() const noexcept {
@@ -68,9 +71,7 @@ public:
     return number_of_rows_;
   }
 
-  iterator begin() noexcept {
-    return iterator(columns_.begin());
-  }
+  iterator begin() noexcept { return iterator(columns_.begin()); }
 
   const_iterator cbegin() const noexcept {
     return const_iterator(columns_.cbegin());
@@ -84,23 +85,20 @@ public:
     return const_reverse_iterator(columns_.crbegin());
   }
 
-  iterator end() noexcept {
-    return iterator(columns_.end());
-  }
+  iterator end() noexcept { return iterator(columns_.end()); }
 
   const_iterator cend() const noexcept {
     return const_iterator(columns_.cend());
   }
 
-  reverse_iterator rend() noexcept {
-    return reverse_iterator(columns_.rend());
-  }
+  reverse_iterator rend() noexcept { return reverse_iterator(columns_.rend()); }
 
   const_reverse_iterator crend() const noexcept {
     return const_reverse_iterator(columns_.crend());
   }
 
-  void insert_column(const std::string& header, const Alignment alignment = Alignment::Center) noexcept {
+  void insert_column(const std::string& header,
+                     const Alignment alignment = Alignment::Center) noexcept {
     columns_.emplace_back(header, alignment);
   }
 
@@ -108,12 +106,9 @@ public:
     return columns_.at(index);
   }
 
-  TableColumn& column(const std::size_t index) {
-    return columns_.at(index);
-  }
+  TableColumn& column(const std::size_t index) { return columns_.at(index); }
 
 protected:
-
   std::vector<TableColumn> columns_;
 
   std::string print_data_header() const noexcept {
@@ -170,6 +165,6 @@ protected:
     return text;
   }
 
-}; // class Table
+};  // class Table
 
-} // namespace TI4Echelon
+}  // namespace TI4Echelon

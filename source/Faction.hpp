@@ -8,27 +8,23 @@ namespace TI4Echelon {
 
 /// \brief A faction along with a history of snapshots.
 class Faction {
-
 public:
-
   /// \brief Default constructor.
   Faction() noexcept {}
 
-  /// \brief Constructs a faction, initially without any snapshots. Snapshots can be added from games later.
-  /// \details If a faction does not have a half or a color, then that faction does not appear in plots.
-  Faction(const FactionName name, const std::optional<Half> half = std::optional<Half>{}, const std::optional<Color>& color = std::optional<Color>{}) noexcept : name_(name), half_(half), color_(color) {}
+  /// \brief Constructs a faction, initially without any snapshots. Snapshots
+  /// can be added from games later. \details If a faction does not have a half
+  /// or a color, then that faction does not appear in plots.
+  Faction(const FactionName name,
+          const std::optional<Half> half = std::optional<Half>{},
+          const std::optional<Color>& color = std::optional<Color>{}) noexcept
+    : name_(name), half_(half), color_(color) {}
 
-  FactionName name() const noexcept {
-    return name_;
-  }
+  FactionName name() const noexcept { return name_; }
 
-  const std::optional<Half>& half() const noexcept {
-    return half_;
-  }
+  const std::optional<Half>& half() const noexcept { return half_; }
 
-  const std::optional<Color>& color() const noexcept {
-    return color_;
-  }
+  const std::optional<Color>& color() const noexcept { return color_; }
 
   const EloRating& lowest_elo_rating() const noexcept {
     return lowest_elo_rating_;
@@ -47,7 +43,9 @@ public:
     }
   }
 
-  void update(const Game& game, const std::unordered_map<FactionName, EloRating>& elo_ratings) noexcept {
+  void update(
+      const Game& game,
+      const std::unordered_map<FactionName, EloRating>& elo_ratings) noexcept {
     if (game.exists(name_)) {
       snapshots_.emplace_back(name_, game, elo_ratings, latest_snapshot());
       update_lowest_and_highest_elo_ratings();
@@ -91,22 +89,25 @@ public:
   }
 
   struct sort {
-    bool operator()(const Faction& faction_1, const Faction& faction_2) const noexcept {
+    bool operator()(
+        const Faction& faction_1, const Faction& faction_2) const noexcept {
       return faction_1 < faction_2;
     }
   };
 
   struct const_iterator : public std::vector<Snapshot>::const_iterator {
-    const_iterator(const std::vector<Snapshot>::const_iterator i) noexcept : std::vector<Snapshot>::const_iterator(i) {}
+    const_iterator(const std::vector<Snapshot>::const_iterator i) noexcept
+      : std::vector<Snapshot>::const_iterator(i) {}
   };
 
-  struct const_reverse_iterator : public std::vector<Snapshot>::const_reverse_iterator {
-    const_reverse_iterator(const std::vector<Snapshot>::const_reverse_iterator i) noexcept : std::vector<Snapshot>::const_reverse_iterator(i) {}
+  struct const_reverse_iterator
+    : public std::vector<Snapshot>::const_reverse_iterator {
+    const_reverse_iterator(
+        const std::vector<Snapshot>::const_reverse_iterator i) noexcept
+      : std::vector<Snapshot>::const_reverse_iterator(i) {}
   };
 
-  std::size_t number_of_snapshots() const noexcept {
-    return snapshots_.size();
-  }
+  std::size_t number_of_snapshots() const noexcept { return snapshots_.size(); }
 
   const_iterator begin() const noexcept {
     return const_iterator(snapshots_.begin());
@@ -141,7 +142,6 @@ public:
   }
 
 private:
-
   FactionName name_;
 
   std::optional<Half> half_;
@@ -164,18 +164,16 @@ private:
     }
   }
 
-}; // class Faction
+};  // class Faction
 
-} // namespace TI4Echelon
+}  // namespace TI4Echelon
 
 namespace std {
 
-  template <> struct hash<TI4Echelon::Faction> {
+template<> struct hash<TI4Echelon::Faction> {
+  size_t operator()(const TI4Echelon::Faction& faction) const {
+    return hash<TI4Echelon::FactionName>()(faction.name());
+  }
+};
 
-    size_t operator()(const TI4Echelon::Faction& faction) const {
-      return hash<TI4Echelon::FactionName>()(faction.name());
-    }
-
-  };
-
-} // namespace std
+}  // namespace std

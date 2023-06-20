@@ -7,9 +7,7 @@ namespace TI4Echelon {
 
 /// \brief A set of players.
 class Players {
-
 public:
-
   /// \brief Constructs all player data given the games.
   Players(const Games& games) noexcept {
     initialize_data(games);
@@ -36,39 +34,33 @@ public:
   }
 
   struct const_iterator : public std::vector<Player>::const_iterator {
-    const_iterator(const std::vector<Player>::const_iterator i) noexcept : std::vector<Player>::const_iterator(i) {}
+    const_iterator(const std::vector<Player>::const_iterator i) noexcept
+      : std::vector<Player>::const_iterator(i) {}
   };
 
-  bool empty() const noexcept {
-    return data_.empty();
-  }
+  bool empty() const noexcept { return data_.empty(); }
 
-  std::size_t size() const noexcept {
-    return data_.size();
-  }
+  std::size_t size() const noexcept { return data_.size(); }
 
   const_iterator begin() const noexcept {
-   return const_iterator(data_.begin());
+    return const_iterator(data_.begin());
   }
 
   const_iterator cbegin() const noexcept {
-   return const_iterator(data_.cbegin());
+    return const_iterator(data_.cbegin());
   }
 
-  const_iterator end() const noexcept {
-   return const_iterator(data_.end());
-  }
+  const_iterator end() const noexcept { return const_iterator(data_.end()); }
 
-  const_iterator cend() const noexcept {
-   return const_iterator(data_.cend());
-  }
+  const_iterator cend() const noexcept { return const_iterator(data_.cend()); }
 
   bool exists(const PlayerName& name) const noexcept {
     return indices_.find(name) != indices_.cend();
   }
 
   const_iterator find(const PlayerName& name) const noexcept {
-    const std::unordered_map<PlayerName, std::size_t>::const_iterator found{indices_.find(name)};
+    const std::unordered_map<PlayerName, std::size_t>::const_iterator found{
+        indices_.find(name)};
     if (found != indices_.cend()) {
       return data_.cbegin() + found->second;
     } else {
@@ -77,7 +69,6 @@ public:
   }
 
 private:
-
   EloRating lowest_elo_rating_;
 
   EloRating highest_elo_rating_;
@@ -87,17 +78,26 @@ private:
   std::unordered_map<PlayerName, std::size_t> indices_;
 
   /// \brief Initialize the players with their names and colors.
-  /// \details Only a limited number of players with the most games played are assigned a color.
+  /// \details Only a limited number of players with the most games played are
+  /// assigned a color.
   void initialize_data(const Games& games) noexcept {
-    const std::multimap<std::size_t, PlayerName, std::greater<std::size_t>> player_names_by_number_of_games_(player_names_by_number_of_games(games));
+    const std::multimap<std::size_t, PlayerName, std::greater<std::size_t>>
+        player_names_by_number_of_games_(
+            player_names_by_number_of_games(games));
     std::set<PlayerName, PlayerName::sort> player_names_with_colors;
     std::set<PlayerName, PlayerName::sort> player_names_without_colors;
-    // Assign a color to a number of players with the most games played, and at least 2 games played.
-    for (const std::pair<std::size_t, PlayerName>& number_of_games_and_player_name : player_names_by_number_of_games_) {
-      if (player_names_with_colors.size() < maximum_number_of_players_with_colors() && number_of_games_and_player_name.first >= 2) {
+    // Assign a color to a number of players with the most games played, and at
+    // least 2 games played.
+    for (const std::pair<const std::size_t, PlayerName>&
+             number_of_games_and_player_name :
+         player_names_by_number_of_games_) {
+      if (player_names_with_colors.size()
+              < maximum_number_of_players_with_colors()
+          && number_of_games_and_player_name.first >= 2) {
         player_names_with_colors.insert(number_of_games_and_player_name.second);
       } else {
-        player_names_without_colors.insert(number_of_games_and_player_name.second);
+        player_names_without_colors.insert(
+            number_of_games_and_player_name.second);
       }
     }
     for (const PlayerName& player_name : player_names_with_colors) {
@@ -110,20 +110,28 @@ private:
     std::sort(data_.begin(), data_.end(), Player::sort());
   }
 
-  std::multimap<std::size_t, PlayerName, std::greater<std::size_t>> player_names_by_number_of_games(const Games& games) const noexcept {
-    const std::unordered_map<PlayerName, std::size_t> number_of_games_(number_of_games(games));
-    std::multimap<std::size_t, PlayerName, std::greater<std::size_t>> player_names_by_number_of_games_;
-    for (const std::pair<PlayerName, std::size_t>& player_name_and_number_of_games : number_of_games_) {
-      player_names_by_number_of_games_.emplace(player_name_and_number_of_games.second, player_name_and_number_of_games.first);
+  std::multimap<std::size_t, PlayerName, std::greater<std::size_t>>
+  player_names_by_number_of_games(const Games& games) const noexcept {
+    const std::unordered_map<PlayerName, std::size_t> number_of_games_(
+        number_of_games(games));
+    std::multimap<std::size_t, PlayerName, std::greater<std::size_t>>
+        player_names_by_number_of_games_;
+    for (const std::pair<const PlayerName, std::size_t>&
+             player_name_and_number_of_games : number_of_games_) {
+      player_names_by_number_of_games_.emplace(
+          player_name_and_number_of_games.second,
+          player_name_and_number_of_games.first);
     }
     return player_names_by_number_of_games_;
   }
 
-  std::unordered_map<PlayerName, std::size_t> number_of_games(const Games& games) const noexcept {
+  std::unordered_map<PlayerName, std::size_t> number_of_games(
+      const Games& games) const noexcept {
     std::unordered_map<PlayerName, std::size_t> number_of_games_;
     for (const Game& game : games) {
       for (const Participant& participant : game.participants()) {
-        const std::unordered_map<PlayerName, std::size_t>::iterator found{number_of_games_.find(participant.player_name())};
+        const std::unordered_map<PlayerName, std::size_t>::iterator found{
+            number_of_games_.find(participant.player_name())};
         if (found != number_of_games_.cend()) {
           ++(found->second);
         } else {
@@ -148,9 +156,12 @@ private:
   /// \brief Update all the players with all the games.
   void update(const Games& games) noexcept {
     // Iterate through the games in chronological order.
-    // The games are listed in reverse-chronological order, so use a reverse iterator.
-    for (Games::const_reverse_iterator game = games.crbegin(); game != games.crend(); ++game) {
-      const std::unordered_map<PlayerName, EloRating> current_elo_ratings_{current_elo_ratings()};
+    // The games are listed in reverse-chronological order, so use a reverse
+    // iterator.
+    for (Games::const_reverse_iterator game = games.crbegin();
+         game != games.crend(); ++game) {
+      const std::unordered_map<PlayerName, EloRating> current_elo_ratings_{
+          current_elo_ratings()};
       for (Player& player : data_) {
         player.update(*game, current_elo_ratings_);
         if (player.lowest_elo_rating() < lowest_elo_rating_) {
@@ -163,12 +174,14 @@ private:
     }
   }
 
-  std::unordered_map<PlayerName, EloRating> current_elo_ratings() const noexcept {
+  std::unordered_map<PlayerName, EloRating>
+  current_elo_ratings() const noexcept {
     std::unordered_map<PlayerName, EloRating> elo_ratings_;
     for (const Player& player : data_) {
       const std::optional<Snapshot> latest_snapshot{player.latest_snapshot()};
       if (latest_snapshot.has_value()) {
-        elo_ratings_.emplace(player.name(), latest_snapshot.value().current_elo_rating());
+        elo_ratings_.emplace(
+            player.name(), latest_snapshot.value().current_elo_rating());
       } else {
         elo_ratings_.emplace(player.name(), EloRating{});
       }
@@ -176,6 +189,6 @@ private:
     return elo_ratings_;
   }
 
-}; // class Players
+};  // class Players
 
-} // namespace TI4Echelon
+}  // namespace TI4Echelon

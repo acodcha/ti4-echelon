@@ -5,16 +5,13 @@
 namespace TI4Echelon {
 
 class PlayerName {
-
 public:
-
   PlayerName() noexcept {}
 
-  PlayerName(const std::string& value) noexcept : value_(remove_non_alphabetic_characters(value)) {}
+  PlayerName(const std::string& value) noexcept
+    : value_(remove_non_alphabetic_characters(value)) {}
 
-  const std::string& value() const noexcept {
-    return value_;
-  }
+  const std::string& value() const noexcept { return value_; }
 
   std::filesystem::path path() const noexcept {
     return {remove_non_alphanumeric_characters(value_)};
@@ -46,27 +43,25 @@ public:
 
   /// \brief Sort alphabetically.
   struct sort {
-    bool operator()(const PlayerName& player_name_1, const PlayerName& player_name_2) const noexcept {
+    bool operator()(const PlayerName& player_name_1,
+                    const PlayerName& player_name_2) const noexcept {
       return player_name_1.value() < player_name_2.value();
     }
   };
 
 private:
-
   std::string value_;
 
-}; // class PlayerName
+};  // class PlayerName
 
-} // namespace TI4Echelon
+}  // namespace TI4Echelon
 
 namespace std {
 
-  template <> struct hash<TI4Echelon::PlayerName> {
+template<> struct hash<TI4Echelon::PlayerName> {
+  size_t operator()(const TI4Echelon::PlayerName& player_name) const {
+    return hash<string>()(player_name.value());
+  }
+};
 
-    size_t operator()(const TI4Echelon::PlayerName& player_name) const {
-      return hash<string>()(player_name.value());
-    }
-
-  };
-
-} // namespace std
+}  // namespace std
