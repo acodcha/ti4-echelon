@@ -21,17 +21,25 @@ public:
       : std::vector<std::string>::const_iterator(i) {}
   };
 
-  std::size_t size() const noexcept { return lines_.size(); }
+  std::size_t size() const noexcept {
+    return lines_.size();
+  }
 
   const_iterator cbegin() const noexcept {
     return const_iterator(lines_.cbegin());
   }
 
-  const_iterator begin() const noexcept { return cbegin(); }
+  const_iterator begin() const noexcept {
+    return cbegin();
+  }
 
-  const_iterator cend() const noexcept { return const_iterator(lines_.cend()); }
+  const_iterator cend() const noexcept {
+    return const_iterator(lines_.cend());
+  }
 
-  const_iterator end() const noexcept { return cend(); }
+  const_iterator end() const noexcept {
+    return cend();
+  }
 
 private:
   std::vector<std::string> lines_;

@@ -21,7 +21,9 @@ protected:
     }
   }
 
-  void blank_line() noexcept { line(""); }
+  void blank_line() noexcept {
+    line("");
+  }
 
 };  // class TextFileWriter
 

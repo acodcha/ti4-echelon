@@ -9,7 +9,9 @@ namespace TI4Echelon {
 /// (.gnuplot).
 class PlotConfigurationFileWriter : public TextFileWriter {
 public:
-  ~PlotConfigurationFileWriter() noexcept { blank_line(); }
+  ~PlotConfigurationFileWriter() noexcept {
+    blank_line();
+  }
 
 protected:
   /// \brief Constructor. Takes a file stem, i.e. a file path without a file

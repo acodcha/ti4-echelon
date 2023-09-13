@@ -71,9 +71,13 @@ public:
     }
   }
 
-  double hours() const noexcept { return static_cast<double>(minutes_) / 60.0; }
+  double hours() const noexcept {
+    return static_cast<double>(minutes_) / 60.0;
+  }
 
-  int64_t minutes() const noexcept { return minutes_; }
+  int64_t minutes() const noexcept {
+    return minutes_;
+  }
 
   /// \brief Prints the time duration in the form 1h05m.
   std::string print() const noexcept {
@@ -127,7 +131,8 @@ private:
 
 namespace std {
 
-template<> struct hash<TI4Echelon::Duration> {
+template <>
+struct hash<TI4Echelon::Duration> {
   size_t operator()(const TI4Echelon::Duration& duration) const {
     return hash<int64_t>()(duration.minutes());
   }

@@ -7,7 +7,9 @@ namespace TI4Echelon {
 /// \brief General-purpose file writer.
 class FileWriter : public File<std::ofstream> {
 public:
-  ~FileWriter() noexcept { set_permissions(); }
+  ~FileWriter() noexcept {
+    set_permissions();
+  }
 
   const std::filesystem::perms& permissions() const noexcept {
     return permissions_;

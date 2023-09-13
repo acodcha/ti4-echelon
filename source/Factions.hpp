@@ -16,7 +16,9 @@ public:
     message(print());
   }
 
-  bool need_two_plots() const noexcept { return need_two_plots_; }
+  bool need_two_plots() const noexcept {
+    return need_two_plots_;
+  }
 
   const EloRating& lowest_elo_rating() const noexcept {
     return lowest_elo_rating_;
@@ -40,9 +42,13 @@ public:
       : std::vector<Faction>::const_iterator(i) {}
   };
 
-  bool empty() const noexcept { return data_.empty(); }
+  bool empty() const noexcept {
+    return data_.empty();
+  }
 
-  std::size_t size() const noexcept { return data_.size(); }
+  std::size_t size() const noexcept {
+    return data_.size();
+  }
 
   const_iterator begin() const noexcept {
     return const_iterator(data_.begin());
@@ -52,9 +58,13 @@ public:
     return const_iterator(data_.cbegin());
   }
 
-  const_iterator end() const noexcept { return const_iterator(data_.end()); }
+  const_iterator end() const noexcept {
+    return const_iterator(data_.end());
+  }
 
-  const_iterator cend() const noexcept { return const_iterator(data_.cend()); }
+  const_iterator cend() const noexcept {
+    return const_iterator(data_.cend());
+  }
 
   bool exists(const FactionName name) const noexcept {
     return indices_.find(name) != indices_.cend();

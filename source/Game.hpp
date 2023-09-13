@@ -39,19 +39,29 @@ public:
     }
   }
 
-  constexpr std::size_t index() const noexcept { return index_; }
+  constexpr std::size_t index() const noexcept {
+    return index_;
+  }
 
-  constexpr const Date& date() const noexcept { return date_; }
+  constexpr const Date& date() const noexcept {
+    return date_;
+  }
 
   constexpr const VictoryPoints& victory_point_goal() const noexcept {
     return victory_point_goal_;
   }
 
-  constexpr GameMode mode() const noexcept { return mode_; }
+  constexpr GameMode mode() const noexcept {
+    return mode_;
+  }
 
-  std::optional<Duration> duration() const noexcept { return duration_; }
+  std::optional<Duration> duration() const noexcept {
+    return duration_;
+  }
 
-  const Participants& participants() const noexcept { return participants_; }
+  const Participants& participants() const noexcept {
+    return participants_;
+  }
 
   std::size_t number_of_players_on_team(const Place& place) const {
     const std::set<Team, Team::sort>::const_iterator team{teams_.find(place)};
@@ -203,7 +213,9 @@ public:
     }
   };
 
-  void set_index(const std::size_t index) noexcept { index_ = index; }
+  void set_index(const std::size_t index) noexcept {
+    index_ = index;
+  }
 
 private:
   /// \brief Unique identifier of this game.
@@ -352,7 +364,8 @@ private:
   void initialize_player_names(
       const Place& place, const PlayerName& player_name,
       const VictoryPoints& victory_points, const FactionName faction_name) {
-    const std::pair<std::set<PlayerName, PlayerName::sort>::const_iterator, bool>
+    const std::pair<std::set<PlayerName, PlayerName::sort>::const_iterator,
+                    bool>
         result{player_names_.insert(player_name)};
     if (!result.second) {
       error("Player '" + player_name.value()
@@ -389,8 +402,8 @@ private:
   void check_mode_free_for_all() const noexcept {
     std::set<Place, Place::sort> places;
     for (const Participant& participant : participants_) {
-      const std::pair<std::set<Place, Place::sort>::const_iterator, bool> result{
-          places.insert(participant.place())};
+      const std::pair<std::set<Place, Place::sort>::const_iterator, bool>
+          result{places.insert(participant.place())};
       if (!result.second) {
         error("Place '" + participant.place().print()
               + "' appears twice in the free-for-all game played on "
@@ -405,7 +418,8 @@ private:
 
 namespace std {
 
-template<> struct hash<TI4Echelon::Game> {
+template <>
+struct hash<TI4Echelon::Game> {
   size_t operator()(const TI4Echelon::Game& game) const {
     return hash<TI4Echelon::Date>()(game.date())
            ^ hash<TI4Echelon::VictoryPoints>()(game.victory_point_goal());

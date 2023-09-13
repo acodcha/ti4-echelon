@@ -19,9 +19,13 @@ public:
     : place_(place), player_name_(player_name), victory_points_(victory_points),
       faction_name_(faction_name) {}
 
-  constexpr const Place& place() const noexcept { return place_; }
+  constexpr const Place& place() const noexcept {
+    return place_;
+  }
 
-  const PlayerName& player_name() const noexcept { return player_name_; }
+  const PlayerName& player_name() const noexcept {
+    return player_name_;
+  }
 
   constexpr const VictoryPoints& victory_points() const noexcept {
     return victory_points_;
@@ -159,7 +163,8 @@ private:
 
 namespace std {
 
-template<> struct hash<TI4Echelon::Participant> {
+template <>
+struct hash<TI4Echelon::Participant> {
   size_t operator()(const TI4Echelon::Participant& participant) const {
     return hash<TI4Echelon::Place>()(participant.place())
            ^ hash<TI4Echelon::PlayerName>()(participant.player_name())

@@ -18,9 +18,13 @@ public:
          const std::optional<Color>& color = std::optional<Color>{}) noexcept
     : name_(name), color_(color) {}
 
-  const PlayerName& name() const noexcept { return name_; }
+  const PlayerName& name() const noexcept {
+    return name_;
+  }
 
-  const std::optional<Color>& color() const noexcept { return color_; }
+  const std::optional<Color>& color() const noexcept {
+    return color_;
+  }
 
   const EloRating& lowest_elo_rating() const noexcept {
     return lowest_elo_rating_;
@@ -103,7 +107,9 @@ public:
       : std::vector<Snapshot>::const_reverse_iterator(i) {}
   };
 
-  std::size_t number_of_snapshots() const noexcept { return snapshots_.size(); }
+  std::size_t number_of_snapshots() const noexcept {
+    return snapshots_.size();
+  }
 
   const_iterator begin() const noexcept {
     return const_iterator(snapshots_.begin());
@@ -164,7 +170,8 @@ private:
 
 namespace std {
 
-template<> struct hash<TI4Echelon::Player> {
+template <>
+struct hash<TI4Echelon::Player> {
   size_t operator()(const TI4Echelon::Player& player) const {
     return hash<TI4Echelon::PlayerName>()(player.name());
   }

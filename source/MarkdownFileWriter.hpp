@@ -23,9 +23,13 @@ protected:
     blank_line();
   }
 
-  void table(const Table& table) noexcept { line(table.print_as_markdown()); }
+  void table(const Table& table) noexcept {
+    line(table.print_as_markdown());
+  }
 
-  void list(const std::string& text) noexcept { line("- " + text); }
+  void list(const std::string& text) noexcept {
+    line("- " + text);
+  }
 
   void link_back_to_section(const std::string& section) noexcept {
     blank_line();

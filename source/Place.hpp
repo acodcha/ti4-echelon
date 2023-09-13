@@ -47,7 +47,9 @@ public:
     }
   }
 
-  constexpr int8_t value() const noexcept { return value_; }
+  constexpr int8_t value() const noexcept {
+    return value_;
+  }
 
   std::string print() const noexcept {
     if (value_ == 1) {
@@ -144,7 +146,8 @@ private:
 
 namespace std {
 
-template<> struct hash<TI4Echelon::Place> {
+template <>
+struct hash<TI4Echelon::Place> {
   size_t operator()(const TI4Echelon::Place& place) const {
     return hash<int8_t>()(place.value());
   }

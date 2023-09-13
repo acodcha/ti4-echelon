@@ -49,7 +49,9 @@ public:
     return local_game_index_ + 1;
   }
 
-  constexpr const Date& date() const noexcept { return date_; }
+  constexpr const Date& date() const noexcept {
+    return date_;
+  }
 
   constexpr double average_victory_points_per_game() const noexcept {
     return average_victory_points_per_game_;

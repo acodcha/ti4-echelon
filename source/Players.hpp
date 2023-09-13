@@ -38,9 +38,13 @@ public:
       : std::vector<Player>::const_iterator(i) {}
   };
 
-  bool empty() const noexcept { return data_.empty(); }
+  bool empty() const noexcept {
+    return data_.empty();
+  }
 
-  std::size_t size() const noexcept { return data_.size(); }
+  std::size_t size() const noexcept {
+    return data_.size();
+  }
 
   const_iterator begin() const noexcept {
     return const_iterator(data_.begin());
@@ -50,9 +54,13 @@ public:
     return const_iterator(data_.cbegin());
   }
 
-  const_iterator end() const noexcept { return const_iterator(data_.end()); }
+  const_iterator end() const noexcept {
+    return const_iterator(data_.end());
+  }
 
-  const_iterator cend() const noexcept { return const_iterator(data_.cend()); }
+  const_iterator cend() const noexcept {
+    return const_iterator(data_.cend());
+  }
 
   bool exists(const PlayerName& name) const noexcept {
     return indices_.find(name) != indices_.cend();

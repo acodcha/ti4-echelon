@@ -39,7 +39,9 @@ public:
   TableCell(const VictoryPoints& victory_points) noexcept
     : value_(victory_points.print()) {}
 
-  const std::string& print() const noexcept { return value_; }
+  const std::string& print() const noexcept {
+    return value_;
+  }
 
 protected:
   std::string value_;
