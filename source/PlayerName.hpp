@@ -11,7 +11,9 @@ public:
   PlayerName(const std::string& value) noexcept
     : value_(remove_non_alphabetic_characters(value)) {}
 
-  const std::string& value() const noexcept { return value_; }
+  const std::string& value() const noexcept {
+    return value_;
+  }
 
   std::filesystem::path path() const noexcept {
     return {remove_non_alphanumeric_characters(value_)};
@@ -58,7 +60,8 @@ private:
 
 namespace std {
 
-template<> struct hash<TI4Echelon::PlayerName> {
+template <>
+struct hash<TI4Echelon::PlayerName> {
   size_t operator()(const TI4Echelon::PlayerName& player_name) const {
     return hash<string>()(player_name.value());
   }

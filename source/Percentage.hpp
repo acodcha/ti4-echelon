@@ -14,7 +14,9 @@ public:
   /// the value to 42%.
   constexpr Percentage(const double value) noexcept : value_(value) {}
 
-  constexpr double value() const noexcept { return value_; }
+  constexpr double value() const noexcept {
+    return value_;
+  }
 
   /// \brief Prints to a given number of decimals. For example,
   /// Percentage{0.42}.print() returns "42%".
@@ -65,7 +67,9 @@ public:
     value_ += other.value_;
   }
 
-  constexpr void operator+=(const double number) noexcept { value_ += number; }
+  constexpr void operator+=(const double number) noexcept {
+    value_ += number;
+  }
 
   constexpr Percentage operator-(const Percentage& other) const noexcept {
     return {value_ - other.value_};
@@ -79,19 +83,25 @@ public:
     value_ -= other.value_;
   }
 
-  constexpr void operator-=(const double number) noexcept { value_ -= number; }
+  constexpr void operator-=(const double number) noexcept {
+    value_ -= number;
+  }
 
   constexpr Percentage operator*(const double number) const noexcept {
     return {value_ * number};
   }
 
-  constexpr void operator*=(const double number) noexcept { value_ *= number; }
+  constexpr void operator*=(const double number) noexcept {
+    value_ *= number;
+  }
 
   constexpr Percentage operator/(const double number) const noexcept {
     return {value_ / number};
   }
 
-  constexpr void operator/=(const double number) noexcept { value_ /= number; }
+  constexpr void operator/=(const double number) noexcept {
+    value_ /= number;
+  }
 
   /// \brief Sort descending, i.e. from highest percentage to lowest percentage.
   struct sort {
@@ -110,7 +120,8 @@ private:
 
 namespace std {
 
-template<> struct hash<TI4Echelon::Percentage> {
+template <>
+struct hash<TI4Echelon::Percentage> {
   size_t operator()(const TI4Echelon::Percentage& percentage) const {
     return hash<double>()(percentage.value());
   }

@@ -50,11 +50,17 @@ public:
     }
   }
 
-  constexpr int64_t year() const noexcept { return year_; }
+  constexpr int64_t year() const noexcept {
+    return year_;
+  }
 
-  constexpr int8_t month_number() const noexcept { return month_number_; }
+  constexpr int8_t month_number() const noexcept {
+    return month_number_;
+  }
 
-  constexpr int8_t day_number() const noexcept { return day_number_; }
+  constexpr int8_t day_number() const noexcept {
+    return day_number_;
+  }
 
   std::string print() const noexcept {
     const std::string month_number{
@@ -165,7 +171,8 @@ private:
 
 namespace std {
 
-template<> struct hash<TI4Echelon::Date> {
+template <>
+struct hash<TI4Echelon::Date> {
   size_t operator()(const TI4Echelon::Date& date) const {
     return hash<int64_t>()(date.year()) ^ hash<int8_t>()(date.month_number())
            ^ hash<int8_t>()(date.day_number());

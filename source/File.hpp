@@ -5,7 +5,8 @@
 namespace TI4Echelon {
 
 /// \brief General-purpose file handler.
-template<class FileStream> class File {
+template <class FileStream>
+class File {
 public:
   ~File() noexcept {
     if (stream_.is_open()) {
@@ -13,7 +14,9 @@ public:
     }
   }
 
-  const std::filesystem::path& path() const noexcept { return path_; }
+  const std::filesystem::path& path() const noexcept {
+    return path_;
+  }
 
 protected:
   std::filesystem::path path_;

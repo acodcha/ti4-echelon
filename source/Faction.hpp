@@ -20,11 +20,17 @@ public:
           const std::optional<Color>& color = std::optional<Color>{}) noexcept
     : name_(name), half_(half), color_(color) {}
 
-  FactionName name() const noexcept { return name_; }
+  FactionName name() const noexcept {
+    return name_;
+  }
 
-  const std::optional<Half>& half() const noexcept { return half_; }
+  const std::optional<Half>& half() const noexcept {
+    return half_;
+  }
 
-  const std::optional<Color>& color() const noexcept { return color_; }
+  const std::optional<Color>& color() const noexcept {
+    return color_;
+  }
 
   const EloRating& lowest_elo_rating() const noexcept {
     return lowest_elo_rating_;
@@ -107,7 +113,9 @@ public:
       : std::vector<Snapshot>::const_reverse_iterator(i) {}
   };
 
-  std::size_t number_of_snapshots() const noexcept { return snapshots_.size(); }
+  std::size_t number_of_snapshots() const noexcept {
+    return snapshots_.size();
+  }
 
   const_iterator begin() const noexcept {
     return const_iterator(snapshots_.begin());
@@ -170,7 +178,8 @@ private:
 
 namespace std {
 
-template<> struct hash<TI4Echelon::Faction> {
+template <>
+struct hash<TI4Echelon::Faction> {
   size_t operator()(const TI4Echelon::Faction& faction) const {
     return hash<TI4Echelon::FactionName>()(faction.name());
   }

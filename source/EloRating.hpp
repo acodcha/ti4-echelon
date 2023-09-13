@@ -75,7 +75,9 @@ public:
     }
   }
 
-  constexpr double value() const noexcept { return value_; }
+  constexpr double value() const noexcept {
+    return value_;
+  }
 
   /// \brief Print the Elo rating as an integer.
   std::string print() const noexcept {
@@ -118,7 +120,9 @@ public:
     value_ += other.value_;
   }
 
-  constexpr void operator+=(const double number) noexcept { value_ += number; }
+  constexpr void operator+=(const double number) noexcept {
+    value_ += number;
+  }
 
   constexpr EloRating operator-(const EloRating& other) const noexcept {
     return {value_ - other.value_};
@@ -132,19 +136,25 @@ public:
     value_ -= other.value_;
   }
 
-  constexpr void operator-=(const double number) noexcept { value_ -= number; }
+  constexpr void operator-=(const double number) noexcept {
+    value_ -= number;
+  }
 
   constexpr EloRating operator*(const double number) const noexcept {
     return {value_ * number};
   }
 
-  constexpr void operator*=(const double number) noexcept { value_ *= number; }
+  constexpr void operator*=(const double number) noexcept {
+    value_ *= number;
+  }
 
   constexpr EloRating operator/(const double number) const noexcept {
     return {value_ / number};
   }
 
-  constexpr void operator/=(const double number) noexcept { value_ /= number; }
+  constexpr void operator/=(const double number) noexcept {
+    value_ /= number;
+  }
 
   /// \brief Sort descending, i.e. from the highest Elo rating downwards.
   struct sort {
@@ -205,7 +215,8 @@ private:
 
 namespace std {
 
-template<> struct hash<TI4Echelon::EloRating> {
+template <>
+struct hash<TI4Echelon::EloRating> {
   size_t operator()(const TI4Echelon::EloRating& elo_rating) const {
     return hash<double>()(elo_rating.value());
   }

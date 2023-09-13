@@ -4,15 +4,20 @@
 
 namespace TI4Echelon {
 
-enum class Alignment : int8_t { Left, Center, Right };
+enum class Alignment : int8_t {
+  Left,
+  Center,
+  Right,
+};
 
-template<> const std::unordered_map<Alignment, std::string> labels<Alignment>{
+template <>
+const std::unordered_map<Alignment, std::string> labels<Alignment>{
     {Alignment::Left,   "Left"  },
     {Alignment::Center, "Center"},
     {Alignment::Right,  "Right" },
 };
 
-template<>
+template <>
 const std::unordered_map<std::string, Alignment> spellings<Alignment>{
     {"Left",   Alignment::Left  },
     {"Center", Alignment::Center},

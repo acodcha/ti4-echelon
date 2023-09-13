@@ -56,9 +56,13 @@ public:
       : std::vector<TableColumn>::const_reverse_iterator(i) {}
   };
 
-  bool empty() const noexcept { return columns_.empty(); }
+  bool empty() const noexcept {
+    return columns_.empty();
+  }
 
-  std::size_t number_of_columns() const noexcept { return columns_.size(); }
+  std::size_t number_of_columns() const noexcept {
+    return columns_.size();
+  }
 
   /// \brief Number of rows, excluding the header and alignment rows, if any.
   std::size_t number_of_rows() const noexcept {
@@ -71,7 +75,9 @@ public:
     return number_of_rows_;
   }
 
-  iterator begin() noexcept { return iterator(columns_.begin()); }
+  iterator begin() noexcept {
+    return iterator(columns_.begin());
+  }
 
   const_iterator cbegin() const noexcept {
     return const_iterator(columns_.cbegin());
@@ -85,13 +91,17 @@ public:
     return const_reverse_iterator(columns_.crbegin());
   }
 
-  iterator end() noexcept { return iterator(columns_.end()); }
+  iterator end() noexcept {
+    return iterator(columns_.end());
+  }
 
   const_iterator cend() const noexcept {
     return const_iterator(columns_.cend());
   }
 
-  reverse_iterator rend() noexcept { return reverse_iterator(columns_.rend()); }
+  reverse_iterator rend() noexcept {
+    return reverse_iterator(columns_.rend());
+  }
 
   const_reverse_iterator crend() const noexcept {
     return const_reverse_iterator(columns_.crend());
@@ -106,7 +116,9 @@ public:
     return columns_.at(index);
   }
 
-  TableColumn& column(const std::size_t index) { return columns_.at(index); }
+  TableColumn& column(const std::size_t index) {
+    return columns_.at(index);
+  }
 
 protected:
   std::vector<TableColumn> columns_;

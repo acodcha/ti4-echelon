@@ -20,13 +20,17 @@ public:
   Team(const Place& place, const PlayerName& player_name) noexcept
     : place_(place), player_names_({player_name}) {}
 
-  const Place& place() const noexcept { return place_; }
+  const Place& place() const noexcept {
+    return place_;
+  }
 
   bool exists(const PlayerName& player_name) const noexcept {
     return player_names_.find(player_name) != player_names_.cend();
   }
 
-  std::size_t size() const noexcept { return player_names_.size(); }
+  std::size_t size() const noexcept {
+    return player_names_.size();
+  }
 
   std::pair<std::set<PlayerName, PlayerName::sort>::const_iterator, bool>
   insert(const PlayerName& player_name) noexcept {
@@ -83,7 +87,8 @@ private:
 
 namespace std {
 
-template<> struct hash<TI4Echelon::Team> {
+template <>
+struct hash<TI4Echelon::Team> {
   size_t operator()(const TI4Echelon::Team& team) const {
     return hash<TI4Echelon::Place>()(team.place());
   }

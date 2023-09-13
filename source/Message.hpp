@@ -15,6 +15,8 @@ inline void warning(const std::string& text) noexcept {
 }
 
 /// \brief Throw an exception.
-inline void error(const std::string& text) { throw std::runtime_error(text); }
+inline void error(const std::string& text) {
+  throw std::runtime_error(text);
+}
 
 }  // namespace TI4Echelon

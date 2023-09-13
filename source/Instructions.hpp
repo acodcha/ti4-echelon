@@ -109,7 +109,9 @@ private:
     return text;
   }
 
-  void message_command() const noexcept { message("Command: " + command()); }
+  void message_command() const noexcept {
+    message("Command: " + command());
+  }
 
   void message_start_information() const noexcept {
     if (!games_file_.empty()) {

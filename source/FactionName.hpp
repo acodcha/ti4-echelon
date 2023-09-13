@@ -33,7 +33,7 @@ enum class FactionName : int8_t {
   Custom,
 };
 
-template<>
+template <>
 const std::unordered_map<FactionName, std::string> labels<FactionName>{
     {FactionName::Arborec,              "Arborec"                },
     {FactionName::ArgentFlight,         "Argent Flight"          },
@@ -63,7 +63,7 @@ const std::unordered_map<FactionName, std::string> labels<FactionName>{
     {FactionName::Custom,               "Custom"                 },
 };
 
-template<>
+template <>
 const std::unordered_map<std::string, FactionName> spellings<FactionName>{
     {"Arborec",                 FactionName::Arborec             },
     {"Argent Flight",           FactionName::ArgentFlight        },

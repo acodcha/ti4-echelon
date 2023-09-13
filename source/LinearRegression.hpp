@@ -38,9 +38,13 @@ public:
     }
   }
 
-  constexpr double slope() const noexcept { return slope_; }
+  constexpr double slope() const noexcept {
+    return slope_;
+  }
 
-  constexpr double intercept() const noexcept { return intercept_; }
+  constexpr double intercept() const noexcept {
+    return intercept_;
+  }
 
   /// \brief Use the linear regression to obtain y given x.
   double operator()(const double x) const noexcept {
